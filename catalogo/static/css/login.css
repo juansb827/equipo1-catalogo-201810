@@ -1,0 +1,21 @@
+
+
+ /* Login */
+.login-container{
+    background-image: url('../images/header.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  height:100vh;
+  display: flex;
+  align-items: center;
+
+}
+
+.login-area h1{
+  position:fixed;
+  top:25%;
+  width:100%;
+  left:0px;text-align:center
+}
+
