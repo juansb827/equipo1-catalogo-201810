@@ -7,12 +7,18 @@
   background-size: cover;
   background-position: center;
   height:100vh;
-  display: flex;
-  align-items: center;
+
+
 
 }
 
+ .login-area{
+height: 100vh;
+     display: flex;
+    align-items: center;
+ }
 .login-area h1{
+
   position:fixed;
   top:25%;
   width:100%;
