@@ -25,7 +25,7 @@ SECRET_KEY = 'n&ki+*r2ixc#=08)qbty7jw$5lb&ha#m-%(t(-4z794%d7*(m&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['grupo1-catalogo.herokuapp.com','localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'catalogo'
 ]
 
 MIDDLEWARE = [
