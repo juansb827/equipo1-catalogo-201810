@@ -65,21 +65,19 @@ html,h1,h2,h3,h4,h5,h6,a{
 
 }
 .description h1{
-color:#F97300 ;
+    color:#F97300 ;
 }
 .description p{
-color:#666;
-font-size: 20px;
-width: 50%;
-line-height: 1.5;
+    color:#666;
+    font-size: 20px;
+    width: 50%;
+    line-height: 1.5;
 }
 .description button, .main-button{
-border:1px  solid #F97300;
-background:#F97300;
-color:#fff;
+    border:1px  solid #F97300;
+    background:#F97300;
+    color:#fff;
 }
-
-
 
  .blog{
   margin: 4em 0;
