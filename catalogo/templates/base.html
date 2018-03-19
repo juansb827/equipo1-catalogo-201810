@@ -7,7 +7,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Bootstrap 4 landing page</title>
+	<title>Catálogo CONECTATE</title>
 	<!-- add bootstrap css file -->
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -35,16 +35,16 @@
 		</button>
 
 		<div class="collapse navbar-collapse " id="navbarSupportedContent">
-				<ul class="navbar-nav mr-4">
+            <ul class="navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Iniciar Sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-value="about" href="{% url 'catalogo:addExample' %}">Agregar Ejemplo</a>
+                </li>
 
-
-				  <li class="nav-item">
-					<a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Iniciar Sesión</a>
-				  </li>
-
-				</ul>
-
-			  </div>
+            </ul>
+        </div>
 
 	</nav>
 
