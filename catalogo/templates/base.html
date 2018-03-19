@@ -36,9 +36,13 @@
 
 		<div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-4">
-                <li class="nav-item">
-                    <a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Iniciar Sesión</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:index' %}">{{ user.username }}</a></li>
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:addUser' %}">Registro</a></li>
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Login</a></li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" data-value="about" href="{% url 'catalogo:addExample' %}">Agregar Ejemplo</a>
                 </li>

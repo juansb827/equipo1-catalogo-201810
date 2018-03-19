@@ -17,25 +17,33 @@
                 <div class="container">
 
                     <h1><b>Ingreso para miembros de Conectate</b></h1>
+                    {% if mensaje %}
+                        <div class="alert alert-danger">
+                            {{ mensaje }}
+                        </div>
+                    {% endif %}
 
-                    <form>
+                    <form method="post" action="">
+                        {% csrf_token %}
                         <div class="row justify-content-md-center">
 
                             <div class="col-lg-6 col-md-8 col-sm-12">
 
 
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-lg" placeholder="Email"
-                                           name="email">
+                                    <input type="text" id="username" class="form-control form-control-lg" placeholder="Username"
+                                           name="username" value="{{ username }}">
                                 </div>
 
                                 <div class="form-group">
                                     <input type="password" class="form-control form-control-lg" placeholder="Contraseña"
-                                           name="password">
+                                           name="password" id="password">
                                 </div>
 
-                                <input type="submit" class="btn btn-outline-secondary btn-lg btn-block main-button"
-                                       value="Iniciar Sesión" name="" style="width:100%">
+                                <button type="submit" class="btn btn-outline-secondary btn-lg btn-block main-button">Iniciar Sesión</button>
+                                <a href="{% url 'catalogo:index' %}" class="btn btn-primary">Cancelar</a>
+                                <!--<input type="submit" class="btn btn-outline-secondary btn-lg btn-block main-button"
+                                       value="Iniciar Sesión" name="" style="width:100%">-->
                             </div>
                         </div>
                     </form>
