@@ -1,202 +1,250 @@
+{% extends 'base.html' %}
 
-     {% extends 'base.html' %}
+{% block content %}
+    <!-- header -->
+    <header class="header ">
+        <div class="overlayed">
+            <div class="container">
+                <div class="description ">
+                    <h1>
+                        <b>
+                            Bienvenido al catálogo de conocimiento
 
-       {% block content %}
-	<!-- header -->
-	<header class="header ">
-		<div class="overlayed">
-			<div class="container">
-				<div class="description ">
-					<h1>
-						<b>
-							Bienvenido al catálogo de conocimiento
-
-							<p>
-								cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-								mollit anim id est laborum.</p>
-						</b>
-						<button id="verCatalogo" class="btn btn-outline-secondary btn-lg" data-value="blog" href="#">Ver catálogo</button>
-					</h1>
-				</div>
-			</div>
-		</div>
-	</header>
-
-
-
-
-	<!-- Catálogo -->
-	<div class="blog" id="blog" >
-		<div class="container">
-			<h1 class="text-center">Catálogo</h1>
-			<!-- Barra de busqueda -->
-			<form class="row form-inline  justify-content-center" style="margin-bottom:4em">
-			
-					<select id="email" class="form-control col-sm-3 mr-1" name="idCategoria" style="">
-						<option value="-1">Todas las categorias</option>						
-						<option value="1">Catalogo</option>
-						<option value="1">Herramienta</option>						
-					</select>
-			
-			
-			
-			
-					<input type="text" id="nombrePromocion" name="nombrePromocion" class="form-control col-sm-5" placeholder="" >
-			
-
-			<button type="submit" class="btn btn-outline-secondary main-button  col-sm-3 ml-1">Buscar</button>
-
-			</form>
-
-			<!-- 3 items por fila -->
-			<div class="row item-row" >
-				<!--Item 1-->
-				<div class="col-md-4 col-lg-4 col-sm-12">
-					<div class="card">
-						<div class="card-img">
-							<img src="../static/images/posts/blackboard.jpg">
-						</div>
-
-						<div class="card-body">
-							<h4 class="card-title">Item de Catalogo</h4>
-							<p class="card-text">
-
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div class="card-footer">
-							<a href="" class="card-link">Ver mas</a>
-						</div>
-					</div>
-				</div>
-				<!--Item 2-->
-				<div class="col-md-4 col-lg-4 col-sm-12">
-					<div class="card">
-						<div class="card-img">
-							<img src="../static/images/posts/blackboard.jpg">
-						</div>
-
-						<div class="card-body">
-							<h4 class="card-title">Item de Catalogo</h4>
-							<p class="card-text">
-
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div class="card-footer">
-							<a href="" class="card-link">Ver mas</a>
-						</div>
-					</div>
-				</div>
-				<!--Item 3-->
-				<div class="col-md-4 col-lg-4 col-sm-12">
-					<div class="card">
-						<div class="card-img">
-							<img src="../static/images/posts/blackboard.jpg">
-						</div>
-
-						<div class="card-body">
-							<h4 class="card-title">Item de Catalogo</h4>
-							<p class="card-text">
-
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div class="card-footer">
-							<a href="" class="card-link">Ver mas</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Fila 2 de emeplo-->
-
-			<div class="row item-row">
-				<!--Item 1-->
-				<div class="col-md-4 col-lg-4 col-sm-12">
-					<div class="card">
-						<div class="card-img">
-							<img src="../static/images/posts/blackboard.jpg">
-						</div>
-
-						<div class="card-body">
-							<h4 class="card-title">Item de Catalogo</h4>
-							<p class="card-text">
-
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div class="card-footer">
-							<a href="" class="card-link">Ver mas</a>
-						</div>
-					</div>
-				</div>
-				<!--Item 2-->
-				<div class="col-md-4 col-lg-4 col-sm-12">
-					<div class="card">
-						<div class="card-img">
-							<img src="../static/images/posts/blackboard.jpg">
-						</div>
-
-						<div class="card-body">
-							<h4 class="card-title">Item de Catalogo</h4>
-							<p class="card-text">
-
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div class="card-footer">
-							<a href="" class="card-link">Ver mas</a>
-						</div>
-					</div>
-				</div>
-				<!--Item 3-->
-				<div class="col-md-4 col-lg-4 col-sm-12">
-					<div class="card">
-						<div class="card-img">
-							<img src="../static/images/posts/blackboard.jpg">
-						</div>
-
-						<div class="card-body">
-							<h4 class="card-title">Item de Catalogo</h4>
-							<p class="card-text">
-
-								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div class="card-footer">
-							<a href="" class="card-link">Ver mas</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-			
-		
-
-		</div>
-
-		<ul class="pagination justify-content-center pagination-lg mt-4">
-				<li class="page-item">
-				  <a class="page-link" href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-					<span class="sr-only">Previous</span>
-				  </a>
-				</li>
-				<li class="page-item"><a class="page-link" href="#">1</a></li>
-				<li class="page-item"><a class="page-link" href="#">2</a></li>
-				<li class="page-item"><a class="page-link" href="#">3</a></li>
-				<li class="page-item">
-				  <a class="page-link" href="#" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-					<span class="sr-only">Next</span>
-				  </a>
-				</li>
-			  </ul>
-
-	</div>
+                            <p>
+                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                sunt in culpa qui officia deserunt
+                                mollit anim id est laborum.</p>
+                        </b>
+                        <button id="verCatalogo" class="btn btn-outline-secondary btn-lg" data-value="blog" href="#">Ver
+                            catálogo
+                        </button>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
 
 
 
-      {% endblock %}
+
+    <!-- Catálogo -->
+    <div class="blog" id="blog">
+        <div class="container">
+            <h1 class="text-center">Catálogo</h1>
+            <!-- Barra de busqueda -->
+            <form  class="row form-inline  justify-content-center" style="margin-bottom:4em">
+
+                <select id="email" class="form-control col-sm-3 mr-1" name="idCategoria" style="">
+                    <option value="-1">Todas las categorias</option>
+                    <option value="1">Catalogo</option>
+                    <option value="1">Herramienta</option>
+                </select>
+
+
+                <input type="text" id="nombrePromocion" name="nombrePromocion" class="form-control col-sm-5"
+                       placeholder="">
+
+
+                <button class="btn btn-outline-secondary main-button  col-sm-3 ml-1" onclick="buscarCatalogo(event)">Buscar</button>
+
+            </form>
+            <div class="loader-container">
+                <div id="search-loader" class="loader"></div>
+            </div>
+            <div class="search-results">
+
+                <!-- 3 items por fila -->
+            </div>
+
+            <ul class="pagination justify-content-center pagination-lg mt-4" id="paginador">
+
+            </ul>
+
+
+        </div>
+
+
+    </div>
+
+    <script>
+        var catalogo;
+        var paginaActual=1;
+        var numPaginas;
+        var ITEMS_POR_PAG=6;
+        function buscarElementos(tipo, busqueda,scroll) {
+            $(".search-results").hide();
+            $(".search-results").css({'opacity':0});
+            $(".loader-container").show();
+            $("#paginador").empty();
+
+            $.getJSON("http://localhost:8000/catalogo/searchItems").done(function (data) {
+                //data=[];
+
+
+
+                catalogo=data;
+
+
+                Array.prototype.push.apply(data, data)
+
+                data.push(data[data.length-1]);
+                data.push(data[data.length-1]);
+                /*
+                Array.prototype.push.apply(data, data)
+                Array.prototype.push.apply(data, data)
+                Array.prototype.push.apply(data, data)
+
+                data.push(data[data.length-1]);
+                data.push(data[data.length-1]);
+                data.push(data[data.length-1]);
+
+                */
+
+                numPaginas=Math.round( data.length/ITEMS_POR_PAG +0.49);
+                $(".loader-container").hide();
+                    mostrarElementos(data,1);
+                mostrarPaginador(numPaginas);
+                $(".search-results").show();
+                $(".search-results").css({'opacity':1});
+
+
+
+                if(scroll){
+                    $("body,html").animate({
+                        scrollTop:  $('#paginador').offset().top
+                    },1000)
+                }
+
+
+
+            })
+        }
+
+        buscarElementos(null,null,false);
+
+        function buscarCatalogo(e){
+            e.preventDefault();
+
+            buscarElementos(null,null,true);
+
+
+        }
+
+        function mostrarElementos(elementos,pagina) {
+                $(".search-results").empty();
+                var _itemRow = '<div class="row item-row"> </div> ';
+                var itemRow = $(_itemRow);
+
+
+                var offset= ITEMS_POR_PAG*(pagina-1) ;
+
+            //console.log(elementos,offset);
+
+                for(var i=0 ;i<6 && i+offset<elementos.length;i++){
+
+                    var item=elementos[offset+i];
+
+
+
+
+                    var _itemBox = '<div class="col-md-4 col-lg-4 col-sm-12">' +
+                        '<div class="card">' +
+                        '<div class="card-img">' +
+                        '<img src="https://res.cloudinary.com/hn6nvsi2y/' + item.fields.image + '">' +
+                        '</div>' +
+
+                        '<div class="card-body">' +
+                        '<h4 class="card-title">' + item.fields.name + '</h4>' +
+                        '<p class="card-text">' +
+                        item.fields.description +
+                        '</p>' +
+                        '</div>' +
+                        '<div class="card-footer">' +
+                        '<a href="" class="card-link">Ver mas</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+
+
+                    var itemBox = $(_itemBox);
+                    itemRow.append(itemBox);
+
+                    if ((i != 0) && (i + 1) % 3 == 0 || i+offset == elementos.length - 1) {
+                        $(".search-results").append(itemRow);
+                        itemRow = $(_itemRow);
+                    }
+
+                }
+
+
+
+
+        }
+
+
+         /** index 1 .. n
+          * */
+        function cambiarAPag(index) {
+            console.log("index",index);
+            paginaActual=index;
+            mostrarElementos(catalogo,index);
+        }
+
+        function irAPagAnterior() {
+            if(paginaActual==1) return;
+            cambiarAPag(paginaActual-1);
+
+        }
+
+        function irAPagSiguiente() {
+            if(paginaActual==numPaginas) return;
+            cambiarAPag(paginaActual+1);
+
+        }
+
+        function mostrarPaginador(numPags) {
+
+            var _previous='<li class="page-item" onclick="irAPagAnterior()">\n' +
+                '                    <a class="page-link"   aria-label="Previous">\n' +
+                '                        <span aria-hidden="true">&laquo;</span>\n' +
+                '                        <span class="sr-only">Previous</span>\n' +
+                '                    </a>\n' +
+                '                </li>';
+
+            $("#paginador").append( $(_previous));
+
+
+            for(var i=1;i<=numPags;i++){
+                var _boton='<li class="page-item"><a class="page-link"  onclick="cambiarAPag('+i+')">'+i+'</a></li>';
+                $("#paginador").append($(_boton));
+            }
+
+
+
+            var _next='<li class="page-item" onclick="irAPagSiguiente()">\n' +
+                '                    <a class="page-link" aria-label="Next" >\n' +
+                '                        <span aria-hidden="true">&raquo;</span>\n' +
+                '                        <span class="sr-only">Next</span>\n' +
+                '                    </a>\n' +
+                '                </li>';
+
+            $("#paginador").append( $(_next));
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+{% endblock %}

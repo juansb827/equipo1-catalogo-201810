@@ -3,14 +3,25 @@ from __future__ import unicode_literals
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core import serializers
 from django.shortcuts import render, redirect
-from models import UserForm
+from django.views.decorators.csrf import csrf_exempt
 
+from models import UserForm, Tool
 
 # Create your views here.
 from django.urls import reverse
+import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
+cloudinary.config(
+  cloud_name = os.environ.get('CLOUDINARY_NAME'),
+  api_key = os.environ.get('CLOUDINARY_API_KEY'),
+  api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+)
 
 def index(request):
     return render(request, 'index.html', {})
@@ -48,6 +59,15 @@ def add_user_view(request):
     }
     return render(request, 'registro.html', {})
     #return render(request, 'catalogo/registro.html')
+
+@csrf_exempt
+def search_item(request):
+    if request.user.is_authenticated():
+        lista_imagenes=Tool.objects.all()
+    else:
+        lista_imagenes = Tool.objects.all()
+    return HttpResponse(serializers.serialize("json", lista_imagenes))
+
 
 def login_view(request):
     if request.user.is_authenticated():

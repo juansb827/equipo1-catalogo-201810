@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from cloudinary.models import CloudinaryField
 from django import forms
 from django.contrib.auth.models import User
 from django.db import models
@@ -47,6 +47,7 @@ def clean_password2(self):
 
 class Tool(models.Model):
     name = models.CharField(max_length=150)
+    image = CloudinaryField('image', null=True ) #Imagen que se ve en los resultados de busqueda
     description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
 
