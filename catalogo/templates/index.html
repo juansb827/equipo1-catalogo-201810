@@ -67,6 +67,7 @@
     </div>
 
     <script>
+        var URL_BASE=window.location.origin;
         var catalogo;
         var paginaActual=1;
         var numPaginas;
@@ -77,7 +78,7 @@
             $(".loader-container").show();
             $("#paginador").empty();
 
-            $.getJSON("http://localhost:8000/catalogo/searchItems").done(function (data) {
+            $.getJSON(URL_BASE+"/catalogo/searchItems").done(function (data) {
                 //data=[];
 
 
