@@ -8,7 +8,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Tool
+from models import UserForm, Tool,Technology,Example
 
 # Create your views here.
 from django.urls import reverse
@@ -62,10 +62,37 @@ def add_user_view(request):
 
 @csrf_exempt
 def search_item(request):
-    if request.user.is_authenticated():
-        lista_imagenes=Tool.objects.all()
-    else:
+
+    TOOL="1"
+    TECHNOLOGY ="2"
+    EXAMPLE = "3"
+
+
+    name=request.GET['name'];
+    type= request.GET['type']
+
+    print('type',name,type)
+
+
+    if type==TOOL:
         lista_imagenes = Tool.objects.all()
+    elif type==TECHNOLOGY :
+        lista_imagenes = Technology.objects.all().filter(name__icontains="fdsaf")
+    elif type==EXAMPLE:
+        lista_imagenes = Example.objects.all()
+    else :
+
+        lista_imagenes=  Tool.objects.all()
+
+
+    if name is not None and name !="":
+        print("aca")
+
+        lista_imagenes= lista_imagenes.filter(name__icontains=name.strip())
+
+
+
+
     return HttpResponse(serializers.serialize("json", lista_imagenes))
 
 

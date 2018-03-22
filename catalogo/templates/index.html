@@ -34,10 +34,11 @@
             <!-- Barra de busqueda -->
             <form  class="row form-inline  justify-content-center" style="margin-bottom:4em">
 
-                <select id="email" class="form-control col-sm-3 mr-1" name="idCategoria" style="">
+                <select class="form-control col-sm-3 mr-1" id="idCategoria" style="">
                     <option value="-1">Todas las categorias</option>
-                    <option value="1">Catalogo</option>
                     <option value="1">Herramienta</option>
+                    <option value="2">Catalogo</option>
+
                 </select>
 
 
@@ -50,6 +51,10 @@
             </form>
             <div class="loader-container">
                 <div id="search-loader" class="loader"></div>
+            </div>
+
+            <div id="noResults" class="alert alert-info " role="alert" style="display: none">
+                <strong>No se encontraron resultados!</strong>
             </div>
             <div class="search-results">
 
@@ -72,15 +77,22 @@
         var paginaActual=1;
         var numPaginas;
         var ITEMS_POR_PAG=6;
-        function buscarElementos(tipo, busqueda,scroll) {
-            $(".search-results").hide();
+        function buscarElementos(tipo, nombreElemento,scroll) {
+            $("#noResults").hide();
+            $(".search-results").removeClass("smooth")
             $(".search-results").css({'opacity':0});
             $(".loader-container").show();
             $("#paginador").empty();
 
-            $.getJSON(URL_BASE+"/catalogo/searchItems").done(function (data) {
-                //data=[];
+            $.getJSON(URL_BASE+"/catalogo/searchItems",{type: tipo,name: nombreElemento }).done(function (data) {
+                $(".loader-container").hide();
+                if( data.length == 0) {
+                    $("#noResults").show();
+                    return;
+                }
 
+
+                console.log(data);
 
 
                 catalogo=data;
@@ -102,17 +114,18 @@
                 */
 
                 numPaginas=Math.round( data.length/ITEMS_POR_PAG +0.49);
-                $(".loader-container").hide();
+
                     mostrarElementos(data,1);
                 mostrarPaginador(numPaginas);
-                $(".search-results").show();
+
+                $(".search-results").addClass("smooth");
                 $(".search-results").css({'opacity':1});
 
 
-
+                console.log("scroll",$('.item-row').first().offset().top, $('.item-row').last().offset().top);
                 if(scroll){
                     $("body,html").animate({
-                        scrollTop:  $('#paginador').offset().top
+                        scrollTop: $('#nombrePromocion').first().offset().top
                     },1000)
                 }
 
@@ -125,8 +138,9 @@
 
         function buscarCatalogo(e){
             e.preventDefault();
-
-            buscarElementos(null,null,true);
+            var nombre=$("#nombrePromocion").val();
+            var tipo=$("#idCategoria").val();
+            buscarElementos(tipo,nombre,true);
 
 
         }
