@@ -173,7 +173,7 @@
                         '<div class="card-body">' +
                         '<h4 class="card-title">' + item.fields.name + '</h4>' +
                         '<p class="card-text">' +
-                        item.fields.description +
+                         acortar( item.fields.description )+
                         '</p>' +
                         '</div>' +
                         '<div class="card-footer">' +
@@ -219,6 +219,7 @@
 
         }
 
+
         function mostrarPaginador(numPags) {
 
             var _previous='<li class="page-item" onclick="irAPagAnterior()">\n' +
@@ -246,6 +247,12 @@
                 '                </li>';
 
             $("#paginador").append( $(_next));
+
+        }
+
+        function acortar(texto) {
+            if(texto.length<=60) return texto;
+            else return texto.slice(0,57) + "...";
 
         }
 
