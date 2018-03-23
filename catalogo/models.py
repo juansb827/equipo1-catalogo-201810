@@ -50,7 +50,6 @@ def clean_password2(self):
 
 
 
-
 class Technology(models.Model):
     name = models.CharField(max_length=150)
     thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
@@ -90,3 +89,22 @@ class Tutorial(models.Model):
     def __unicode__(self):
         return self.name
 
+ITEM_TYPE_CHOICES = (
+        ('1', 'TECHNOLOGY'),
+        ('2', 'TOOL'),
+        ('3', 'TUTORIAL'),
+        ('4', 'EXAMPLE'),
+    )
+
+class Item(models.Model):
+    name = models.CharField(max_length=150)
+    description = models.CharField(max_length=150)
+    thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
+    type = models.CharField(max_length=1, choices=ITEM_TYPE_CHOICES)
+    technology = models.ForeignKey(Technology, null=True, blank=True)
+    tool = models.ForeignKey(Tool, null=True, blank=True)
+    tutorial = models.ForeignKey(Tutorial, null=True, blank=True)
+    example = models.ForeignKey(Example, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name + "   " +ITEM_TYPE_CHOICES[int(self.type)-1][1]

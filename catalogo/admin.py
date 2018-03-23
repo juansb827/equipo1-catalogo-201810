@@ -8,7 +8,7 @@ from django.contrib import admin
 # Register your models here.
 import catalogo.models as models
 
-
+admin.site.register(models.Item)
 admin.site.register(models.Technology)
 admin.site.register(models.Tool)
 admin.site.register(models.Tutorial)

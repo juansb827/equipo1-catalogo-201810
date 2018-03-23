@@ -9,7 +9,7 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Tool,Technology,Example,Tutorial
+from models import UserForm, Tool,Technology,Example,Tutorial,Item,ITEM_TYPE_CHOICES
 from django.db.models import Q
 # Create your views here.
 from django.urls import reverse
@@ -73,16 +73,65 @@ def search_item(request):
 
     name=request.GET['name'];
     type= request.GET['type']
+    #type='1'
+
+
 
     if name is not None :
         name = name.strip()
 
     print('type',name,type)
 
-    techs = Technology.objects.all()
-    if name is not None and name != "":
-        techs= techs.filter(Q(name__icontains=name))
+    query = Item.objects.all()
 
+    if name is not None and name != "":
+        print ("aca")
+
+        tech = Item.objects.filter(Q(type='1')).filter(name__icontains=name)
+
+        # el nombre contiene name o el nombre de su tecnologia contiene name
+        tools= query.filter(type='2').filter(Q(name__icontains=name) | Q(tool__technology_id__in=tech.values('technology')) )
+
+        # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
+        tutoriales = query.filter(type='3').filter(Q(name__icontains=name) | Q(tutorial__tool__id__in =tools.values('tool') ) )
+
+        # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
+        examples = query.filter(type='4').filter(Q(name__icontains=name) | Q(example__tool__id__in =tools.values('tool') ))
+
+        if type == '1':
+            query = tech
+        elif type == '2':
+            query = tools
+        elif type == '3':
+            query = tutoriales
+        elif type == '4':
+            query = examples
+        else :
+            query = tech.union(tools).union(tutoriales).union(examples)
+
+    else:
+
+        if type!='-1':
+            query = query.filter(type=type)
+
+
+
+
+
+
+
+
+        #query=tech
+
+
+        """if type == '1':
+        if type == '2':
+            query = query.filter(Q(name__icontains=name) | Q(tool__technology__name__icontains=name))
+        if type == '3':
+            query = query.filter(Q(name__icontains=name) | Q(tutorial__tool__name__icontains=name ) | Q(tutorial__tool__technology__name__icontains=name) )
+            """
+
+    """
     tools = Tool.objects.all()
     if name is not None and name != "":
         tools= tools.filter(  Q(name__icontains=name) | Q(technology__name__icontains=name))
@@ -111,7 +160,7 @@ def search_item(request):
     else :
         query=  chain(techs,tools,tuts,exs)
 
-
+        """
     """
     if name is not None and name !="":
         print("aca")
