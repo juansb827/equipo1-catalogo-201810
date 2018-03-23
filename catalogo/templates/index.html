@@ -36,8 +36,10 @@
 
                 <select class="form-control col-sm-3 mr-1" id="idCategoria" style="">
                     <option value="-1">Todas las categorias</option>
-                    <option value="1">Herramienta</option>
-                    <option value="2">Catalogo</option>
+                    <option value="1">Tecnologia</option>
+                    <option value="2">Herramienta</option>
+                    <option value="3">Tutorial</option>
+                    <option value="4">Ejemplo</option>
 
                 </select>
 
@@ -97,12 +99,12 @@
 
                 catalogo=data;
 
-
+/*
                 Array.prototype.push.apply(data, data)
 
                 data.push(data[data.length-1]);
                 data.push(data[data.length-1]);
-                /*
+
                 Array.prototype.push.apply(data, data)
                 Array.prototype.push.apply(data, data)
                 Array.prototype.push.apply(data, data)
@@ -165,7 +167,7 @@
                     var _itemBox = '<div class="col-md-4 col-lg-4 col-sm-12">' +
                         '<div class="card">' +
                         '<div class="card-img">' +
-                        '<img src="https://res.cloudinary.com/hn6nvsi2y/' + item.fields.image + '">' +
+                        '<img src="https://res.cloudinary.com/hn6nvsi2y/' + item.fields.thumbnail + '">' +
                         '</div>' +
 
                         '<div class="card-body">' +

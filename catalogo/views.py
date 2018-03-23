@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
+from __future__ import unicode_literals
+from itertools import chain
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -8,8 +9,8 @@ from django.core import serializers
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Tool,Technology,Example
-
+from models import UserForm, Tool,Technology,Example,Tutorial
+from django.db.models import Q
 # Create your views here.
 from django.urls import reverse
 import os
@@ -63,37 +64,66 @@ def add_user_view(request):
 @csrf_exempt
 def search_item(request):
 
-    TOOL="1"
-    TECHNOLOGY ="2"
-    EXAMPLE = "3"
+
+    TECHNOLOGY ="1"
+    TOOL = "2"
+    TUTORIAL = "3"
+    EXAMPLE = "4"
 
 
     name=request.GET['name'];
     type= request.GET['type']
 
+    if name is not None :
+        name = name.strip()
+
     print('type',name,type)
 
+    techs = Technology.objects.all()
+    if name is not None and name != "":
+        techs= techs.filter(Q(name__icontains=name))
 
-    if type==TOOL:
-        lista_imagenes = Tool.objects.all()
-    elif type==TECHNOLOGY :
-        lista_imagenes = Technology.objects.all().filter(name__icontains="fdsaf")
+    tools = Tool.objects.all()
+    if name is not None and name != "":
+        tools= tools.filter(  Q(name__icontains=name) | Q(technology__name__icontains=name))
+
+    tuts = Tutorial.objects.all()
+    if name is not None and name != "":
+        tuts = tuts.filter( Q(name__icontains=name) |
+             Q(tool__name__icontains=name) | Q(
+                tool__technology__name__icontains=name))
+
+    exs = Example.objects.all()
+    if name is not None and name != "":
+        exs = exs.filter( Q(name__icontains=name) |
+         Q(tool__name__icontains=name) | Q(
+                tool__technology__name__icontains=name))
+
+
+    if type==TECHNOLOGY :
+        query=techs
+    elif type == TOOL:
+        query=tools
+    elif type == TUTORIAL:
+        query=tuts
     elif type==EXAMPLE:
-        lista_imagenes = Example.objects.all()
+        query=exs
     else :
+        query=  chain(techs,tools,tuts,exs)
 
-        lista_imagenes=  Tool.objects.all()
 
-
+    """
     if name is not None and name !="":
         print("aca")
 
         lista_imagenes= lista_imagenes.filter(name__icontains=name.strip())
+        
+        """
 
 
 
 
-    return HttpResponse(serializers.serialize("json", lista_imagenes))
+    return HttpResponse(serializers.serialize("json", query))
 
 
 def login_view(request):

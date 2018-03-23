@@ -45,19 +45,27 @@ def clean_password2(self):
     return password2
 
 
-class Tool(models.Model):
-    name = models.CharField(max_length=150)
-    image = CloudinaryField('image', null=True ) #Imagen que se ve en los resultados de busqueda
-    description = models.CharField(max_length=500)
-    url = models.CharField(max_length=1000)
 
-    def __unicode__(self):
-        return self.name
+
+
+
 
 
 class Technology(models.Model):
     name = models.CharField(max_length=150)
+    thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
     description = models.CharField(max_length=1000)
+
+
+    def __unicode__(self):
+        return self.name
+
+class Tool(models.Model):
+    name = models.CharField(max_length=150)
+    thumbnail = CloudinaryField('image', null=True ) #Imagen que se ve en los resultados de busqueda
+    description = models.CharField(max_length=500)
+    url = models.CharField(max_length=1000)
+    technology = models.ForeignKey(Technology, null=True)
 
     def __unicode__(self):
         return self.name
@@ -65,8 +73,20 @@ class Technology(models.Model):
 
 class Example(models.Model):
     name = models.CharField(max_length=150)
+    thumbnail = CloudinaryField('image', null=True)
+    description = models.CharField(max_length=500)
     tool = models.ForeignKey(Tool, null=False)
-    technology = models.ForeignKey(Technology, null=False)
 
     def __unicode__(self):
         return self.name
+
+class Tutorial(models.Model):
+    name = models.CharField(max_length=150)
+    thumbnail = CloudinaryField('image', null=True)
+    description = models.CharField(max_length=500)
+    url = models.CharField(max_length=1000)
+    tool = models.ForeignKey(Tool, null=False)
+
+    def __unicode__(self):
+        return self.name
+
