@@ -1,39 +1,47 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-from itertools import chain
+
+import json
+import os
+
+import cloudinary.api
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
 from django.core import serializers
-from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-
-from models import UserForm, Tool,Technology,Example,Tutorial,Item,ITEM_TYPE_CHOICES
 from django.db.models import Q
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
-import os
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+from django.views.decorators.csrf import csrf_exempt
+
+from models import UserForm, Item
 
 cloudinary.config(
-  cloud_name = os.environ.get('CLOUDINARY_NAME'),
-  api_key = os.environ.get('CLOUDINARY_API_KEY'),
-  api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+    cloud_name=os.environ.get('CLOUDINARY_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
+
 
 def index(request):
     return render(request, 'index.html', {})
 
 
-#def login(request):
+# def login(request):
 #   return render(request, 'login.html', {})
 
 
 def add_example(request):
-    return render(request, 'add_example.html', {})
+    request.GET = request.GET.copy()
+    request.GET['type'] = '1'
+    request.GET['name'] = None
+    response = search_item(request)
+    techs = json.loads(response.content)
+    context = {'techs': techs}
+    return render(request, 'add_example.html', context)
+
 
 def add_user_view(request):
     if request.method == 'POST':
@@ -56,31 +64,27 @@ def add_user_view(request):
     else:
         form = UserForm()
     context = {
-        'form':form
+        'form': form
     }
     return render(request, 'registro.html', {})
-    #return render(request, 'catalogo/registro.html')
+    # return render(request, 'catalogo/registro.html')
+
 
 @csrf_exempt
 def search_item(request):
-
-
-    TECHNOLOGY ="1"
+    TECHNOLOGY = "1"
     TOOL = "2"
     TUTORIAL = "3"
     EXAMPLE = "4"
 
+    name = request.GET['name'];
+    type = request.GET['type']
+    # type='1'
 
-    name=request.GET['name'];
-    type= request.GET['type']
-    #type='1'
-
-
-
-    if name is not None :
+    if name is not None:
         name = name.strip()
 
-    print('type',name,type)
+    print('type', name, type)
 
     query = Item.objects.all()
 
@@ -90,13 +94,16 @@ def search_item(request):
         tech = Item.objects.filter(Q(type='1')).filter(name__icontains=name)
 
         # el nombre contiene name o el nombre de su tecnologia contiene name
-        tools= query.filter(type='2').filter(Q(name__icontains=name) | Q(tool__technology_id__in=tech.values('technology')) )
+        tools = query.filter(type='2').filter(
+            Q(name__icontains=name) | Q(tool__technology_id__in=tech.values('technology')))
 
         # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
-        tutoriales = query.filter(type='3').filter(Q(name__icontains=name) | Q(tutorial__tool__id__in =tools.values('tool') ) )
+        tutoriales = query.filter(type='3').filter(
+            Q(name__icontains=name) | Q(tutorial__tool__id__in=tools.values('tool')))
 
         # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
-        examples = query.filter(type='4').filter(Q(name__icontains=name) | Q(example__tool__id__in =tools.values('tool') ))
+        examples = query.filter(type='4').filter(
+            Q(name__icontains=name) | Q(example__tool__id__in=tools.values('tool')))
 
         if type == '1':
             query = tech
@@ -106,23 +113,15 @@ def search_item(request):
             query = tutoriales
         elif type == '4':
             query = examples
-        else :
+        else:
             query = tech.union(tools).union(tutoriales).union(examples)
 
     else:
 
-        if type!='-1':
+        if type != '-1':
             query = query.filter(type=type)
 
-
-
-
-
-
-
-
-        #query=tech
-
+        # query=tech
 
         """if type == '1':
         if type == '2':
@@ -169,9 +168,6 @@ def search_item(request):
         
         """
 
-
-
-
     return HttpResponse(serializers.serialize("json", query))
 
 
@@ -180,7 +176,7 @@ def login_view(request):
         return redirect(reverse('catalogo:index'))
 
     mensaje = ''
-    if request.method =='POST':
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
@@ -190,7 +186,8 @@ def login_view(request):
         else:
             mensaje = 'Nombre de usuario o clave incorrecta.'
 
-    return render(request, 'login.html', {'mensaje':mensaje})
+    return render(request, 'login.html', {'mensaje': mensaje})
+
 
 def logout_view(request):
     logout(request)
