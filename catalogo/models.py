@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.forms import ModelForm
 
-# Create your models here.
 
+# Create your models here.
 
 
 class UserForm(ModelForm):
@@ -22,32 +22,30 @@ class UserForm(ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'password2']
 
+
 def clean_username(self):
-    #Validación para nombre de usuario
+    # Validación para nombre de usuario
     username = self.cleaned_data['username']
     if User.objects.filter(username=username):
         raise forms.ValidationError('El nombre de usuario ya existe! Por favor intenta otro.')
     return username
 
+
 def clean_email(self):
-    #Validación para correo electronico
+    # Validación para correo electronico
     email = self.cleaned_data['email']
     if User.objects.filter(email=email):
         raise forms.ValidationError('El correo electronico ya existe! Intenta otro por favor.')
     return email
 
+
 def clean_password2(self):
-    #Comprueba que password  y password2 sean iguales.
-    password =  self.cleaned_data['password']
+    # Comprueba que password  y password2 sean iguales.
+    password = self.cleaned_data['password']
     password2 = self.cleaned_data['password2']
     if password != password2:
         raise forms.ValidationError('Las contraseñas no coinciden. Intentalo nuevamente')
     return password2
-
-
-
-
-
 
 
 class Technology(models.Model):
@@ -55,16 +53,15 @@ class Technology(models.Model):
     thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
     description = models.CharField(max_length=1000)
 
-
     def __unicode__(self):
         return self.name
 
+
 class Tool(models.Model):
     name = models.CharField(max_length=150)
-    thumbnail = CloudinaryField('image', null=True ) #Imagen que se ve en los resultados de busqueda
+    thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
     description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
-    technology = models.ForeignKey(Technology, null=True)
 
     def __unicode__(self):
         return self.name
@@ -74,10 +71,13 @@ class Example(models.Model):
     name = models.CharField(max_length=150)
     thumbnail = CloudinaryField('image', null=True)
     description = models.CharField(max_length=500)
+    url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
+    technology = models.ForeignKey(Technology, null=False)
 
     def __unicode__(self):
         return self.name
+
 
 class Tutorial(models.Model):
     name = models.CharField(max_length=150)
@@ -89,12 +89,14 @@ class Tutorial(models.Model):
     def __unicode__(self):
         return self.name
 
+
 ITEM_TYPE_CHOICES = (
-        ('1', 'TECHNOLOGY'),
-        ('2', 'TOOL'),
-        ('3', 'TUTORIAL'),
-        ('4', 'EXAMPLE'),
-    )
+    ('1', 'TECHNOLOGY'),
+    ('2', 'TOOL'),
+    ('3', 'TUTORIAL'),
+    ('4', 'EXAMPLE'),
+)
+
 
 class Item(models.Model):
     name = models.CharField(max_length=150)
@@ -107,4 +109,4 @@ class Item(models.Model):
     example = models.ForeignKey(Example, null=True, blank=True)
 
     def __unicode__(self):
-        return self.name + "   " +ITEM_TYPE_CHOICES[int(self.type)-1][1]
+        return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]

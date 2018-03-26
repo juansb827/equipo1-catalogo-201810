@@ -1,0 +1,73 @@
+
+
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
+    <div class="login-container">
+        <div class="overlayed">
+            <div class="login-area">
+                <div class="container">
+                    <form id="formAddExample" action="../addExample/" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name">Nombre del ejemplo</label>
+                            <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="url">URL del ejemplo</label>
+                            <input required type="text" class="form-control" id="url" name="url" placeholder="URL">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tech">Tecnología</label>
+                                <select required class="form-control" id="tech" name="tech">
+                                    <option disabled selected value>Seleccione una tecnología</option>
+                                    {% for entry in techs %}
+                                        <option value="{{ entry.fields.technology }}">{{ entry.fields.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="tool">Herramienta</label>
+                                <select required class="form-control" id="tool" name="tool">
+                                    <option disabled selected value>Seleccione una herramienta</option>
+                                    {% for entry in tools %}
+                                        <option value="{{ entry.fields.tool }}">{{ entry.fields.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn  main-button">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+<script>
+    $('form').submit(function (e) {
+        var formData = new FormData($("#formAddExample")[0]);
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function () {
+                window.location = "../example/";
+            }
+        });
+        e.preventDefault();
+    });
+</script>
+
+
+
+
+
+

@@ -10,13 +10,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Item
+from models import UserForm, Item, Example
 
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_NAME'),
@@ -33,14 +33,35 @@ def index(request):
 #   return render(request, 'login.html', {})
 
 
-def add_example(request):
+def example(request):
     request.GET = request.GET.copy()
     request.GET['type'] = '1'
     request.GET['name'] = None
     response = search_item(request)
     techs = json.loads(response.content)
-    context = {'techs': techs}
-    return render(request, 'add_example.html', context)
+    request.GET = request.GET.copy()
+    request.GET['type'] = '2'
+    request.GET['name'] = None
+    response = search_item(request)
+    tools = json.loads(response.content)
+    context = {'techs': techs, 'tools': tools}
+    return render(request, 'example.html', context)
+
+
+def add_example(request):
+    example = {}
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        url = request.POST.get('url')
+        tool = request.POST.get('tool')
+        tech = request.POST.get('tech')
+        example = Example(
+            name=name,
+            url=url,
+            tool_id=tool,
+            technology_id=tech)
+        example.save()
+    return HttpResponse(serializers.serialize("json", [example]))
 
 
 def add_user_view(request):
