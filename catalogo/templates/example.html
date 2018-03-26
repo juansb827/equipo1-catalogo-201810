@@ -11,7 +11,7 @@
         <div class="overlayed">
             <div class="login-area">
                 <div class="container">
-                    <form id="formAddExample" action="../addExample/" enctype="multipart/form-data" method="post">
+                    <form id="formAddExample" enctype="multipart/form-data" method="post">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="name">Nombre del ejemplo</label>
@@ -47,25 +47,30 @@
             </div>
         </div>
     </div>
-{% endblock %}
+
 <script>
-    $('form').submit(function (e) {
+    var URL_BASE=window.location.origin;
+
+    $('#formAddExample').submit(function (e) {
+        e.preventDefault();
+
+
         var formData = new FormData($("#formAddExample")[0]);
         $.ajax({
-            url: $(this).attr('action'),
+            url: URL_BASE+"/catalogo/addExample/",
             type: $(this).attr('method'),
             data: formData,
             cache: false,
             processData: false,
             contentType: false,
-            success: function () {
-                window.location = "../example/";
-            }
+            success: function(){window.location.reload()}
+
         });
-        e.preventDefault();
+
     });
 </script>
 
+{% endblock %}
 
 
 
