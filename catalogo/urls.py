@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^addUser/$', views.add_user_view, name='addUser'),
     url(r'^addExample/$', views.add_example, name='addExample'),
     url(r'^example/$', views.example, name='example'),
-    url(r'^searchItems/$', views.search_item, name='searchItems')
+    url(r'^searchItems/$', views.search_item, name='searchItems'),
+    url(r'^tutorial/$', views.tutorial, name='tutorial'),
 ]

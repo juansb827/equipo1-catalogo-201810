@@ -47,6 +47,20 @@ def example(request):
     context = {'techs': techs, 'tools': tools}
     return render(request, 'example.html', context)
 
+def tutorial(request):
+    request.GET = request.GET.copy()
+    request.GET['type'] = '1'
+    request.GET['name'] = None
+    response = search_item(request)
+    techs = json.loads(response.content)
+    request.GET = request.GET.copy()
+    request.GET['type'] = '2'
+    request.GET['name'] = None
+    response = search_item(request)
+    tools = json.loads(response.content)
+    context = {'techs': techs, 'tools': tools}
+    return render(request, 'tutorial.html',context)
+
 
 def add_example(request):
     example = {}

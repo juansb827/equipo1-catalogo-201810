@@ -39,6 +39,8 @@
                 {% if user.is_authenticated %}
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:index' %}">{{ user.username }}</a></li>
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:logout' %}">Logout</a></li>
+                    <li class="nav-item">
+                    <a class="nav-link" data-value="about" href="{% url 'catalogo:tutorial' %}">Agregar Tutorial</a></li>
                 {% else %}
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:addUser' %}">Registro</a></li>
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Login</a></li>
