@@ -156,52 +156,7 @@ def search_item(request):
         if type != '-1':
             query = query.filter(type=type)
 
-        # query=tech
 
-        """if type == '1':
-        if type == '2':
-            query = query.filter(Q(name__icontains=name) | Q(tool__technology__name__icontains=name))
-        if type == '3':
-            query = query.filter(Q(name__icontains=name) | Q(tutorial__tool__name__icontains=name ) | Q(tutorial__tool__technology__name__icontains=name) )
-            """
-
-    """
-    tools = Tool.objects.all()
-    if name is not None and name != "":
-        tools= tools.filter(  Q(name__icontains=name) | Q(technology__name__icontains=name))
-
-    tuts = Tutorial.objects.all()
-    if name is not None and name != "":
-        tuts = tuts.filter( Q(name__icontains=name) |
-             Q(tool__name__icontains=name) | Q(
-                tool__technology__name__icontains=name))
-
-    exs = Example.objects.all()
-    if name is not None and name != "":
-        exs = exs.filter( Q(name__icontains=name) |
-         Q(tool__name__icontains=name) | Q(
-                tool__technology__name__icontains=name))
-
-
-    if type==TECHNOLOGY :
-        query=techs
-    elif type == TOOL:
-        query=tools
-    elif type == TUTORIAL:
-        query=tuts
-    elif type==EXAMPLE:
-        query=exs
-    else :
-        query=  chain(techs,tools,tuts,exs)
-
-        """
-    """
-    if name is not None and name !="":
-        print("aca")
-
-        lista_imagenes= lista_imagenes.filter(name__icontains=name.strip())
-        
-        """
 
     return HttpResponse(serializers.serialize("json", query))
 
@@ -222,6 +177,9 @@ def login_view(request):
             mensaje = 'Nombre de usuario o clave incorrecta.'
 
     return render(request, 'login.html', {'mensaje': mensaje})
+
+def estrategia_view(request):
+    return render(request, 'estrategia.html', {})
 
 
 def logout_view(request):

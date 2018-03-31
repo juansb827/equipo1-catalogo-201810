@@ -86,6 +86,12 @@ class Tutorial(models.Model):
     url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
 
+
+class Strategy(models.Model):
+    name = models.CharField(max_length=150)
+
+
+
     def __unicode__(self):
         return self.name
 
@@ -107,6 +113,12 @@ class Item(models.Model):
     tool = models.ForeignKey(Tool, null=True, blank=True)
     tutorial = models.ForeignKey(Tutorial, null=True, blank=True)
     example = models.ForeignKey(Example, null=True, blank=True)
+    strategy = models.ForeignKey(Strategy, null=True, blank=True)
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
+
+
+class Image(models.Model):
+    item =models.ForeignKey(Item)
+    image = CloudinaryField('image', null=True)

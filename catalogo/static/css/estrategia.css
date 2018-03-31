@@ -1,0 +1,32 @@
+.img-preview{
+    height: 12em;
+}
+
+.fileinput-button{
+    position: relative;
+     width: 200px;
+}
+
+.upload-button{
+
+        position: absolute;
+    left: 0;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.card{
+    padding: 1em;
+    margin : 1em;
+    box-shadow: 0 0 20px #ccc;
+}
+
+.miniatura {
+
+    padding: 1em;
+    margin : 1em;
+    box-shadow: 0 0 20px #ccc;
+
+}
