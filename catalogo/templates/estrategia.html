@@ -14,12 +14,12 @@
 
             <div class="form-group">
                 <label for="name">Nombre de la estrategia</label>
-                <input type="text" id="username" class="form-control form-control-lg" placeholder="Username"
+                <input type="text" id="name" class="form-control form-control-lg" placeholder="Username"
                                                    name="username" value="ds">
             </div>
             <div class="form-group">
-                    <label for="comment">Descripción:</label>
-                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                    <label for="description">Descripción:</label>
+                    <textarea class="form-control" rows="5" id="description"></textarea>
             </div>
 
 
@@ -47,11 +47,12 @@
 
         <div id="files" class="files"></div>
 
-        <button type="submit" class="btn btn-outline-secondary btn-lg btn-block main-button">Guardar</button>
+        <button  onclick="sendData()" class="btn btn-outline-secondary btn-lg btn-block main-button">Guardar Estrategia</button>
 
         </div>
 
         <script type="text/javascript">
+        /*
             for(var i=0;i<8;i++){
                 var del='../../static/images/delete.svg';
                      var temp='<div class="card"><img class="img-preview" src="https://cdn.dopl3r.com/memes_files/carl-de-los-simpson-plantilla-8W5Pr.jpg">' +
@@ -65,15 +66,13 @@
 
                     $(".images").append($(temp));
             }
-
-            function  send(file) {
+    */
+            function  send(file,preset,cb) {
                 var formData = new FormData();
-                formData.append('upload_preset','thumbnail');
+                formData.append('upload_preset',preset);
                 formData.append('file',file);
                  var xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    console.log("sucess",this);
-                };
+                xhr.onload = cb;
 
                 xhr.addEventListener("progress",function (evt) {
                      console.log("progress",evt);
@@ -91,44 +90,72 @@
 
             }
 
+            function deletePhoto(i){
+                urls[i]=null;
+                $(".images #preview-"+i).remove();
+            }
+
+            function addImage(src,file) {
+                var value={src: src, file: file};
+                urls.push(value);
+                var i=urls.length-1;
+                var del='../../static/images/delete.svg';
+                var itemBox ='<div class="card" id="preview-'+i+'"><img class="img-preview uploading" src="'+value.src+'">' +
+                             '<div class="wrapper"><div class="loader-container-2">' +
+                             '                         <div id="search-loader" class="loader-2"></div>\n' +
+                             '                    </div>'+
+                             '</div>'+
+                             '  <div class="delete " onclick="deletePhoto('+i+')"><img style="height:50px" src="'+del+'"></div>'+
+                             '</div>';
+
+
+
+                $(".images").append($(itemBox));
+
+            }
+
+            function uploadPhoto(i,preset,cb){
+
+                send(urls[i].file,preset,function (data) {
+                    console.log(data);
+                    var res=JSON.parse(data.target.response);
+                    var url=res.url;
+                    var offset='http://res.cloudinary.com/hn6nvsi2y'.length;
+                    var imgPath=url.slice(offset);
+                    urls[i].path=imgPath;
+
+                    console.log(urls);
+                    cb(imgPath);
+
+                })
+
+            }
+
+
+
             var urls=[];
             function updatePreviews() {
                 $(".images").empty();
-
+                var del='../../static/images/delete.svg';
                 urls.forEach(function (value,i) {
+                    if(!value) return;
 
-                     var itemBox = '<div class="col-sm-3">' +
-                        '<div class="card">' +
-                        '<div class="card-img">' +
-                        '<img src="'+value.src+'">' +
-                        '</div>' +
-
-                        '<div class="card-body">' +
-                        '<h4 class="card-title">' + 'ds' +'</h4>' +
-                        '<p class="card-text">' +
-                         'dsd'+
-                        '</p>' +
-                        '</div>' +
-                        '<div class="card-footer">' +
-                        '<a href="" class="card-link">Ver mas</a>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
-
-                     var temp='<div ><img style="height: 12em" src="https://cdn.dopl3r.com/memes_files/carl-de-los-simpson-plantilla-8W5Pr.jpg"></div>\n' +
-                         '            <div ><img style="height: 12em" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYldI6HERUkLWu_3R9gy9wa6b5-sSehUwh75vc7Whayc2XbGxGOA"></div>'
+                     var itemBox ='<div class="card" id="preview-'+i+'"><img class="img-preview uploading" src="'+value.src+'">' +
+                             '<div class="wrapper"><div class="loader-container-2">' +
+                             '                         <div id="search-loader" class="loader-2"></div>\n' +
+                             '                    </div>'+
+                             '</div>'+
+                             '  <div class="delete " onclick="deletePhoto('+i+')"><img style="height:50px" src="'+del+'"></div>'+
+                             '</div>';
 
 
 
-                    $(".images").append($(temp));
+                    $(".images").append($(itemBox));
                 })
 
 
-
-
-
-
             }
+
 
             function readURL(input) {
 
@@ -136,8 +163,13 @@
                     var reader = new FileReader();
 
                     reader.onload = function (e) {
-                        urls.push({src: e.target.result, file: input.files[0]});
-                        updatePreviews();
+                        addImage(e.target.result, input.files[0]);
+                        var i=urls.length-1;
+                        uploadPhoto(i,'big_image',function () {
+
+                            $('#preview-'+i+' .img-preview').removeClass('uploading');
+                            $('#preview-'+i+' .wrapper').hide();
+                        });
 
 
                     }
@@ -151,6 +183,65 @@
             $("#imgInp").change(function () {
                 readURL(this);
             });
+
+            var URL_BASE=window.location.origin;
+            function sendData(){
+                var data={};
+                data.name=$('#name').val();
+                data.description=$('#description').val();
+                data.images=[];
+
+
+                urls=urls.filter(function (data) {
+                    return !!data;
+                })
+
+                urls.forEach(function (value,i) {
+
+
+
+                    if(!value.path) {
+                        console.log("no cargo la imagen",value,i);
+                        return;
+                    }
+
+                    if(!data.thumbnail){
+                        console.log("aca");
+                        data.thumbnail=i;
+                    }
+                    data.images.push(value.path);
+
+                });
+
+                //Validaciones
+                var msg=[];
+                if(!data.name || !data.name.trim()){
+                    msg.push("No completo el campo nombre");
+
+                }
+                if(urls.length==0){
+                    msg.push("No ha seleccionado fotos");
+
+                }
+                if(!data.description){
+                    msg.push("Debe colocar una descripción");
+                }
+                if (msg.length!=0){
+                    console.log("Vali",msg);
+                    return;
+                }
+                uploadPhoto(data.thumbnail,'thumbnail',function (imgPath) {
+                    data.thumbnail=imgPath;
+                    console.log("Data to be sent",data);
+                })
+
+
+                return;
+
+                $.post(URL_BASE+"/catalogo/addEstrategia",data
+                )
+
+            }
 
 
 

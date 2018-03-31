@@ -181,6 +181,21 @@ def login_view(request):
 def estrategia_view(request):
     return render(request, 'estrategia.html', {})
 
+@csrf_exempt
+def add_estrategia(request):
+    name = request.POST['name'];
+    description = request.POST['description']
+    thumbnail = request.POST['thumbnail']
+    """
+    //TODO: agregar a items
+    // TODO: agregar a estrategia1
+
+    "image/upload/" + data.result.path;
+        """
+    pass
+
+
+
 
 def logout_view(request):
     logout(request)
