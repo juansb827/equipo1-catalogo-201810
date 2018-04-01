@@ -14,8 +14,8 @@
 
             <div class="form-group">
                 <label for="name">Nombre de la estrategia</label>
-                <input type="text" id="name" class="form-control form-control-lg" placeholder="Username"
-                                                   name="username" value="ds">
+                <input type="text" id="name" class="form-control form-control-lg" placeholder=""
+                                                   name="username" value="">
             </div>
             <div class="form-group">
                     <label for="description">Descripción:</label>
@@ -121,7 +121,7 @@
                     var res=JSON.parse(data.target.response);
                     var url=res.url;
                     var offset='http://res.cloudinary.com/hn6nvsi2y'.length;
-                    var imgPath=url.slice(offset);
+                    var imgPath= res.public_id;//url.slice(offset);
                     urls[i].path=imgPath;
 
                     console.log(urls);
@@ -188,6 +188,7 @@
             function sendData(){
                 var data={};
                 data.name=$('#name').val();
+                data.type='5'; //Estrategia
                 data.description=$('#description').val();
                 data.images=[];
 
@@ -233,13 +234,21 @@
                 uploadPhoto(data.thumbnail,'thumbnail',function (imgPath) {
                     data.thumbnail=imgPath;
                     console.log("Data to be sent",data);
+
+                    $.post(URL_BASE+"/catalogo/addEstrategia/",data )
+                    .done(function (data) {
+                        console.log("Suc",data);
+                    })
+                    .fail(function (err) {
+                        console.log("Error",err);
+                    })
+
                 })
 
 
-                return;
 
-                $.post(URL_BASE+"/catalogo/addEstrategia",data
-                )
+
+
 
             }
 

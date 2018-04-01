@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from models import UserForm, Item, Example, Tutorial
-
+import models as models
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),
@@ -123,10 +123,7 @@ def add_user_view(request):
 
 @csrf_exempt
 def search_item(request):
-    TECHNOLOGY = "1"
-    TOOL = "2"
-    TUTORIAL = "3"
-    EXAMPLE = "4"
+
 
     name = request.GET['name'];
     type = request.GET['type']
@@ -140,13 +137,14 @@ def search_item(request):
     query = Item.objects.all()
 
     if name is not None and name != "":
-        print ("aca")
+
 
         tech = Item.objects.filter(Q(type='1')).filter(name__icontains=name)
 
+
         # el nombre contiene name o el nombre de su tecnologia contiene name
         tools = query.filter(type='2').filter(
-            Q(name__icontains=name) | Q(tool__technology_id__in=tech.values('technology')))
+            Q(name__icontains=name) | Q(tool__technology__id__in=tech.values('technology')))
 
         # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
         tutoriales = query.filter(type='3').filter(
@@ -156,6 +154,8 @@ def search_item(request):
         examples = query.filter(type='4').filter(
             Q(name__icontains=name) | Q(example__tool__id__in=tools.values('tool')))
 
+        strategies = query.filter(type='5').filter( Q(name__icontains=name))
+
         if type == '1':
             query = tech
         elif type == '2':
@@ -164,11 +164,13 @@ def search_item(request):
             query = tutoriales
         elif type == '4':
             query = examples
+        elif type == '5':
+            query= strategies
         else:
-            query = tech.union(tools).union(tutoriales).union(examples)
+            query = tech.union(tools).union(tutoriales).union(examples).union(strategies)
 
     else:
-
+        #No escribio un criterio de busqueda pero selecciono un tipo de item
         if type != '-1':
             query = query.filter(type=type)
 
@@ -197,18 +199,91 @@ def login_view(request):
 def estrategia_view(request):
     return render(request, 'estrategia.html', {})
 
+
+
+
+
+
 @csrf_exempt
 def add_estrategia(request):
+
+
+
+
     name = request.POST['name'];
     description = request.POST['description']
     thumbnail = request.POST['thumbnail']
-    """
-    //TODO: agregar a items
-    // TODO: agregar a estrategia1
+    images = request.POST.getlist('images[]')
+    type = request.POST['type']
 
-    "image/upload/" + data.result.path;
-        """
-    pass
+    """if type == models.TECHNOLOGY:
+        
+    elif type == models.TOOL:
+        
+    elif type == models.TUTORIAL:
+        
+    elif type == models.EXAMPLE:
+      """
+
+
+
+
+
+    item = Item(
+        name=name,
+        description=description,
+        thumbnail=thumbnail,
+        type=type,
+    )
+
+    ob = None
+
+    if type == models.TECHNOLOGY:  #TODO: agregar cosas especificas de cada tipo de item
+        ob = models.Technology(
+            name=name
+        )
+        ob.save()
+        item.technology = ob
+    elif type == models.TOOL:
+        ob = models.Tool(
+            name=name
+        )
+        ob.save()
+        item.tool = ob
+    elif type == models.TUTORIAL:
+        ob = models.Tutorial(
+            name=name
+        )
+        ob.save()
+        item.tutorial = ob
+    elif type == models.EXAMPLE:
+        ob = models.Example(
+            name=name
+        )
+        ob.save()
+        item.ex = ob
+    elif type == models.STRATEGY:
+        ob = models.Strategy(
+            name=name
+        )
+        ob.save()
+        item.strategy = ob
+
+    item.save()
+
+
+
+    for image in images:
+        models.Image(item=item, image=image).save()
+        print("se guarda imagen")
+
+
+
+    print name,description,thumbnail,images
+    _ob=serializers.serialize("json", [ob])
+    _item = serializers.serialize("json", [item])
+
+    return JsonResponse({'mensaje' : 'ok','item': _item,'strategy': _ob})
 
 
 

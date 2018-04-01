@@ -62,6 +62,7 @@ class Tool(models.Model):
     thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
     description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
+    technology = models.ForeignKey(Technology, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -101,8 +102,14 @@ ITEM_TYPE_CHOICES = (
     ('2', 'TOOL'),
     ('3', 'TUTORIAL'),
     ('4', 'EXAMPLE'),
+    ('5', 'STRATEGY'),
 )
 
+TECHNOLOGY = "1"
+TOOL = "2"
+TUTORIAL = "3"
+EXAMPLE = "4"
+STRATEGY = "5"
 
 class Item(models.Model):
     name = models.CharField(max_length=150)
