@@ -14,12 +14,12 @@
 
             <div class="form-group">
                 <label for="name">Nombre de la estrategia</label>
-                <input type="text" id="name" class="form-control form-control-lg" placeholder=""
+                <input type="text" id="name" class="form-control form-control-lg" placeholder="" maxlength="30"
                                                    name="username" value="">
             </div>
             <div class="form-group">
                     <label for="description">Descripción:</label>
-                    <textarea class="form-control" rows="5" id="description"></textarea>
+                    <textarea class="form-control" rows="5" id="description" maxlength="150"></textarea>
             </div>
 
 
@@ -51,6 +51,32 @@
 
         </div>
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Campos incompletos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul id="listaErrores">
+
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div id="snackbar">Guardando...</div>
         <script type="text/javascript">
         /*
             for(var i=0;i<8;i++){
@@ -186,6 +212,7 @@
 
             var URL_BASE=window.location.origin;
             function sendData(){
+
                 var data={};
                 data.name=$('#name').val();
                 data.type='5'; //Estrategia
@@ -206,13 +233,14 @@
                         return;
                     }
 
-                    if(!data.thumbnail){
-                        console.log("aca");
+                    if(data.thumbnail==undefined    ){
+                        console.log("aca",i);
                         data.thumbnail=i;
                     }
                     data.images.push(value.path);
 
                 });
+                console.log("images",urls);
 
                 //Validaciones
                 var msg=[];
@@ -228,15 +256,27 @@
                     msg.push("Debe colocar una descripción");
                 }
                 if (msg.length!=0){
-                    console.log("Vali",msg);
+                    $('#listaErrores').empty();
+                    msg.forEach(function (value) {
+                        var error='<li>'+value+'</li>';
+                        $('#listaErrores').append($(error))
+                    });
+
+
+                    $('#exampleModal').modal('show');
+
                     return;
                 }
+
+                $('#snackbar').addClass('show');
                 uploadPhoto(data.thumbnail,'thumbnail',function (imgPath) {
                     data.thumbnail=imgPath;
                     console.log("Data to be sent",data);
 
                     $.post(URL_BASE+"/catalogo/addEstrategia/",data )
                     .done(function (data) {
+
+                        window.location = URL_BASE+"/catalogo/";
                         console.log("Suc",data);
                     })
                     .fail(function (err) {

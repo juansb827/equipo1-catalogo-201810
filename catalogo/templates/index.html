@@ -178,7 +178,7 @@
                         '</p>' +
                         '</div>' +
                         '<div class="card-footer">' +
-                        '<a href="" class="card-link">Ver mas</a>' +
+                        '<a style="color:#007bff" class="card-link" >'+tipos[item.fields.type]+'</a>' +
                         '</div>' +
                         '</div>' +
                         '</div>';
@@ -193,6 +193,8 @@
                     }
 
                 }
+
+
 
 
 
@@ -257,6 +259,16 @@
 
         }
 
+
+
+
+        var tipos={
+            "1":"Tecnologia" ,
+            "2":"Herramienta",
+            "3": "Tutorial",
+            "4": "Ejemplo",
+            "5": "Estrategia"
+        }
 
 
 
