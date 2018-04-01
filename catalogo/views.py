@@ -16,7 +16,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Item, Example
+from models import UserForm, Item, Example, Tutorial
 
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_NAME'),
@@ -58,7 +58,7 @@ def tutorial(request):
     request.GET['name'] = None
     response = search_item(request)
     tools = json.loads(response.content)
-    context = {'techs': techs, 'tools': tools}
+    context = {'tools': tools}
     return render(request, 'tutorial.html',context)
 
 
@@ -76,6 +76,22 @@ def add_example(request):
             technology_id=tech)
         example.save()
     return HttpResponse(serializers.serialize("json", [example]))
+
+def add_tutorial(request):
+    tutorial = {}
+    if request.method == 'POST':
+        name = request.POST.get('nameTuto')
+        url = request.POST.get('url')
+        description = request.POST.get('description')
+        tool = request.POST.get('tool')
+        tutorial = Tutorial(
+            name=name,
+            url=url,
+            description = description,
+            tool_id = tool)
+        tutorial.save()
+    return HttpResponse(serializers.serialize("json", [tutorial]))
+
 
 
 def add_user_view(request):
