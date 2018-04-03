@@ -18,6 +18,10 @@
                             <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre">
                         </div>
                         <div class="form-group">
+                            <label for="description">Descripción del ejemplo:</label>
+                            <textarea class="form-control" rows="5" id="description" name="description" maxlength="150"></textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="url">URL del ejemplo</label>
                             <input required type="text" class="form-control" id="url" name="url" placeholder="URL">
                         </div>
@@ -56,8 +60,11 @@
 
 
         var formData = new FormData($("#formAddExample")[0]);
+        formData.append('type','4')
+        formData.append('thumbnail','')
+        formData.append('images',[])
         $.ajax({
-            url: URL_BASE+"/catalogo/addExample/",
+            url: URL_BASE+"/catalogo/addEstrategia/",
             type: $(this).attr('method'),
             data: formData,
             cache: false,
