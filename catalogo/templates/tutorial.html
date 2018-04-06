@@ -7,10 +7,12 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
     <div class="login-container">
         <div class="overlayed">
+
             <div class="login-area">
-                <div class="container">
+                <h1>Agregar Tutoriales</h1>
+                <div class="container" style="margin-top:10em">
                     <form id="formAddTutorial" enctype="multipart/form-data" method="post">
-                        <h1>Agregar Tutoriales</h1>
+
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="name">Nombre del tutorial</label>

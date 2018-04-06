@@ -275,7 +275,7 @@ def add_estrategia(request):
             tool_id=tool,
             technology_id=tech)
         ob.save()
-        item.ex = ob
+        item.example = ob
 
     elif type == models.STRATEGY:
         ob = models.Strategy(
