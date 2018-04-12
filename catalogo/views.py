@@ -16,8 +16,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Item, Example, Tutorial
+from models import UserForm, Item, Example, Tutorial, Tool
 import models as models
+
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),
@@ -47,6 +48,7 @@ def example(request):
     context = {'techs': techs, 'tools': tools}
     return render(request, 'example.html', context)
 
+
 def tutorial(request):
     request.GET = request.GET.copy()
     request.GET['type'] = '1'
@@ -59,23 +61,38 @@ def tutorial(request):
     response = search_item(request)
     tools = json.loads(response.content)
     context = {'tools': tools}
-    return render(request, 'tutorial.html',context)
+    return render(request, 'tutorial.html', context)
+
+
+def tool(request):
+    return render(request, 'herramienta.html')
+
+
+def add_tool(request):
+    t = {}
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        t = Tool(
+            name=name)
+        t.save()
+    return HttpResponse(serializers.serialize("json", [t]))
 
 
 def add_example(request):
-    example = {}
+    ex = {}
     if request.method == 'POST':
         name = request.POST.get('name')
         url = request.POST.get('url')
         tool = request.POST.get('tool')
         tech = request.POST.get('tech')
-        example = Example(
+        ex = Example(
             name=name,
             url=url,
             tool_id=tool,
             technology_id=tech)
-        example.save()
-    return HttpResponse(serializers.serialize("json", [example]))
+        ex.save()
+    return HttpResponse(serializers.serialize("json", [ex]))
+
 
 def add_tutorial(request):
     tutorial = {}
@@ -87,11 +104,10 @@ def add_tutorial(request):
         tutorial = Tutorial(
             name=name,
             url=url,
-            description = description,
-            tool_id = tool)
+            description=description,
+            tool_id=tool)
         tutorial.save()
     return HttpResponse(serializers.serialize("json", [tutorial]))
-
 
 
 def add_user_view(request):
@@ -123,8 +139,6 @@ def add_user_view(request):
 
 @csrf_exempt
 def search_item(request):
-
-
     name = request.GET['name'];
     type = request.GET['type']
     # type='1'
@@ -138,9 +152,7 @@ def search_item(request):
 
     if name is not None and name != "":
 
-
         tech = Item.objects.filter(Q(type='1')).filter(name__icontains=name)
-
 
         # el nombre contiene name o el nombre de su tecnologia contiene name
         tools = query.filter(type='2').filter(
@@ -154,7 +166,7 @@ def search_item(request):
         examples = query.filter(type='4').filter(
             Q(name__icontains=name) | Q(example__tool__id__in=tools.values('tool')))
 
-        strategies = query.filter(type='5').filter( Q(name__icontains=name))
+        strategies = query.filter(type='5').filter(Q(name__icontains=name))
 
         if type == '1':
             query = tech
@@ -165,16 +177,14 @@ def search_item(request):
         elif type == '4':
             query = examples
         elif type == '5':
-            query= strategies
+            query = strategies
         else:
             query = tech.union(tools).union(tutoriales).union(examples).union(strategies)
 
     else:
-        #No escribio un criterio de busqueda pero selecciono un tipo de item
+        # No escribio un criterio de busqueda pero selecciono un tipo de item
         if type != '-1':
             query = query.filter(type=type)
-
-
 
     return HttpResponse(serializers.serialize("json", query))
 
@@ -196,20 +206,13 @@ def login_view(request):
 
     return render(request, 'login.html', {'mensaje': mensaje})
 
+
 def estrategia_view(request):
     return render(request, 'estrategia.html', {})
 
 
-
-
-
-
 @csrf_exempt
 def add_estrategia(request):
-
-
-
-
     name = request.POST['name'];
     description = request.POST['description']
     thumbnail = request.POST['thumbnail']
@@ -225,10 +228,8 @@ def add_estrategia(request):
     elif type == models.EXAMPLE:
       """
 
-
-    if thumbnail == '' :
+    if thumbnail == '':
         thumbnail == None
-
 
     item = Item(
         name=name,
@@ -239,7 +240,7 @@ def add_estrategia(request):
 
     ob = None
 
-    if type == models.TECHNOLOGY:  #TODO: agregar cosas especificas de cada tipo de item
+    if type == models.TECHNOLOGY:  # TODO: agregar cosas especificas de cada tipo de item
         ob = models.Technology(
             name=name
         )
@@ -247,7 +248,8 @@ def add_estrategia(request):
         item.technology = ob
     elif type == models.TOOL:
         ob = models.Tool(
-            name=name
+            name=name,
+            description=description
         )
         ob.save()
         item.tool = ob
@@ -286,21 +288,15 @@ def add_estrategia(request):
 
     item.save()
 
-
-
     for image in images:
         models.Image(item=item, image=image).save()
         print("se guarda imagen")
 
-
-
-    print name,description,thumbnail,images
-    _ob=serializers.serialize("json", [ob])
+    print name, description, thumbnail, images
+    _ob = serializers.serialize("json", [ob])
     _item = serializers.serialize("json", [item])
 
-    return JsonResponse({'mensaje' : 'ok','item': _item,'strategy': _ob})
-
-
+    return JsonResponse({'mensaje': 'ok', 'item': _item, 'strategy': _ob})
 
 
 def logout_view(request):

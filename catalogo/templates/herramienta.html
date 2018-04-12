@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
+    <div class="login-container">
+        <div class="overlayed">
+            <div class="login-area">
+                <div class="container">
+                    <form id="formAddTool" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name">Nombre de la herramienta</label>
+                            <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripción de la herramienta</label>
+                            <textarea class="form-control" rows="5" id="description" name="description" maxlength="150"></textarea>
+                        </div>
+                        <button type="submit" class="btn  main-button">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var URL_BASE = window.location.origin;
+
+        $('#formAddTool').submit(function (e) {
+            e.preventDefault();
+
+            var formData = new FormData($("#formAddTool")[0]);
+            formData.append('type', '2');
+            formData.append('thumbnail', '');
+            formData.append('images', []);
+            $.ajax({
+                url: URL_BASE + "/catalogo/addEstrategia/",
+                type: $(this).attr('method'),
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    window.location.reload()
+                }
+
+            });
+
+        });
+    </script>
+
+{% endblock %}
