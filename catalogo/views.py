@@ -226,7 +226,8 @@ def add_estrategia(request):
       """
 
 
-
+    if thumbnail == '' :
+        thumbnail == None
 
 
     item = Item(
@@ -251,17 +252,31 @@ def add_estrategia(request):
         ob.save()
         item.tool = ob
     elif type == models.TUTORIAL:
+        url = request.POST.get('url')
+        tool = request.POST.get('tool')
+
         ob = models.Tutorial(
-            name=name
+            name=name,
+            url=url,
+            description=description,
+            tool_id=tool
         )
         ob.save()
         item.tutorial = ob
     elif type == models.EXAMPLE:
-        ob = models.Example(
-            name=name
-        )
+
+        url = request.POST.get('url')
+        tool = request.POST.get('tool')
+        tech = request.POST.get('tech')
+
+        ob = Example(
+            name=name,
+            url=url,
+            tool_id=tool,
+            technology_id=tech)
         ob.save()
-        item.ex = ob
+        item.example = ob
+
     elif type == models.STRATEGY:
         ob = models.Strategy(
             name=name
