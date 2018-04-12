@@ -300,6 +300,9 @@ def add_estrategia(request):
 
     return JsonResponse({'mensaje' : 'ok','item': _item,'strategy': _ob})
 
+def desarrollo_view(request):
+    return render(request, 'desarrollo.html', {})
+
 
 
 
