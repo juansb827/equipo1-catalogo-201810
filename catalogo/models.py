@@ -118,7 +118,12 @@ EXAMPLE = "4"
 STRATEGY = "5"
 
 
-
+ITEM_TYPE_STATUS = (
+    ('1', 'IN REVIEW'),
+    ('2', 'ACCEPTED'),
+    ('3', 'REJECTED'),
+    ('4', 'UNFINISHED')
+)
 
 class Item(models.Model):
     name = models.CharField(max_length=150)
@@ -133,6 +138,7 @@ class Item(models.Model):
     development = models.ForeignKey(Development, null=True, blank=True)
     item_code = models.IntegerField(default= -1)  #Relaciona diferentes versiones de un mismo item
     version = models.IntegerField(default = 0)   #Version del item
+    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
 
 
 
