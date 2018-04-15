@@ -19,7 +19,8 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Descripción del ejemplo</label>
-                            <textarea class="form-control" rows="5" id="description" name="description" maxlength="150"></textarea>
+                            <textarea class="form-control" rows="5" id="description" name="description"
+                                      maxlength="150"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="url">URL del ejemplo</label>
@@ -52,30 +53,32 @@
         </div>
     </div>
 
-<script>
-    var URL_BASE=window.location.origin;
+    <script>
+        var URL_BASE = window.location.origin;
 
-    $('#formAddExample').submit(function (e) {
-        e.preventDefault();
+        $('#formAddExample').submit(function (e) {
+            e.preventDefault();
 
 
-        var formData = new FormData($("#formAddExample")[0]);
-        formData.append('type','4')
-        formData.append('thumbnail','')
-        formData.append('images',[])
-        $.ajax({
-            url: URL_BASE+"/catalogo/addEstrategia/",
-            type: $(this).attr('method'),
-            data: formData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function(){window.location.reload()}
+            var formData = new FormData($("#formAddExample")[0]);
+            formData.append('type', '4')
+            formData.append('thumbnail', '')
+            formData.append('images', [])
+            $.ajax({
+                url: URL_BASE + "/catalogo/addEstrategia/",
+                type: $(this).attr('method'),
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    window.location.reload()
+                }
+
+            });
 
         });
-
-    });
-</script>
+    </script>
 
 {% endblock %}
 

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
+    <div class="login-container">
+        <div class="overlayed">
+            <div class="container">
+                {% if items %}
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for entry in items %}
+                            <tr>
+                                <th scope="row">{{ entry.pk }}</th>
+                                <td>{{ entry.fields.name }}</td>
+                                <td>{{ entry.fields.description }}</td>
+                                <td>{{ entry.fields.type }}</td>
+                                <td>
+                                    <button type="submit" class="btn main-button">Aceptar</button>
+                                    <button type="submit" class="btn btn-danger">Rechazar</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    No hay items por revisar
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

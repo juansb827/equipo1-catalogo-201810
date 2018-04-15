@@ -91,8 +91,6 @@ class Tutorial(models.Model):
 class Strategy(models.Model):
     name = models.CharField(max_length=150)
 
-
-
     def __unicode__(self):
         return self.name
 
@@ -111,6 +109,13 @@ TUTORIAL = "3"
 EXAMPLE = "4"
 STRATEGY = "5"
 
+ITEM_TYPE_STATUS = (
+    ('1', 'IN REVIEW'),
+    ('2', 'ACCEPTED'),
+    ('3', 'REJECTED'),
+    ('4', 'UNFINISHED')
+)
+
 class Item(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=150)
@@ -121,11 +126,12 @@ class Item(models.Model):
     tutorial = models.ForeignKey(Tutorial, null=True, blank=True)
     example = models.ForeignKey(Example, null=True, blank=True)
     strategy = models.ForeignKey(Strategy, null=True, blank=True)
+    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
 
 
 class Image(models.Model):
-    item =models.ForeignKey(Item)
+    item = models.ForeignKey(Item)
     image = CloudinaryField('image', null=True)

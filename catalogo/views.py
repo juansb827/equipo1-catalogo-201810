@@ -236,6 +236,7 @@ def add_estrategia(request):
         description=description,
         thumbnail=thumbnail,
         type=type,
+        status='4'
     )
 
     ob = None
@@ -302,3 +303,10 @@ def add_estrategia(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('catalogo:index'))
+
+
+def review(request):
+    query = Item.objects.all().filter(Q(status='2'))
+    items = serializers.serialize("json", query)
+    context = {'items': json.loads(items)}
+    return render(request, 'revision.html', context)
