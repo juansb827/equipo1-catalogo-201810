@@ -213,11 +213,20 @@ def estrategia_view(request):
 
 @csrf_exempt
 def add_estrategia(request):
-    name = request.POST['name'];
-    description = request.POST['description']
-    thumbnail = request.POST['thumbnail']
-    images = request.POST.getlist('images[]')
-    type = request.POST['type']
+
+    data = json.loads(request.body);
+
+
+
+    name = data['name'];
+    description = data['description']
+    thumbnail = data['thumbnail']
+    #getlist('images[]')
+    images = data['images']
+    type = data['type']
+
+    print name, description, thumbnail, type == models.STRATEGY
+
 
     """if type == models.TECHNOLOGY:
         
@@ -236,6 +245,7 @@ def add_estrategia(request):
         description=description,
         thumbnail=thumbnail,
         type=type,
+        status='1'
     )
 
     ob = None
@@ -296,7 +306,13 @@ def add_estrategia(request):
     _ob = serializers.serialize("json", [ob])
     _item = serializers.serialize("json", [item])
 
-    return JsonResponse({'mensaje': 'ok', 'item': _item, 'strategy': _ob})
+
+    return JsonResponse({'mensaje' : 'ok','item': _item,'strategy': _ob})
+
+def desarrollo_view(request):
+    return render(request, 'desarrollo.html', {})
+
+
 
 
 def logout_view(request):

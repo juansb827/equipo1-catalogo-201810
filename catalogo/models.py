@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import random
+
 from cloudinary.models import CloudinaryField
 from django import forms
 from django.contrib.auth.models import User
@@ -91,6 +94,9 @@ class Tutorial(models.Model):
 class Strategy(models.Model):
     name = models.CharField(max_length=150)
 
+class Development(models.Model):
+    name = models.CharField(max_length=150)
+
 
 
     def __unicode__(self):
@@ -111,6 +117,14 @@ TUTORIAL = "3"
 EXAMPLE = "4"
 STRATEGY = "5"
 
+
+ITEM_TYPE_STATUS = (
+    ('1', 'IN REVIEW'),
+    ('2', 'ACCEPTED'),
+    ('3', 'REJECTED'),
+    ('4', 'UNFINISHED')
+)
+
 class Item(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=150)
@@ -121,6 +135,12 @@ class Item(models.Model):
     tutorial = models.ForeignKey(Tutorial, null=True, blank=True)
     example = models.ForeignKey(Example, null=True, blank=True)
     strategy = models.ForeignKey(Strategy, null=True, blank=True)
+    development = models.ForeignKey(Development, null=True, blank=True)
+    item_code = models.IntegerField(default= -1)  #Relaciona diferentes versiones de un mismo item
+    version = models.IntegerField(default = 0)   #Version del item
+    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
+
+
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
