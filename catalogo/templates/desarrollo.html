@@ -11,7 +11,7 @@
     <div class="container" style="padding: 100px" id="vue-app">
         <h1>Nueva desarrollo</h1>
 
-        <div class="estrategia">
+        <div class="estrategia item">
 
             <div class="form-group">
                 <label for="name">Nombre de la estrategia</label>
@@ -38,10 +38,23 @@
                 </div>
             </div>
 
+            <div class="tech">
+                <h2>Desarrollado con:</h2>
+                <div class="tech-checks">
+
+                    <label class="" v-for="tech in devTechs">
+                        <input type="checkbox"/>
+                        <span class="custom-control-description">{{ tech.name }}</span>
+                    </label>
+
+
+                </div>
+            </div>
+
 
         </div>
 
-        <h1>Imagenes</h1>
+        <h2>Imagenes</h2>
 
         <temp class="" v-bind:images="item.images"></temp>
         <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
@@ -55,35 +68,72 @@
             Guardar Estrategia
         </button>
 
-    </div>
 
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Campos incompletos</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="item-preview">
+            <h1>Desarrollo Nuevo 20</h1>
+            <p>Integer tincidunt ante vel ante blandit, nec pharetra risus pulvinar. Quisque tellus velit, lobortis non
+                quam ac, eleifend volutpat dolor. Duis at pellentesque sem, ut viverra arcu. Praesent euismod lacinia
+                nisl, sit amet auctor urna posuere eget. Nullam laoreet ullamcorper quam, eu porttitor nibh pulvinar ac.
+                Phasellus sit amet mauris varius nulla fermentum consequat. Phasellus nec arcu ut justo elementum congue
+                in sed dolor. Duis posuere suscipit mi et tempus. Nulla eros quam, tristique id risus nec, sollicitudin
+                imperdiet neque. Fusce auctor semper gravida. Duis sagittis ligula vitae elit egestas placerat.</p>
+            <div class="tech-imgs">
+                <div v-for="tech in devTechs" class="card">
+                    <img v-bind:src="tech.image">
+                    <div class="footer">
+                        <a style="color:#007bff" class="card-link">{{ tech.name }}</a>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <ul id="listaErrores">
 
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
 
+            <div class="gallery" style="display: flex;">
+                <!-- Images used to open the lightbox -->
+                <div class="row">
+                    <div>
+                        <img v-for="(img, index) in mockImages" v-bind:src="img"
+                             v-on:click="openGalleryModal();changeSlide(index)" >
+                    </div>
                 </div>
+
+
             </div>
         </div>
+
+
+        <!-- The Modal/Lightbox -->
+        <div id="galleryModal" class="gallery-modal">
+            <span class="close cursor" @click="closeGalleryModal()">&times;</span>
+            <div class="my-modal-content">
+                <div class="slide " >
+                    <div class="" style="height: 100%">
+                        <img v-bind:src="mockImages[currentSlide]" style="height: 100%;max-width: 100%" class="fade-in" v-for="(img, index) in mockImages" v-if="index == currentSlide">
+                        <div class="numbertext">{{ this.currentSlide+1 }} / {{ this.mockImages.length }}</div>
+                    </div>
+                    <div class="dots" >
+                            <span class="dot" v-on:click="changeSlide(index)" v-for="(img,index) in mockImages" v-bind:class="{ active : index == currentSlide}"></span>
+                    </div>
+                </div>
+
+                <a class="prev-btn" v-on:click="changeSlide(currentSlide-1)">&#10094;</a>
+                <a class="next-btn" v-on:click="changeSlide(currentSlide+1)">&#10095;</a>
+
+
+            </div>
+            <div class="thumbnails">
+                    <div class="thumbnail" v-for="(img, index) in currentImages" v-on:click="changeSlide( winStart + index)" v-bind:class="{ selected: index == currentSlide - winStart }">
+                        <img class=" " v-bind:src="img" style="width:100%"
+                             alt="Nature and sunrise">
+                    </div>
+            </div>
+
+        </div>
+
     </div>
 
     <div id="snackbar">Guardando...</div>
+
+
 
     <script src="https://unpkg.com/vuelidate@0.6.2/dist/vuelidate.min.js"></script>
     <script src="https://unpkg.com/vuelidate@0.6.2/dist/validators.min.js"></script>

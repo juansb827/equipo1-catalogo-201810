@@ -97,10 +97,17 @@ class Strategy(models.Model):
 class Development(models.Model):
     name = models.CharField(max_length=150)
 
+    def __unicode__(self):
+        return self.name
 
+class DevelopmentTechnology(models.Model):
+    name = models.CharField(max_length=50)
+    image = CloudinaryField('image', null=True)
 
     def __unicode__(self):
         return self.name
+
+
 
 
 ITEM_TYPE_CHOICES = (
@@ -138,7 +145,7 @@ class Item(models.Model):
     development = models.ForeignKey(Development, null=True, blank=True)
     item_code = models.IntegerField(default= -1)  #Relaciona diferentes versiones de un mismo item
     version = models.IntegerField(default = 0)   #Version del item
-    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
+    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS )
 
 
 

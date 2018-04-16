@@ -312,6 +312,11 @@ def add_estrategia(request):
 def desarrollo_view(request):
     return render(request, 'desarrollo.html', {})
 
+def getDevTech(request):
+    techs = models.DevelopmentTechnology.objects.all()
+    return HttpResponse(serializers.serialize("json", techs))
+
+
 
 
 

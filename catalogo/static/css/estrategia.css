@@ -17,7 +17,7 @@
     width: 100%;
 }
 
-.card{
+.images .card{
     padding: 1em;
     margin : 1em;
     box-shadow: 0 0 20px #ccc;
@@ -107,6 +107,192 @@
     animation: fadein 0.5s;
 }
 
+
+.item .tech-checks{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+
+
+}
+
+.item .tech-checks label{
+
+        margin-right: 10px;
+
+}
+
+.item-preview h1{
+    text-align: center;
+}
+
+.item-preview .card{
+     box-shadow: 0 0 20px #ccc;
+
+    width: 12em;
+    padding: 1em;
+    margin: 1em;
+
+}
+
+.item-preview .card img{
+    height: 10em;
+    max-width: 100%;
+
+}
+
+.item-preview .tech-imgs{
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.item-preview .tech-imgs .card .footer{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 2.5em;
+}
+
+
+/*Galeria de imagenes*/
+.gallery .row{
+    display: flex;
+}
+
+.gallery .row img{
+    height: 6em;
+
+}
+
+.gallery-modal{
+
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(1, 1, 1, 0.7);
+
+
+}
+
+/* Modal Content */
+.gallery-modal .my-modal-content, .gallery-modal .thumbnails {
+  /*border: 1px solid rgba(0,0,0,1); */
+  position: relative;
+  margin: auto;
+  padding: 0;
+  width: 90%;
+  max-width: 1200px;
+  background-color: black;
+
+}
+
+/* The Close Button */
+.gallery-modal .close {
+  color: white !important;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+/* Number text (1/3 etc) */
+.gallery-modal .numbertext {
+  color: #f2f2f2;
+  font-size: 1.2em;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+.gallery-modal .dots{
+    text-align:center;
+    width: 100%;
+    position: absolute;
+    bottom: 5%;
+}
+
+.gallery-modal .dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 8px;
+  background-color: white;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.gallery-modal .dots .active, .gallery-modal .dot:hover {
+  background-color: #717171;
+}
+
+
+.gallery-modal .slide{
+    height: 45vh;
+    text-align: center;
+    background-color: inherit;
+}
+
+.gallery-modal .thumbnail{
+    cursor: pointer;
+    display: inline-block;
+    width: 25%;
+    height: 12em;
+    opacity: 0.2;
+
+}
+
+
+.gallery-modal .thumbnail:hover, .gallery-modal  .selected{
+    opacity: 1;
+
+}
+
+.gallery-modal .thumbnail img{
+    width: 100%;
+    height: 100%;
+}
+
+/* Next & previous buttons */
+.gallery-modal .prev-btn,
+.gallery-modal .next-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white !important;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gallery-modal .next-btn {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.gallery-modal .prev-btn:hover,
+.gallery-modal .next-btn:hover {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+
+/* Spinner animation */
 @-webkit-keyframes fadein {
     from {bottom: 0; opacity: 0;}
     to {bottom: 30px; opacity: 1;}
@@ -128,4 +314,20 @@
 }
 
 
+/* Fading animation */
+.gallery-modal .fade-in {
+  -webkit-animation-name: fade-in;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade-in;
+  animation-duration: 1.5s;
+}
 
+@-webkit-keyframes fade-in {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade-in {
+  from {opacity: .4}
+  to {opacity: 1}
+}

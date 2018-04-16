@@ -70,13 +70,20 @@ Vue.component('temp', {
 var app= new Vue({
     el: '#vue-app',
     data: {
+        fade : true,
+        currentSlide: 0,
+        winStart: 0,
+        winEnd: 3,
+        mockImages: [],
         item:{
             type: '5',
             name: '',
             description: '',
             images: [],
+
             thumbnail: ''
-        }
+        },
+        devTechs: [] //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
     },
     methods: {
         getClass : function (fieldName) {
@@ -106,7 +113,7 @@ var app= new Vue({
 
                 axios.post(URL_BASE + "/catalogo/addEstrategia/", data)
                     .then(function (res) {
-                        console.log("Success", err);
+                        console.log("Success", res);
                     })
                     .catch(function (err) {
                         console.log("Error", err);
@@ -115,6 +122,43 @@ var app= new Vue({
 
                     })
             });
+        },
+        changeSlide: function (i) {
+            if(i<0 || i> this.mockImages.length-1)
+                return;
+
+
+
+            var offset=0;
+            /* Slides the 4-images windows  :V */
+            if( i > this.winEnd  ){
+                offset = i - this.winEnd; //Positive offset
+            }else if( i < this.winStart){
+                offset = i -this.winStart; //Negative offset
+            }
+
+            this.winStart += offset;
+            this.winEnd += offset;
+            this.currentSlide = i;
+            console.log('s',this.winStart,'e',this.winEnd,this.currentSlide);
+
+
+
+        },
+        openGalleryModal: function () {
+            document.getElementsByTagName('nav')[0].style.display = "none";
+            document.getElementById('galleryModal').style.display = "block";
+        },
+
+        closeGalleryModal: function () {
+            document.getElementsByTagName('nav')[0].style.display = "flex";
+            document.getElementById('galleryModal').style.display = "none";
+        }
+
+    },
+    computed: {
+        currentImages: function(){
+            return this.mockImages.slice(this.winStart,this.winEnd+1);
         }
     },
     validations:{
@@ -132,6 +176,38 @@ var app= new Vue({
                 required: validators.required
             }
         }
+    },
+    created: function () {
+        //this.loadDevTechs();
+
+        var self = this;
+        this.mockImages = [
+            'https://www.w3schools.com/howto/img_lights_wide.jpg',
+            'https://www.w3schools.com/howto/img_mountains_wide.jpg',
+            'https://images.pexels.com/photos/39811/pexels-photo-39811.jpeg?auto=compress&cs=tinysrgb&h=350',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzabaX7ooQ-ZTzDiT8RuvgsC94g7lcnpbpzLUvwu9smM7THIMc5g',
+            'http://apclandscape.us.com/wp-content/themes/land3/images/sliders/slide1.jpg',
+            'https://www.w3schools.com/howto/img_lights_wide.jpg',
+            'https://www.w3schools.com/howto/img_mountains_wide.jpg',
+            'https://images.pexels.com/photos/39811/pexels-photo-39811.jpeg?auto=compress&cs=tinysrgb&h=350',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzabaX7ooQ-ZTzDiT8RuvgsC94g7lcnpbpzLUvwu9smM7THIMc5g',
+            'http://apclandscape.us.com/wp-content/themes/land3/images/sliders/slide1.jpg'
+        ]
+
+            axios.get(URL_BASE + "/catalogo/devTech/")
+                .then(function (res) {
+                    self.devTechs = res.data.map(function (entry) {
+                        var fields = entry.fields;
+                        fields.id = entry.pk;
+                        fields.image = 'https://res.cloudinary.com/hn6nvsi2y/' + fields.image;
+                        return fields;
+                    });
+                    console.log("DEvTEchs",self.devTechs);
+                })
+
     }
 
 })
+
+
+

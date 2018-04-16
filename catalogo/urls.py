@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^estrategia/$', views.estrategia_view, name='estrategia'),
     url(r'^addEstrategia/$', views.add_estrategia, name='addEstrategia'),
     url(r'^desarrollo/$', views.desarrollo_view, name='desarrollo'),
+    url(r'^devTech/$', views.getDevTech, name='getDevTech'),
 ]
