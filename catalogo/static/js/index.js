@@ -6,7 +6,8 @@ var tipos = [
     { key: "2" , val :"Herramienta"},
     { key: "3" , val :"Tutorial"},
     { key: "4" , val :"Ejemplo"},
-    { key: "5" , val :"Estrategia Pedagógica"}
+    { key: "5" , val :"Estrategia Pedagógica"},
+    { key: "6" , val :"Desarrollo"}
 
 ]
 var app = new Vue({
@@ -55,6 +56,12 @@ var app = new Vue({
                         item.thumbnail = 'https://res.cloudinary.com/hn6nvsi2y/' + item.thumbnail;
                     else
                         item.thumbnail = '../../static/images/no_image2.svg';
+
+                    if(!tipos[item.type]){
+                        console.log("item",item);
+                        return null;
+                    }
+
                     item.typeName= tipos[item.type].val;
                     return item;
                 });

@@ -10,87 +10,96 @@
 
     <div class="container" style="padding: 100px" id="vue-app">
         <div class="item-edit" v-if="editing">
-        <h1>Nueva desarrollo</h1>
+            <h1>Nueva desarrollo</h1>
 
-        <div class="estrategia item">
+            <div class="estrategia item">
 
-            <div class="form-group">
-                <label for="name">Nombre de la estrategia</label>
-                <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="30"
-                       v-bind:class="getClass('name')"
+                <div class="form-group">
+                    <label for="name">Nombre de la estrategia</label>
+                    <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="20"
+                           v-bind:class="getClass('name')"
 
-                       name="username" v-model.trim="item.name" @input="$v.item.name.$touch()">
-                <div class="invalid-feedback">
-                    <p class="" v-if="!$v.item.name.required">El nombre es obligatorio.</p>
-                    <p class="" v-if="!$v.item.name.maxLength">El nombre no puede tener mas de {{
-                        $v.item.name.$params.maxLength.max }} caracteres.</p>
+                           name="username" v-model.trim="item.name" @input="$v.item.name.$touch()">
+                    <div class="invalid-feedback">
+                        <p class="" v-if="!$v.item.name.required">El nombre es obligatorio.</p>
+                        <p class="" v-if="!$v.item.name.maxLength">El nombre no puede tener mas de {{
+                            $v.item.name.$params.maxLength.max }} caracteres.</p>
+                    </div>
                 </div>
+
+                <div class="form-group" style="position: relative">
+                    <label for="description">Descripción:</label>
+                    <textarea class="form-control" rows="5" id="description"
+                              v-bind:class="getClass('description')"
+                              @input="$v.item.description.$touch()" v-model.trim="item.description"></textarea>
+                    <div style="text-align: right">{{ item.description.length }}/{{ $v.item.description.$params.maxLength.max }}</div>
+                    <div class="invalid-feedback">
+                        <p class="" v-if="!$v.item.description.required">La descripción es obligatoria.</p>
+                        <p class="" v-if="!$v.item.description.maxLength">La descripción no puede tener mas de {{
+                            $v.item.description.$params.maxLength.max }} caracteres.</p>
+                    </div>
+                </div>
+
+                <div class="tech">
+                    <h2>Desarrollado con:</h2>
+                    <div class="tech-checks">
+
+                        <label class="" v-for="tech in devTechs">
+                            <input type="checkbox" :value="tech" v-model="item.devTechs"/>
+                            <span class="custom-control-description">{{ tech.name }}</span>
+                        </label>
+                        <div class="invalid-feedback" style="display: block" v-if="$v.item.devTechs.$error">
+                            <p class="" v-if="!$v.item.devTechs.required">Debe seleccionar almenos un elemento.</p>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
             </div>
 
-            <div class="form-group">
-                <label for="description">Descripción:</label>
-                <textarea class="form-control" rows="5" id="description" maxlength="150"
-                          v-bind:class="getClass('description')"
-                          @input="$v.item.description.$touch()" v-model.trim="item.description"></textarea>
-                <div class="invalid-feedback">
-                    <p class="" v-if="!$v.item.description.required">La descripción es obligatoria.</p>
-                    <p class="" v-if="!$v.item.description.maxLength">La descripción no puede tener mas de {{
-                        $v.item.description.$params.maxLength.max }} caracteres.</p>
-                </div>
-            </div>
+            <h2>Imagenes</h2>
 
-            <div class="tech">
-                <h2>Desarrollado con:</h2>
-                <div class="tech-checks">
+            <temp class="" v-bind:images="item.images" ></temp>
 
-                    <label class="" v-for="tech in devTechs">
-                        <input type="checkbox"/>
-                        <span class="custom-control-description">{{ tech.name }}</span>
-                    </label>
-
-
-                </div>
+            <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
+                <p class="" v-if="!$v.item.images.required">Debe seleccionar almenos una imagen.</p>
+                <p class="" v-if="$v.item.images.required && !$v.item.images.$each.errors">Debe esperar a que todas las imagenes sean subidas.</p>
             </div>
 
 
-        </div>
 
-        <h2>Imagenes</h2>
+            <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
+                <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg  main-button " style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
+                    Vista previa
+                </button>
+                <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg main-button  "  style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
+                    Enviar a revisión
+                </button>
 
-        <temp class="" v-bind:images="item.images"></temp>
-        <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
-            <p class="" v-if="!$v.item.images.required">Debe seleccionar almenos una imagen.</p>
-        </div>
+                <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-basis: 100%;margin-bottom:1em" >
+                Guardar Cambios
+                </button>
+            </div>
 
-
-        <div id="files" class="files"></div>
-
-        <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg btn-block main-button">
-            Vista previa
-        </button>
-        <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button">
-            Enviar a revisión
-        </button>
-        <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button">
-            Guardar
-        </button>
 
         </div><!-- Fin editar item -->
 
-        <div class="item-preview">
-            <button v-on:click="showEditMode()" class="btn btn-outline-secondary btn-lg btn-block main-button">
-                Regresar a modo de edición
-            </button>
-            <h1>Desarrollo Nuevo 20</h1>
+        <!-- preview item -->
 
-            <p>Integer tincidunt ante vel ante blandit, nec pharetra risus pulvinar. Quisque tellus velit, lobortis non
-                quam ac, eleifend volutpat dolor. Duis at pellentesque sem, ut viverra arcu. Praesent euismod lacinia
-                nisl, sit amet auctor urna posuere eget. Nullam laoreet ullamcorper quam, eu porttitor nibh pulvinar ac.
-                Phasellus sit amet mauris varius nulla fermentum consequat. Phasellus nec arcu ut justo elementum congue
-                in sed dolor. Duis posuere suscipit mi et tempus. Nulla eros quam, tristique id risus nec, sollicitudin
-                imperdiet neque. Fusce auctor semper gravida. Duis sagittis ligula vitae elit egestas placerat.</p>
+        <div class="item-preview" v-if="!editing">
+            <div style="display: flex;flex-wrap: wrap">
+                <button v-on:click="showEditMode()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-grow: 1;">
+                    Regresar a modo de edición
+                </button>
+            </div>
+            <h1>{{ item.name }}</h1>
+
+            <p>{{ item.description }}</p>
+
             <div class="tech-imgs">
-                <div v-for="tech in devTechs" class="card">
+                <div v-for="tech in item.devTechs" class="card">
                     <img v-bind:src="tech.image">
                     <div class="footer">
                         <a style="color:#007bff" class="card-link">{{ tech.name }}</a>
@@ -101,14 +110,15 @@
 
             <h2>Imagenes </h2>
 
-            <div class="gallery" >
+            <div class="gallery">
                 <!-- Images used to open the lightbox -->
 
-                <div >
-                    <div v-for="(img, index) in mockImages" class="card" v-on:click="openGalleryModal();moveCarousel(  index)" >
-                        <img src="../../static/images/zoom_in.png" style="position:absolute;right:0.6em;bottom:0.6em;height: 2em;">
-                        <img  v-bind:src="img"
-                             >
+                <div>
+                    <div v-for="(img, index) in item.images" class="card"
+                         v-on:click="openGalleryModal();moveCarousel(  index)">
+                        <img src="../../static/images/zoom_in.png"
+                             style="position:absolute;right:0.6em;bottom:0.6em;height: 2em;">
+                        <img v-bind:src="img.src"       >
 
 
                     </div>
@@ -125,51 +135,40 @@
             <span class="close cursor" @click="closeGalleryModal()">&times;</span>
 
             <div class="my-modal-content fade-in">
-				<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
-                     <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" v-for="(img, index) in mockImages" v-on:click="moveCarousel(index)" style="height: 6px"
-                            v-bind:class="{ active : index == 0}"></li>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" v-for="(img, index) in item.images"
+                            v-on:click="moveCarousel(index)" style="height: 6px"
+                            v-bind:class="{ active : index == 0}">
+                        </li>
                     </ol>
 
-					  <div class="carousel-inner" role="listbox" style="height: 100%" >
-						<div class="carousel-item " v-for="(img, index) in mockImages" v-bind:class="{ active: index == 0}" style="text-align: center;height: inherit">
-						  <img class="" v-bind:src="img" alt="First slide" style="height: 100%;max-width: 100%">
-						</div>
+                    <div class="carousel-inner" role="listbox" style="height: 100%">
+                        <div class="carousel-item " v-for="(img, index) in item.images"
+                             v-bind:class="{ active: index == 0}" style="text-align: center;height: inherit">
+                            <img class="" v-bind:src="img.src" alt="First slide" style="height: 100%;max-width: 100%">
+                        </div>
 
-					  </div>
-					  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" >
-						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-						<span class="sr-only">Previous</span>
-					  </a>
-					  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" >
-						<span class="carousel-control-next-icon" aria-hidden="true"></span>
-						<span class="sr-only">Next</span>
-					  </a>
-				</div>
-
-			</div>
-            <!--
-            <div class="my-modal-content">
-                <div class="slide " >
-                    <div class="" style="height: 100%">
-                        <img v-bind:src="mockImages[currentImage]" style="height: 100%;max-width: 100%" class="fade-in" v-for="(img, index) in mockImages" v-if="index == currentImage">
-                        <div class="numbertext">{{ this.currentImage+1 }} / {{ this.mockImages.length }}</div>
                     </div>
-                    <div class="dots" >
-                            <span class="dot" v-on:click="changeSlide(index)" v-for="(img,index) in mockImages" v-bind:class="{ active : index == currentImage}"></span>
-                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
 
-                <a class="prev-btn" v-on:click="changeSlide(currentImage-1)">&#10094;</a>
-                <a class="next-btn" v-on:click="changeSlide(currentImage+1)">&#10095;</a>
+            </div>
 
-
-            </div>7-->
             <div class="thumbnails">
-                    <div class="thumbnail" v-for="(img, index) in currentImages" v-on:click="moveCarousel( winStart + index)" v-bind:class="{ selected: index == currentImage - winStart }">
-                        <img class=" " v-bind:src="img" style="width:100%"
-                             alt="Nature and sunrise">
-                    </div>
+                <div class="thumbnail" v-for="(img, index) in currentImages"
+                     v-on:click="moveCarousel( winStart + index)"
+                     v-bind:class="{ selected: index == currentImage - winStart }">
+                    <img class=" " v-bind:src="img.src" style="width:100%"
+                         alt="Nature and sunrise">
+                </div>
             </div>
 
         </div>

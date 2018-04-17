@@ -44,7 +44,13 @@ Vue.component('temp', {
             var self = this;
             utils.readURL(e.target, function (src,file) {
                 var img = { src: src, file: file, uploading: true };
+                img.uploading = true;
+                //Needs to have the property 'remote Id' in order for Vuelidate to detect changes on it afterwards
+                img.remoteId = "";
                 self.images.push(img);
+
+
+                ;
                 utils.uploadPhoto(file, 'big_image', function (remoteId) {
                     console.log("on up",remoteId);
                     img.remoteId = remoteId;
@@ -74,11 +80,11 @@ var app= new Vue({
         currentImage: 0,
         winStart: 0,
         winEnd: 3,
-        mockImages: [],
         item:{
-            type: '5',
-            name: '',
-            description: '',
+            type: '6',
+            name: 'Desarrollo 20',
+            description: 'Integer tincidunt ante vel ante blandit, nec pharetra risus pulvinar. Quisque tellus velit, lobortis non quam ac, eleifend volutpat dolor. Duis at pellentesque sem, ut viverra arcu. Praesent euismod lacinia nisl, sit amet auctor urna posuere eget. ',
+            devTechs: [],
             images: [],
 
             thumbnail: ''
@@ -104,12 +110,18 @@ var app= new Vue({
                 var data = utils.sliceKey(self.item,'images');
 
 
+                //Les deja  solo el id a las tecnologias de desarrollo
+                data.devTechs = data.devTechs.map(function (tech) {
+                    return tech.id;
+                })
                 //Les deja solo el id a las imagenes
                 data.images = self.item.images.map(function (img) {
                     return img.remoteId;
                 })
 
-                console.log("Transformed", data);
+
+
+                console.log("Transformed",data);
 
                 axios.post(URL_BASE + "/catalogo/addEstrategia/", data)
                     .then(function (res) {
@@ -128,7 +140,7 @@ var app= new Vue({
 		},
         changeSlide: function (i) {
 			console.log("previ",i);
-			var length = this.mockImages.length
+			var length = this.item.images.length
 			i = ( length + (i % length ) ) % length; //
 
 			console.log("next",i);
@@ -162,6 +174,7 @@ var app= new Vue({
             document.getElementById('galleryModal').style.display = "none";
         },
         showPreview: function () {
+            console.log("show PReview");
             this.editing = false;
         },
         showEditMode: function () {
@@ -171,22 +184,30 @@ var app= new Vue({
     },
     computed: {
         currentImages: function(){
-            return this.mockImages.slice(this.winStart,this.winEnd+1);
+            return this.item.images.slice(this.winStart,this.winEnd+1);
         }
     },
     validations:{
         item:{
             name: {
                 required: validators.required,
-                maxLength: validators.maxLength(10)
+                maxLength: validators.maxLength(20)
             },
             description: {
                 required: validators.required,
-                maxLength: validators.maxLength(10)
+                maxLength: validators.maxLength(300)
 
             },
-            images: {
+            devTechs: {
                 required: validators.required
+            },
+            images: {
+                required: validators.required,
+                $each: {
+                    remoteId: {
+                        required: validators.required
+                    }
+                }
             }
         }
     },

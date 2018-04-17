@@ -167,7 +167,7 @@
 .gallery .card{
      box-shadow: 0 0 20px #ccc;
 
-    height: 6em;
+    height: 8em;
     width: auto;
     padding: 0.5em;
     margin: 0.5em;
@@ -248,7 +248,7 @@
 
 
 .gallery-modal .slide{
-    height: 45vh;
+    height: 60vh;
     text-align: center;
     background-color: inherit;
 }

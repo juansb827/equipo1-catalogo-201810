@@ -296,11 +296,31 @@ def add_estrategia(request):
         ob.save()
         item.strategy = ob
 
+    elif type == models.DEVELOPMENT:
+        ob = models.Development(
+            name=name
+        )
+
+        ob.save()
+
+        for tech in data['devTechs']: #the list of devTechs PK's
+            ob.dev_technologies.add(tech)
+
+
+        ob.save()
+        item.development = ob
+
+    item.save()
+    item.item_code = item.pk
     item.save()
 
     for image in images:
-        models.Image(item=item, image=image).save()
-        print("se guarda imagen")
+        newImg = models.Image.objects.create(image=image)
+        item.images.add(newImg)
+
+    item.save()
+
+
 
     print name, description, thumbnail, images
     _ob = serializers.serialize("json", [ob])
