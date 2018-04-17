@@ -158,13 +158,24 @@
 
 
 /*Galeria de imagenes*/
-.gallery .row{
+
+.gallery div{
     display: flex;
+    flex-wrap: wrap;
 }
 
-.gallery .row img{
-    height: 6em;
+.gallery .card{
+     box-shadow: 0 0 20px #ccc;
 
+    height: 6em;
+    width: auto;
+    padding: 0.5em;
+    margin: 0.5em;
+
+}
+
+.gallery .card img{
+    height: 100%;
 }
 
 .gallery-modal{
@@ -289,6 +300,8 @@
 .gallery-modal .next-btn:hover {
   background-color: rgba(0, 0, 0, 0.5) !important;
 }
+
+
 
 
 

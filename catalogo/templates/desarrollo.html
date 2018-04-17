@@ -9,6 +9,7 @@
 
 
     <div class="container" style="padding: 100px" id="vue-app">
+        <div class="item-edit" v-if="editing">
         <h1>Nueva desarrollo</h1>
 
         <div class="estrategia item">
@@ -64,13 +65,24 @@
 
         <div id="files" class="files"></div>
 
+        <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg btn-block main-button">
+            Vista previa
+        </button>
         <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button">
-            Guardar Estrategia
+            Enviar a revisión
+        </button>
+        <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button">
+            Guardar
         </button>
 
+        </div><!-- Fin editar item -->
 
         <div class="item-preview">
+            <button v-on:click="showEditMode()" class="btn btn-outline-secondary btn-lg btn-block main-button">
+                Regresar a modo de edición
+            </button>
             <h1>Desarrollo Nuevo 20</h1>
+
             <p>Integer tincidunt ante vel ante blandit, nec pharetra risus pulvinar. Quisque tellus velit, lobortis non
                 quam ac, eleifend volutpat dolor. Duis at pellentesque sem, ut viverra arcu. Praesent euismod lacinia
                 nisl, sit amet auctor urna posuere eget. Nullam laoreet ullamcorper quam, eu porttitor nibh pulvinar ac.
@@ -87,13 +99,20 @@
 
             </div>
 
-            <div class="gallery" style="display: flex;">
+            <h2>Imagenes </h2>
+
+            <div class="gallery" >
                 <!-- Images used to open the lightbox -->
-                <div class="row">
-                    <div>
-                        <img v-for="(img, index) in mockImages" v-bind:src="img"
-                             v-on:click="openGalleryModal();changeSlide(index)" >
+
+                <div >
+                    <div v-for="(img, index) in mockImages" class="card" v-on:click="openGalleryModal();moveCarousel(  index)" >
+                        <img src="../../static/images/zoom_in.png" style="position:absolute;right:0.6em;bottom:0.6em;height: 2em;">
+                        <img  v-bind:src="img"
+                             >
+
+
                     </div>
+
                 </div>
 
 
@@ -104,24 +123,50 @@
         <!-- The Modal/Lightbox -->
         <div id="galleryModal" class="gallery-modal">
             <span class="close cursor" @click="closeGalleryModal()">&times;</span>
+
+            <div class="my-modal-content fade-in">
+				<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
+                     <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" v-for="(img, index) in mockImages" v-on:click="moveCarousel(index)" style="height: 6px"
+                            v-bind:class="{ active : index == 0}"></li>
+                    </ol>
+
+					  <div class="carousel-inner" role="listbox" style="height: 100%" >
+						<div class="carousel-item " v-for="(img, index) in mockImages" v-bind:class="{ active: index == 0}" style="text-align: center;height: inherit">
+						  <img class="" v-bind:src="img" alt="First slide" style="height: 100%;max-width: 100%">
+						</div>
+
+					  </div>
+					  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" >
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					  </a>
+					  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" >
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					  </a>
+				</div>
+
+			</div>
+            <!--
             <div class="my-modal-content">
                 <div class="slide " >
                     <div class="" style="height: 100%">
-                        <img v-bind:src="mockImages[currentSlide]" style="height: 100%;max-width: 100%" class="fade-in" v-for="(img, index) in mockImages" v-if="index == currentSlide">
-                        <div class="numbertext">{{ this.currentSlide+1 }} / {{ this.mockImages.length }}</div>
+                        <img v-bind:src="mockImages[currentImage]" style="height: 100%;max-width: 100%" class="fade-in" v-for="(img, index) in mockImages" v-if="index == currentImage">
+                        <div class="numbertext">{{ this.currentImage+1 }} / {{ this.mockImages.length }}</div>
                     </div>
                     <div class="dots" >
-                            <span class="dot" v-on:click="changeSlide(index)" v-for="(img,index) in mockImages" v-bind:class="{ active : index == currentSlide}"></span>
+                            <span class="dot" v-on:click="changeSlide(index)" v-for="(img,index) in mockImages" v-bind:class="{ active : index == currentImage}"></span>
                     </div>
                 </div>
 
-                <a class="prev-btn" v-on:click="changeSlide(currentSlide-1)">&#10094;</a>
-                <a class="next-btn" v-on:click="changeSlide(currentSlide+1)">&#10095;</a>
+                <a class="prev-btn" v-on:click="changeSlide(currentImage-1)">&#10094;</a>
+                <a class="next-btn" v-on:click="changeSlide(currentImage+1)">&#10095;</a>
 
 
-            </div>
+            </div>7-->
             <div class="thumbnails">
-                    <div class="thumbnail" v-for="(img, index) in currentImages" v-on:click="changeSlide( winStart + index)" v-bind:class="{ selected: index == currentSlide - winStart }">
+                    <div class="thumbnail" v-for="(img, index) in currentImages" v-on:click="moveCarousel( winStart + index)" v-bind:class="{ selected: index == currentImage - winStart }">
                         <img class=" " v-bind:src="img" style="width:100%"
                              alt="Nature and sunrise">
                     </div>

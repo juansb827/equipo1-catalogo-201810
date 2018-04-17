@@ -70,8 +70,8 @@ Vue.component('temp', {
 var app= new Vue({
     el: '#vue-app',
     data: {
-        fade : true,
-        currentSlide: 0,
+        editing: true,
+        currentImage: 0,
         winStart: 0,
         winEnd: 3,
         mockImages: [],
@@ -123,9 +123,16 @@ var app= new Vue({
                     })
             });
         },
+        moveCarousel: function(i){
+			$('.carousel').carousel(i);
+		},
         changeSlide: function (i) {
-            if(i<0 || i> this.mockImages.length-1)
-                return;
+			console.log("previ",i);
+			var length = this.mockImages.length
+			i = ( length + (i % length ) ) % length; //
+
+			console.log("next",i);
+
 
 
 
@@ -139,8 +146,8 @@ var app= new Vue({
 
             this.winStart += offset;
             this.winEnd += offset;
-            this.currentSlide = i;
-            console.log('s',this.winStart,'e',this.winEnd,this.currentSlide);
+            this.currentImage = i;
+            console.log('s',this.winStart,'e',this.winEnd,this.currentImage);
 
 
 
@@ -153,6 +160,12 @@ var app= new Vue({
         closeGalleryModal: function () {
             document.getElementsByTagName('nav')[0].style.display = "flex";
             document.getElementById('galleryModal').style.display = "none";
+        },
+        showPreview: function () {
+            this.editing = false;
+        },
+        showEditMode: function () {
+            this.editing = true;
         }
 
     },
@@ -187,11 +200,8 @@ var app= new Vue({
             'https://images.pexels.com/photos/39811/pexels-photo-39811.jpeg?auto=compress&cs=tinysrgb&h=350',
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzabaX7ooQ-ZTzDiT8RuvgsC94g7lcnpbpzLUvwu9smM7THIMc5g',
             'http://apclandscape.us.com/wp-content/themes/land3/images/sliders/slide1.jpg',
-            'https://www.w3schools.com/howto/img_lights_wide.jpg',
-            'https://www.w3schools.com/howto/img_mountains_wide.jpg',
-            'https://images.pexels.com/photos/39811/pexels-photo-39811.jpeg?auto=compress&cs=tinysrgb&h=350',
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzabaX7ooQ-ZTzDiT8RuvgsC94g7lcnpbpzLUvwu9smM7THIMc5g',
-            'http://apclandscape.us.com/wp-content/themes/land3/images/sliders/slide1.jpg'
+            'http://images.nationalgeographic.com.es/medio/2015/12/21/bf63ef82rio_narcea_tineo_720x480.jpg'
+
         ]
 
             axios.get(URL_BASE + "/catalogo/devTech/")
@@ -205,7 +215,16 @@ var app= new Vue({
                     console.log("DEvTEchs",self.devTechs);
                 })
 
-    }
+    },
+    mounted: function(){
+		var self = this;
+		$('.carousel').on('slide.bs.carousel',function(e){
+			var slideFrom = $(this).find('.active').index();
+			var slideTo = $(e.relatedTarget).index();
+			console.log(slideFrom+' => '+slideTo);
+			self.changeSlide(slideTo);
+		});
+	}
 
 })
 
