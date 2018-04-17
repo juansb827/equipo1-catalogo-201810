@@ -140,6 +140,10 @@ ITEM_TYPE_STATUS = (
 class Image(models.Model):
     image = CloudinaryField('image', null=True)
 
+    @property
+    def full(self):
+        return self.image.public_id
+
 class Item(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=300)

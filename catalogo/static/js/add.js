@@ -225,6 +225,25 @@ var app= new Vue({
 
         ]
 
+            axios.get(URL_BASE + "/catalogo/item/",{
+                params: {
+                        id: window.itemInfo.id,
+                        type: window.itemInfo.type,
+                        version: window.itemInfo.version,
+                }
+            })
+
+                .then(function (res) {
+                        var images = JSON.parse(res.data.images);
+                        var item = JSON.parse(res.data.item);
+                        if (item.length == 0){
+                            console.log("No se encontro el item");
+                            return
+                        }
+
+                      console.log("Images", images );
+                        console.log("Data", item[0] );
+                })
             axios.get(URL_BASE + "/catalogo/devTech/")
                 .then(function (res) {
                     self.devTechs = res.data.map(function (entry) {
@@ -235,6 +254,8 @@ var app= new Vue({
                     });
                     console.log("DEvTEchs",self.devTechs);
                 })
+
+
 
     },
     mounted: function(){

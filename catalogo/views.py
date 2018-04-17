@@ -9,7 +9,8 @@ import cloudinary.api
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.db.models import Q
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q, Prefetch
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 # Create your views here.
@@ -331,6 +332,47 @@ def add_estrategia(request):
 
 def desarrollo_view(request):
     return render(request, 'desarrollo.html', {})
+
+def mostrar_item(request):
+    return render(request, 'desarrollo.html', {
+            'itemType': 6,
+            'itemId': 55,
+            'itemVer': 0
+    })
+
+def get_item(request):
+    id = request.GET['id']
+    type = request.GET['type']
+    item = models.Item.objects.filter(item_code= '55', version='0', type='6')
+
+    images = item[0].images.all()
+    imgs_res = []
+    for img in images:
+        imgs_res.append({'id': img.pk, 'remoteId': img.full})
+
+    print imgs_res
+    serializers.serialize("json", item)
+
+    print  models.Image.objects.get(pk = 1).full
+
+    #res =json.dumps(list(item), cls=DjangoJSONEncoder)
+
+
+    print item
+    jon =  json.dumps(imgs_res)
+
+    #json.pk = 56;
+    res = {
+        'images': jon,
+        'item':   serializers.serialize("json", [item[0]])
+    }
+
+    return HttpResponse(json.dumps(res))
+
+
+
+
+
 
 def getDevTech(request):
     techs = models.DevelopmentTechnology.objects.all()

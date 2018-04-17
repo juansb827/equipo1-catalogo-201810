@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <script>
+        window.itemInfo = {
+            id: {{ itemId }},
+            type: {{ itemType }},
+            version: {{ itemVer }}
+        }
+
+    </script>
+
     {% verbatim  %}
 
     <link rel="stylesheet" type="text/css" href="../../static/css/estrategia.css">
