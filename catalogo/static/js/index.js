@@ -10,6 +10,8 @@ var tipos = [
     { key: "6" , val :"Desarrollo"}
 
 ]
+
+var estados = ["Borrador","En Revisión","Aprobado"]
 var app = new Vue({
     el: '#vue-app',
     data:
@@ -25,6 +27,9 @@ var app = new Vue({
         }
     ,
     methods: {
+        getItemLink: function (item) {
+            return URL_BASE + '/catalogo/verItem/?type='+item.type+'&code='+item.item_code+'&ver='+item.version;
+        },
         goToPage: function (index) {
             if (index > 0 && index <= this.pageCount) this.currentPage = index;
         },
@@ -37,14 +42,29 @@ var app = new Vue({
 
         },
         buscar: function (scroll) {
+
             this.searching = true;
             this.currentPage = 1;
             var self = this;
 
+            if(scroll == false){ //Search on page reload
+                self.searchOptions.type = utils.getParameterByName('type') || -1;
+                self.searchOptions.words = utils.getParameterByName('busqueda') || '';
+                scroll = true;
+            }
+
+            var searchParams = {
+                type: self.searchOptions.type, name: self.searchOptions.words
+            }
+
+            window.history.pushState('catalogo/', 'Title', '/catalogo/?type='+searchParams.type+'&busqueda='+searchParams.name)
+
+
+
+            console.log("searchOarams",searchParams);
+
             axios.get(URL_BASE + "/catalogo/searchItems",{
-                params:{
-                    type: self.searchOptions.type, name: self.searchOptions.words
-                }
+                params: searchParams
             }).then(function (response) {
                 this.loading=false;
                 var data= response.data;
@@ -63,6 +83,8 @@ var app = new Vue({
                     }
 
                     item.typeName= tipos[item.type].val;
+
+                    item.statusName =   estados[item.version];
                     return item;
                 });
                 console.log('Processed - Self ', self.items);

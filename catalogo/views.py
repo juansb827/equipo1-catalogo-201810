@@ -15,6 +15,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
+from django.utils.encoding import smart_text
 from django.views.decorators.csrf import csrf_exempt
 
 from models import UserForm, Item, Example, Tutorial, Tool
@@ -226,7 +227,7 @@ def add_estrategia(request):
     images = data['images']
     type = data['type']
 
-    print name, description, thumbnail, type == models.STRATEGY
+
 
 
     """if type == models.TECHNOLOGY:
@@ -241,13 +242,23 @@ def add_estrategia(request):
     if thumbnail == '':
         thumbnail == None
 
-    item = Item(
-        name=name,
-        description=description,
-        thumbnail=thumbnail,
-        type=type,
-        status='1'
-    )
+    itemCode = data['id']
+
+    print 'add_estrategia',itemCode
+
+    if itemCode == '' or itemCode == 0:
+        item = Item()
+        item.type = int(smart_text(type, encoding='utf-8', strings_only=False, errors='strict'))
+    else:
+        item = Item.objects.get(item_code= itemCode, version=0)
+
+    item.name=smart_text(name, encoding='utf-8', strings_only=False, errors='strict')
+    item.description=smart_text(description, encoding='utf-8', strings_only=False, errors='strict')
+    item.thumbnail=thumbnail
+    item.status='1'
+
+
+
 
     ob = None
 
@@ -298,13 +309,20 @@ def add_estrategia(request):
         item.strategy = ob
 
     elif type == models.DEVELOPMENT:
-        ob = models.Development(
-            name=name
-        )
-
-        ob.save()
+        devPk = data['subclassId'];
+        print "devPk", devPk
+        if devPk == '':
+            ob = models.Development(
+                name=name
+            )
+            ob.save()
+        else:
+            ob = models.Development.objects.get(pk=devPk)
+            ob.dev_technologies.clear()
+            ob.save()
 
         for tech in data['devTechs']: #the list of devTechs PK's
+            print "tech",tech
             ob.dev_technologies.add(tech)
 
 
@@ -312,8 +330,10 @@ def add_estrategia(request):
         item.development = ob
 
     item.save()
-    item.item_code = item.pk
-    item.save()
+
+    if item.item_code == -1:
+        item.item_code = item.pk
+        item.save()
 
     for image in images:
         newImg = models.Image.objects.create(image=image)
@@ -327,45 +347,120 @@ def add_estrategia(request):
     _ob = serializers.serialize("json", [ob])
     _item = serializers.serialize("json", [item])
 
+    sendToReview = data['sendToReview'];
+
+    if( sendToReview):
+        createReviewVersion(item)
+
+
 
     return JsonResponse({'mensaje' : 'ok','item': _item,'strategy': _ob})
 
-def desarrollo_view(request):
-    return render(request, 'desarrollo.html', {})
+""" Crea una copia del item """
+def createReviewVersion(item ):
+
+    print 'createReviewVersion',item.type
+
+    #Crea una copia de la subclase del item
+    if item.type == models.DEVELOPMENT:
+        development = models.Development.objects.get(pk = item.development.pk)
+        devTechs =development.dev_technologies.all()
+        development.pk = None
+        development.name = development.name+ '+1'
+        development.save()
+        development.dev_technologies.set(devTechs) # le asigna las mismas tecnologias a la copia
+        development.save()
+        item.development = development
+
+    #Crea unacopia del item
+    images = item.images.all()
+    item.pk = None
+    item.version = 1
+    item.save()
+    item.images.set(images) #le asigna las mismas imagenes a la copia
+    item.save()
+
+""" Cambia el status del item a aprobado """
+@csrf_exempt
+def aprobarRevision(request):
+    data = json.loads(request.body);
+
+    item_code = data['item_code']
+    version = data['version']
+
+    # revisa si ya existe una version aprobada y la elimina
+    aprobada = models.Item.objects.filter(item_code=item_code, version=2)
+    if len( aprobada) != 0:
+        aprobada[0].delete()
+
+    item = models.Item.objects.get(item_code=item_code, version=1)
+    item.version = 2
+    item.save()
+
+
+    return JsonResponse({'mensaje': 'ok'})
+
+
+
+def crear_estrategia_view(request):
+    return createItemView(request, models.STRATEGY)
+
+def crear_desarrollo_view(request):
+    return createItemView(request, models.DEVELOPMENT)
+
+def createItemView(request,type):
+    return render(request, 'desarrollo.html', {
+        'itemType': type,
+        'itemId': '',
+        'itemVer': ''
+    })
+
 
 def mostrar_item(request):
+    print request.GET['type']
+    print request.GET['code']
+    print request.GET['ver']
     return render(request, 'desarrollo.html', {
-            'itemType': 6,
-            'itemId': 55,
-            'itemVer': 0
+            'itemType': request.GET['type'],
+            'itemId': request.GET['code'],
+            'itemVer': request.GET['ver']
     })
+
+
+
+
+
 
 def get_item(request):
     id = request.GET['id']
     type = request.GET['type']
-    item = models.Item.objects.filter(item_code= '55', version='0', type='6')
+    version  = request.GET['version']
+    print id,type,version
+    item = models.Item.objects.filter(item_code= id, version=version, type=type)
+
+    if len(item) == 0:
+        print 'item not found'
+        #return JsonResponse({'mensaje': 404})
 
     images = item[0].images.all()
     imgs_res = []
     for img in images:
         imgs_res.append({'id': img.pk, 'remoteId': img.full})
 
-    print imgs_res
-    serializers.serialize("json", item)
-
-    print  models.Image.objects.get(pk = 1).full
-
-    #res =json.dumps(list(item), cls=DjangoJSONEncoder)
 
 
-    print item
-    jon =  json.dumps(imgs_res)
 
-    #json.pk = 56;
     res = {
-        'images': jon,
+        'images': json.dumps(imgs_res),
         'item':   serializers.serialize("json", [item[0]])
     }
+
+    if (type == models.DEVELOPMENT):
+        techs = item[0].development.dev_technologies.all()
+        res['techs'] = serializers.serialize("json", techs)
+
+
+
 
     return HttpResponse(json.dumps(res))
 

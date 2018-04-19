@@ -3,9 +3,9 @@
 {% block content %}
     <script>
         window.itemInfo = {
-            id: {{ itemId }},
-            type: {{ itemType }},
-            version: {{ itemVer }}
+            id: {{  itemId }}+'' ,
+            type: {{ itemType }}+'',
+            version: {{ itemVer }}+''
         }
 
     </script>
@@ -17,14 +17,14 @@
 
 
 
-    <div class="container" style="padding: 100px" id="vue-app">
+    <div class="container" style="padding: 100px;display:none" id="vue-app" v-bind:style="{ display: true }">
         <div class="item-edit" v-if="editing">
-            <h1>Nueva desarrollo</h1>
+            <h1>Desarrollo</h1>
 
             <div class="estrategia item">
 
                 <div class="form-group">
-                    <label for="name">Nombre de la estrategia</label>
+                    <label for="name">Nombre:</label>
                     <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="20"
                            v-bind:class="getClass('name')"
 
@@ -53,8 +53,8 @@
                     <h2>Desarrollado con:</h2>
                     <div class="tech-checks">
 
-                        <label class="" v-for="tech in devTechs">
-                            <input type="checkbox" :value="tech" v-model="item.devTechs"/>
+                        <label class="" v-for="(tech,key) in devTechs">
+                            <input type="checkbox" :value="key" v-model="item.devTechs"/>
                             <span class="custom-control-description">{{ tech.name }}</span>
                         </label>
                         <div class="invalid-feedback" style="display: block" v-if="$v.item.devTechs.$error">
@@ -83,7 +83,7 @@
                 <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg  main-button " style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
                     Vista previa
                 </button>
-                <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg main-button  "  style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
+                <button v-on:click="test()" class="btn btn-outline-secondary btn-lg main-button  "  style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
                     Enviar a revisión
                 </button>
 
@@ -97,21 +97,21 @@
 
         <!-- preview item -->
 
-        <div class="item-preview" v-if="!editing">
-            <div style="display: flex;flex-wrap: wrap">
+        <div class="item-preview" v-if="!editing ">
+            <div style="display: flex;flex-wrap: wrap" v-if="!readOnly">
                 <button v-on:click="showEditMode()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-grow: 1;">
                     Regresar a modo de edición
                 </button>
             </div>
-            <h1>{{ item.name }}</h1>
+            <h1>{{ item.name || 'Sin titulo'}}</h1>
 
-            <p>{{ item.description }}</p>
+            <p>{{ item.description || 'Sin descripcion'}}</p>
 
             <div class="tech-imgs">
-                <div v-for="tech in item.devTechs" class="card">
-                    <img v-bind:src="tech.image">
+                <div v-for="key in item.devTechs" class="card">
+                    <img v-bind:src="devTechs[key].image">
                     <div class="footer">
-                        <a style="color:#007bff" class="card-link">{{ tech.name }}</a>
+                        <a style="color:#007bff" class="card-link">{{ devTechs[key].name }}</a>
                     </div>
                 </div>
 
@@ -135,6 +135,12 @@
                 </div>
 
 
+            </div>
+
+            <div style="display: flex;flex-wrap: wrap" v-if="showApprovalButton">
+                <button v-on:click="sendApproval()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-grow: 1;">
+                    Aprobar versión
+                </button>
             </div>
         </div>
 
@@ -182,9 +188,11 @@
 
         </div>
 
-    </div>
+        <div id="snackbar" v-bind:class="{show: loading}">Un momento por favor...</div>
+        <div id="snackbar" v-bind:class="{show: initializing}">Cargando información...</div>
+    </div><!-- end of vue -->
 
-    <div id="snackbar">Guardando...</div>
+
 
 
 
@@ -193,218 +201,6 @@
 
     <script type="text/javascript" src='../../static/js/utils.js'></script>
     <script type="text/javascript" src='../../static/js/add.js'></script>
-
-    <script type="text/javascript">
-        /*
-            for(var i=0;i<8;i++){
-                var del='../../static/images/delete.svg';
-                     var temp='<div class="card"><img class="img-preview" src="https://cdn.dopl3r.com/memes_files/carl-de-los-simpson-plantilla-8W5Pr.jpg">' +
-                             '<div style="position:absolute;bottom:-25px;right:-25px;opacity:0.7"><img style="height:50px" src="'+del+'"></div>'+
-                         '</div>\n' +
-                         '            <div  class="card"><img class="img-preview" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYldI6HERUkLWu_3R9gy9wa6b5-sSehUwh75vc7Whayc2XbGxGOA">' +
-                             '<div style="position:absolute;bottom:-25px;right:-25px;opacity:0.7"><img style="height:50px" src="'+del+'"></div>'+
-                         '</div>'
-
-
-
-                    $(".images").append($(temp));
-            }
-    */
-        function send(file, preset, cb) {
-            var formData = new FormData();
-            formData.append('upload_preset', preset);
-            formData.append('file', file);
-            var xhr = new XMLHttpRequest();
-            xhr.onload = cb;
-
-            xhr.addEventListener("progress", function (evt) {
-                console.log("progress", evt);
-                if (evt.lengthComputable) {
-                    var percentage = (evt.loaded / evt.total) * 100;
-                    console.log("pro", percentage);
-                }
-            }, false)
-
-
-            xhr.open("post", "https://api.cloudinary.com/v1_1/hn6nvsi2y/image/upload");
-
-            xhr.send(formData);
-
-
-        }
-
-        function deletePhoto(i) {
-            urls[i] = null;
-            $(".images #preview-" + i).remove();
-        }
-
-        function addImage(src, file) {
-            var value = {src: src, file: file};
-            urls.push(value);
-            var i = urls.length - 1;
-            var del = '../../static/images/delete.svg';
-            var itemBox = '<div class="card" id="preview-' + i + '"><img class="img-preview uploading" src="' + value.src + '">' +
-                '<div class="wrapper"><div class="loader-container-2">' +
-                '                         <div id="search-loader" class="loader-2"></div>\n' +
-                '                    </div>' +
-                '</div>' +
-                '  <div class="delete " onclick="deletePhoto(' + i + ')"><img style="height:50px" src="' + del + '"></div>' +
-                '</div>';
-
-
-            $(".images").append($(itemBox));
-
-        }
-
-        function _uploadPhoto(i, preset, cb) {
-
-            send(urls[i].file, preset, function (data) {
-                console.log(data);
-                var res = JSON.parse(data.target.response);
-                var url = res.url;
-                var offset = 'http://res.cloudinary.com/hn6nvsi2y'.length;
-                var imgPath = res.public_id;//url.slice(offset);
-                urls[i].path = imgPath;
-
-                console.log(urls);
-                cb(imgPath);
-
-            })
-
-        }
-
-
-        var urls = [];
-
-        function updatePreviews() {
-            $(".images").empty();
-            var del = '../../static/images/delete.svg';
-            urls.forEach(function (value, i) {
-                if (!value) return;
-
-                var itemBox = '<div class="card" id="preview-' + i + '"><img class="img-preview uploading" src="' + value.src + '">' +
-                    '<div class="wrapper"><div class="loader-container-2">' +
-                    '                         <div id="search-loader" class="loader-2"></div>\n' +
-                    '                    </div>' +
-                    '</div>' +
-                    '  <div class="delete " onclick="deletePhoto(' + i + ')"><img style="height:50px" src="' + del + '"></div>' +
-                    '</div>';
-
-
-                $(".images").append($(itemBox));
-            })
-
-
-        }
-
-
-        function _readURL(input) {
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    addImage(e.target.result, input.files[0]);
-                    var i = urls.length - 1;
-                    uploadPhoto(i, 'big_image', function () {
-
-                        $('#preview-' + i + ' .img-preview').removeClass('uploading');
-                        $('#preview-' + i + ' .wrapper').hide();
-                    });
-
-
-                }
-
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        /*
-        $("#imgInp").change(function () {
-            readURL(this);
-        }); */
-
-        var URL_BASE = window.location.origin;
-
-        function sendData() {
-
-            var data = {};
-            data.name = $('#name').val();
-            data.type = '5'; //Estrategia
-            data.description = $('#description').val();
-            data.images = [];
-
-
-            urls = urls.filter(function (data) {
-                return !!data;
-            })
-
-            urls.forEach(function (value, i) {
-
-
-                if (!value.path) {
-                    console.log("no cargo la imagen", value, i);
-                    return;
-                }
-
-                if (data.thumbnail == undefined) {
-                    console.log("aca", i);
-                    data.thumbnail = i;
-                }
-                data.images.push(value.path);
-
-            });
-            console.log("images", urls);
-
-            //Validaciones
-            var msg = [];
-            if (!data.name || !data.name.trim()) {
-                msg.push("No completo el campo nombre");
-
-            }
-            if (urls.length == 0) {
-                msg.push("No ha seleccionado fotos");
-
-            }
-            if (!data.description) {
-                msg.push("Debe colocar una descripción");
-            }
-            if (msg.length != 0) {
-                $('#listaErrores').empty();
-                msg.forEach(function (value) {
-                    var error = '<li>' + value + '</li>';
-                    $('#listaErrores').append($(error))
-                });
-
-
-                $('#exampleModal').modal('show');
-
-                return;
-            }
-
-            $('#snackbar').addClass('show');
-            uploadPhoto(data.thumbnail, 'thumbnail', function (imgPath) {
-                data.thumbnail = imgPath;
-                console.log("Data to be sent", data);
-
-                $.post(URL_BASE + "/catalogo/addEstrategia/", data)
-                    .done(function (data) {
-
-                        window.location = URL_BASE + "/catalogo/";
-                        console.log("Suc", data);
-                    })
-                    .fail(function (err) {
-                        console.log("Error", err);
-                    })
-
-            })
-
-
-        }
-
-
-    </script>
 
     {% endverbatim  %}
 {% endblock %}
