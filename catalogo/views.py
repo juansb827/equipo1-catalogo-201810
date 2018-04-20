@@ -9,11 +9,13 @@ import cloudinary.api
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.db.models import Q
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Q, Prefetch
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
+from django.utils.encoding import smart_text
 from django.views.decorators.csrf import csrf_exempt
 
 from models import UserForm, Item, Example, Tutorial, Tool
@@ -213,11 +215,20 @@ def estrategia_view(request):
 
 @csrf_exempt
 def add_estrategia(request):
-    name = request.POST['name'];
-    description = request.POST['description']
-    thumbnail = request.POST['thumbnail']
-    images = request.POST.getlist('images[]')
-    type = request.POST['type']
+
+    data = json.loads(request.body);
+
+
+
+    name = data['name'];
+    description = data['description']
+    thumbnail = data['thumbnail']
+    #getlist('images[]')
+    images = data['images']
+    type = data['type']
+
+
+
 
     """if type == models.TECHNOLOGY:
         
@@ -231,13 +242,23 @@ def add_estrategia(request):
     if thumbnail == '':
         thumbnail == None
 
-    item = Item(
-        name=name,
-        description=description,
-        thumbnail=thumbnail,
-        type=type,
-        status='4'
-    )
+    itemCode = data['id']
+
+    print 'add_estrategia',itemCode
+
+    if itemCode == '' or itemCode == 0:
+        item = Item()
+        item.type = int(smart_text(type, encoding='utf-8', strings_only=False, errors='strict'))
+    else:
+        item = Item.objects.get(item_code= itemCode, version=0)
+
+    item.name=smart_text(name, encoding='utf-8', strings_only=False, errors='strict')
+    item.description=smart_text(description, encoding='utf-8', strings_only=False, errors='strict')
+    item.thumbnail=thumbnail
+    item.status='1'
+
+
+
 
     ob = None
 
@@ -287,26 +308,175 @@ def add_estrategia(request):
         ob.save()
         item.strategy = ob
 
+    elif type == models.DEVELOPMENT:
+        devPk = data['subclassId'];
+        print "devPk", devPk
+        if devPk == '':
+            ob = models.Development(
+                name=name
+            )
+            ob.save()
+        else:
+            ob = models.Development.objects.get(pk=devPk)
+            ob.dev_technologies.clear()
+            ob.save()
+
+        for tech in data['devTechs']: #the list of devTechs PK's
+            print "tech",tech
+            ob.dev_technologies.add(tech)
+
+
+        ob.save()
+        item.development = ob
+
     item.save()
 
+    if item.item_code == -1:
+        item.item_code = item.pk
+        item.save()
+
     for image in images:
-        models.Image(item=item, image=image).save()
-        print("se guarda imagen")
+        newImg = models.Image.objects.create(image=image)
+        item.images.add(newImg)
+
+    item.save()
+
+
 
     print name, description, thumbnail, images
     _ob = serializers.serialize("json", [ob])
     _item = serializers.serialize("json", [item])
 
-    return JsonResponse({'mensaje': 'ok', 'item': _item, 'strategy': _ob})
+    sendToReview = data['sendToReview'];
+
+    if( sendToReview):
+        createReviewVersion(item)
+
+
+
+    return JsonResponse({'mensaje' : 'ok','item': _item,'strategy': _ob})
+
+""" Crea una copia del item """
+def createReviewVersion(item ):
+
+    print 'createReviewVersion',item.type
+
+    #Crea una copia de la subclase del item
+    if item.type == models.DEVELOPMENT:
+        development = models.Development.objects.get(pk = item.development.pk)
+        devTechs =development.dev_technologies.all()
+        development.pk = None
+        development.name = development.name+ '+1'
+        development.save()
+        development.dev_technologies.set(devTechs) # le asigna las mismas tecnologias a la copia
+        development.save()
+        item.development = development
+
+    #Crea unacopia del item
+    images = item.images.all()
+    item.pk = None
+    item.version = 1
+    item.save()
+    item.images.set(images) #le asigna las mismas imagenes a la copia
+    item.save()
+
+""" Cambia el status del item a aprobado """
+@csrf_exempt
+def aprobarRevision(request):
+    data = json.loads(request.body);
+
+    item_code = data['item_code']
+    version = data['version']
+
+    # revisa si ya existe una version aprobada y la elimina
+    aprobada = models.Item.objects.filter(item_code=item_code, version=2)
+    if len( aprobada) != 0:
+        aprobada[0].delete()
+
+    item = models.Item.objects.get(item_code=item_code, version=1)
+    item.version = 2
+    item.save()
+
+
+    return JsonResponse({'mensaje': 'ok'})
+
+
+
+def crear_estrategia_view(request):
+    return createItemView(request, models.STRATEGY)
+
+def crear_desarrollo_view(request):
+    return createItemView(request, models.DEVELOPMENT)
+
+def createItemView(request,type):
+    return render(request, 'desarrollo.html', {
+        'itemType': type,
+        'itemId': '',
+        'itemVer': ''
+    })
+
+
+def mostrar_item(request):
+    print request.GET['type']
+    print request.GET['code']
+    print request.GET['ver']
+    return render(request, 'desarrollo.html', {
+            'itemType': request.GET['type'],
+            'itemId': request.GET['code'],
+            'itemVer': request.GET['ver']
+    })
+
+
+
+
+
+
+def get_item(request):
+    id = request.GET['id']
+    type = request.GET['type']
+    version  = request.GET['version']
+    print id,type,version
+    item = models.Item.objects.filter(item_code= id, version=version, type=type)
+
+    if len(item) == 0:
+        print 'item not found'
+        #return JsonResponse({'mensaje': 404})
+
+    images = item[0].images.all()
+    imgs_res = []
+    for img in images:
+        imgs_res.append({'id': img.pk, 'remoteId': img.full})
+
+
+
+
+    res = {
+        'images': json.dumps(imgs_res),
+        'item':   serializers.serialize("json", [item[0]])
+    }
+
+    if (type == models.DEVELOPMENT):
+        techs = item[0].development.dev_technologies.all()
+        res['techs'] = serializers.serialize("json", techs)
+
+
+
+
+    return HttpResponse(json.dumps(res))
+
+
+
+
+
+
+def getDevTech(request):
+    techs = models.DevelopmentTechnology.objects.all()
+    return HttpResponse(serializers.serialize("json", techs))
+
+
+
 
 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('catalogo:index'))
-
-
-def review(request):
-    query = Item.objects.all().filter(Q(status='2'))
-    items = serializers.serialize("json", query)
-    context = {'items': json.loads(items)}
-    return render(request, 'revision.html', context)

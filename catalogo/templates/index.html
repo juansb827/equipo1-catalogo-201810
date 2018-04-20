@@ -52,7 +52,7 @@
                 <div id="search-loader" class="loader"></div>
             </div>
 
-            <div id="noResults" class="alert alert-info " role="alert" style="display: none">
+            <div id="noResults" class="alert alert-info " role="alert" v-if="items.length == 0 && !searching ">
                 <strong>No se encontraron resultados!</strong>
             </div>
             <div class="search-results" v-bind:style="{ opacity : searching ? '0' : '1' }" v-bind:class="{smooth : !searching}">
@@ -69,7 +69,7 @@
                                     <p class="card-text"> {{ item.description | shorten }}</p>
                                 </div>
                                 <div class="card-footer">
-                                    <a style="color:#007bff" class="card-link" >{{ item.typeName }}</a>
+                                    <a style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} - {{ item.statusName }}</a>
                                 </div>
                             </div>
                     </div>
@@ -98,7 +98,7 @@
 
     </div>
 
-
+    <script type="text/javascript" src='../../static/js/utils.js'></script>
     <script type="text/javascript" src='../../static/js/index.js'></script>
 
 

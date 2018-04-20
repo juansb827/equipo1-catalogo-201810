@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import random
+
 from cloudinary.models import CloudinaryField
 from django import forms
 from django.contrib.auth.models import User
@@ -89,10 +92,25 @@ class Tutorial(models.Model):
 
 
 class Strategy(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=300)
+
+
+
+class DevelopmentTechnology(models.Model):
+    name = models.CharField(max_length=50)
+    image = CloudinaryField('image', null=True)
 
     def __unicode__(self):
         return self.name
+
+class Development(models.Model):
+    name = models.CharField(max_length=150)
+    dev_technologies = models.ManyToManyField(DevelopmentTechnology)
+
+    def __unicode__(self):
+        return self.name
+
+
 
 
 ITEM_TYPE_CHOICES = (
@@ -101,6 +119,7 @@ ITEM_TYPE_CHOICES = (
     ('3', 'TUTORIAL'),
     ('4', 'EXAMPLE'),
     ('5', 'STRATEGY'),
+    ('6', 'DEVELOPMENT')
 )
 
 TECHNOLOGY = "1"
@@ -108,6 +127,8 @@ TOOL = "2"
 TUTORIAL = "3"
 EXAMPLE = "4"
 STRATEGY = "5"
+DEVELOPMENT = "6"
+
 
 ITEM_TYPE_STATUS = (
     ('1', 'IN REVIEW'),
@@ -116,9 +137,16 @@ ITEM_TYPE_STATUS = (
     ('4', 'UNFINISHED')
 )
 
+class Image(models.Model):
+    image = CloudinaryField('image', null=True)
+
+    @property
+    def full(self):
+        return self.image.public_id
+
 class Item(models.Model):
     name = models.CharField(max_length=150)
-    description = models.CharField(max_length=150)
+    description = models.CharField(max_length=300)
     thumbnail = CloudinaryField('image', null=True)  # Imagen que se ve en los resultados de busqueda
     type = models.CharField(max_length=1, choices=ITEM_TYPE_CHOICES)
     technology = models.ForeignKey(Technology, null=True, blank=True)
@@ -126,12 +154,15 @@ class Item(models.Model):
     tutorial = models.ForeignKey(Tutorial, null=True, blank=True)
     example = models.ForeignKey(Example, null=True, blank=True)
     strategy = models.ForeignKey(Strategy, null=True, blank=True)
-    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
+    development = models.ForeignKey(Development, null=True, blank=True)
+    item_code = models.IntegerField(default= -1)  #Relaciona diferentes versiones de un mismo item
+    version = models.IntegerField(default = 0)   #Version del item
+    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS )
+    images = models.ManyToManyField(Image)
+
+
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
 
 
-class Image(models.Model):
-    item = models.ForeignKey(Item)
-    image = CloudinaryField('image', null=True)

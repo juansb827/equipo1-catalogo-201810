@@ -16,5 +16,13 @@ urlpatterns = [
     url(r'^addTutorial/$', views.add_tutorial, name='addTutorial'),
     url(r'^estrategia/$', views.estrategia_view, name='estrategia'),
     url(r'^addEstrategia/$', views.add_estrategia, name='addEstrategia'),
-    url(r'^review/$', views.review, name='review'),
+    #rutas para creacion de items
+    url(r'^crearEstrategia/$', views.crear_estrategia_view, name='crearEstrategia'),
+    url(r'^crearDesarrollo/$', views.crear_desarrollo_view, name='crearDesarrollo'),
+    url(r'^devTech/$', views.getDevTech, name='getDevTech'),
+    url(r'^verItem/$', views.mostrar_item, name='viewItem'),
+    url(r'^aprobarRevision/$', views.aprobarRevision, name='aprobarRevision'),
+  #  url(r'^verItem/([0-9]{1})/([0-9]+)/([0-9]{1})/$', views.mostrar_item, name='viewItem'),
+    url(r'^item/$', views.get_item, name='getItem'),
+
 ]
