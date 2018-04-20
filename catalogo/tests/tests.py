@@ -38,3 +38,5 @@ class FunctionalTest(TestCase):
         button = self.browser.find_element_by_css_selector("#formAddExample > button")
 
         self.assertIn('Guardar', button.text)
+
+    #Agregar nueva prueba
