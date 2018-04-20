@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import random
-
 from cloudinary.models import CloudinaryField
 from django import forms
 from django.contrib.auth.models import User
@@ -66,6 +64,10 @@ class Tool(models.Model):
     description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
     technology = models.ForeignKey(Technology, null=True, blank=True)
+    license_type = models.CharField(max_length=150)
+    use_restrictions = models.CharField(max_length=500, null=True)
+    download_url = models.CharField(max_length=1000, null=True)
+    technical_info = models.CharField(max_length=1000)
 
     def __unicode__(self):
         return self.name
@@ -95,7 +97,6 @@ class Strategy(models.Model):
     name = models.CharField(max_length=300)
 
 
-
 class DevelopmentTechnology(models.Model):
     name = models.CharField(max_length=50)
     image = CloudinaryField('image', null=True)
@@ -103,14 +104,13 @@ class DevelopmentTechnology(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Development(models.Model):
     name = models.CharField(max_length=150)
     dev_technologies = models.ManyToManyField(DevelopmentTechnology)
 
     def __unicode__(self):
         return self.name
-
-
 
 
 ITEM_TYPE_CHOICES = (
@@ -129,7 +129,6 @@ EXAMPLE = "4"
 STRATEGY = "5"
 DEVELOPMENT = "6"
 
-
 ITEM_TYPE_STATUS = (
     ('1', 'IN REVIEW'),
     ('2', 'ACCEPTED'),
@@ -137,12 +136,14 @@ ITEM_TYPE_STATUS = (
     ('4', 'UNFINISHED')
 )
 
+
 class Image(models.Model):
     image = CloudinaryField('image', null=True)
 
     @property
     def full(self):
         return self.image.public_id
+
 
 class Item(models.Model):
     name = models.CharField(max_length=150)
@@ -155,14 +156,10 @@ class Item(models.Model):
     example = models.ForeignKey(Example, null=True, blank=True)
     strategy = models.ForeignKey(Strategy, null=True, blank=True)
     development = models.ForeignKey(Development, null=True, blank=True)
-    item_code = models.IntegerField(default= -1)  #Relaciona diferentes versiones de un mismo item
-    version = models.IntegerField(default = 0)   #Version del item
-    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS )
+    item_code = models.IntegerField(default=-1)  # Relaciona diferentes versiones de un mismo item
+    version = models.IntegerField(default=0)  # Version del item
+    status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
     images = models.ManyToManyField(Image)
-
-
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
-
-
