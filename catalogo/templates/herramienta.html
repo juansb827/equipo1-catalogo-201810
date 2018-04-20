@@ -3,25 +3,52 @@
 {% block content %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
-    <div class="login-container">
+    <div class="login-container" style="height: 153vh;">
         <div class="overlayed">
-            <div class="login-area">
-                <div class="container">
-                    <form id="formAddTool" enctype="multipart/form-data" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="name">Nombre de la herramienta</label>
-                            <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Descripción de la herramienta</label>
-                            <textarea class="form-control" rows="5" id="description" name="description" maxlength="150"></textarea>
-                        </div>
-                        <button type="submit" class="btn  main-button">Guardar</button>
-                    </form>
-                </div>
+            <div class="container" style="padding-top: 100px;">
+                <form id="formAddTool" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">Nombre de la herramienta</label>
+                        <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descripción de la herramienta</label>
+                        <textarea class="form-control" rows="5" id="description" name="description"
+                                  placeholder="Descripción"
+                                  maxlength="150"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Tipo de licencia</label>
+                        <input required type="text" class="form-control" id="license" name="license"
+                               placeholder="Licencia">
+                    </div>
+                    <div class="form-group">
+                        <label for="restrictions">Restricciones de uso</label>
+                        <textarea class="form-control" rows="5" id="restrictions" name="restrictions"
+                                  placeholder="Restricciones de uso"
+                                  maxlength="150"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">URL de la herramienta</label>
+                        <input required type="text" class="form-control" id="url" name="url" placeholder="URL">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">URL descarga</label>
+                        <input required type="text" class="form-control" id="download_url" name="download_url"
+                               placeholder="URL descarga">
+                    </div>
+                    <div class="form-group">
+                        <label for="tech_info">Información técnica</label>
+                        <textarea class="form-control" rows="5" id="tech_info" name="tech_info"
+                                  placeholder="Información técnica"
+                                  maxlength="150"></textarea>
+                    </div>
+                    <button type="submit" class="btn  main-button">Guardar</button>
+                </form>
             </div>
         </div>
+    </div>
     </div>
 
     <script>

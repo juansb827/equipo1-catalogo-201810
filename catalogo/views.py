@@ -269,9 +269,19 @@ def add_estrategia(request):
         ob.save()
         item.technology = ob
     elif type == models.TOOL:
+        url = request.POST.get('url')
+        download_url = request.POST.get('download_url')
+        license = request.POST.get('license')
+        restrictions = request.POST.get('restrictions')
+        tech_info = request.POST.get('tech_info')
         ob = models.Tool(
             name=name,
-            description=description
+            description=description,
+            url=url,
+            download_url=download_url,
+            license_type=license,
+            use_restrictions=restrictions,
+            technical_info=tech_info
         )
         ob.save()
         item.tool = ob
