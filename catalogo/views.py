@@ -170,6 +170,8 @@ def search_item(request):
 
         strategies = query.filter(type='5').filter(Q(name__icontains=name))
 
+        developments = query.filter(type='6').filter(Q(name__icontains=name))
+
         if type == '1':
             query = tech
         elif type == '2':
@@ -180,8 +182,10 @@ def search_item(request):
             query = examples
         elif type == '5':
             query = strategies
+        elif type == '6':
+            query = developments
         else:
-            query = tech.union(tools).union(tutoriales).union(examples).union(strategies)
+            query = tech.union(tools).union(tutoriales).union(examples).union(strategies).union(developments)
 
     else:
         # No escribio un criterio de busqueda pero selecciono un tipo de item
@@ -309,6 +313,7 @@ def add_estrategia(request):
 
         ob.name = name
         ob.url = data['exampleUrl']
+        ob.strategy_id = data['strategy']
         ob.tool_id = data['tool']
 
         ob.save()
@@ -355,6 +360,7 @@ def add_estrategia(request):
         item.item_code = item.pk
         item.save()
 
+    item.images.clear()
     for image in images:
         newImg = models.Image.objects.create(image=image)
         item.images.add(newImg)
@@ -534,7 +540,7 @@ def get_item(request):
 
 
 
-
+#TODO: unir los metodos en uno solo
 
 def getDevTech(request):
     techs = models.DevelopmentTechnology.objects.all()
@@ -545,8 +551,13 @@ def technologies(request):
     return HttpResponse(serializers.serialize("json", technologies))
 
 def tools(request):
-    tools = models.Tool.objects.all()
-    return HttpResponse(serializers.serialize("json", tools))
+    tools = models.Item.objects.filter( type = models.TOOL, version = '2')
+    return HttpResponse(serializers.serialize("json", list(tools), fields=('item_code', 'name', 'tool')))
+
+def strategies(request):
+    strategies = models.Item.objects.filter( type = models.STRATEGY, version = '2')
+    return HttpResponse(serializers.serialize("json", list(strategies) ,fields= ('item_code','name', 'strategy')))
+    #return HttpResponse(serializers.serialize("json", strategies))
 
 
 

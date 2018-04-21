@@ -74,12 +74,15 @@ class Tool(models.Model):
     def __unicode__(self):
         return self.name
 
+class Strategy(models.Model):
+    name = models.CharField(max_length=300)
 
 class Example(models.Model):
     name = models.CharField(max_length=150)
     url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
-    technology = models.ForeignKey(Technology, null=True, blank=True)
+    strategy = models.ForeignKey(Strategy, null=True, blank=True)
+
 
     def __unicode__(self):
         return self.name
@@ -91,8 +94,7 @@ class Tutorial(models.Model):
     tool = models.ForeignKey(Tool, null=False)
 
 
-class Strategy(models.Model):
-    name = models.CharField(max_length=300)
+
 
 
 class DevelopmentTechnology(models.Model):

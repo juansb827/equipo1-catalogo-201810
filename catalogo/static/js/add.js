@@ -130,6 +130,7 @@ var app = new Vue({
             integration: false,
             functionalDescription: '',
             //EJEMPLO
+            strategy: '',
             tool: '',
             exampleUrl: '',
             //TUTORIAL
@@ -138,6 +139,7 @@ var app = new Vue({
 
 
         },
+        strategies: {},
         tools: {},
         technologies: {},  // tecnologias del catalogo eg. sicua o moodle
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
@@ -180,9 +182,9 @@ var app = new Vue({
                     return tech.id;
                 }) */
                 //Les deja solo el id a las imagenes
-                data.images = self.item.images.filter(function (img) {
+                data.images = self.item.images.map(function (img) {  /* filter(function (img) {
                     return !img.id; // Ignora las que tengan Id, por que ya estan en la db
-                }).map(function (img) {
+                })*/
                     return img.remoteId;
                 })
 
@@ -216,7 +218,7 @@ var app = new Vue({
 
             axios.post(URL_BASE + "/catalogo/aprobarRevision/", data)
                 .then(function (res) {
-                    window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda=';
+                    window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda='+self.item.name;
                     console.log("Success Aproval", res);
                 })
                 .catch(function (err) {
@@ -274,7 +276,10 @@ var app = new Vue({
         },
         showEditMode: function () {
             this.editing = true;
-        }
+        },
+        getItemLink: function (item_code,type) {
+            return URL_BASE + '/catalogo/verItem/?type='+type+'&code='+item_code+'&ver=2';
+        },
 
     },
     computed: {
@@ -342,6 +347,7 @@ var app = new Vue({
 
                     break;
                      case EXAMPLE:
+                         val.item.strategy = { required: validators.required }
                          val.item.tool = { required: validators.required }
                          val.item.exampleUrl = {
                              required: validators.required,
@@ -490,6 +496,7 @@ function cargarInfo(self, res, data) {
 
         break;
         case EXAMPLE:
+            self.item.strategy = subItem.fields.strategy;
             self.item.tool = subItem.fields.tool;
             self.item.exampleUrl = subItem.fields.url;
         break;
@@ -553,15 +560,28 @@ function loadLists(self) {
         case EXAMPLE:
 
 
+
             axios.get(URL_BASE + "/catalogo/tools/")
                 .then(function (res) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        //fields.image = IMG_BASE + fields.image;
-                        self.$set(self.tools, entry.pk, fields);// devTechs[] = fields;
+                        fields.item= entry.pk;
+                        self.$set(self.tools, fields.tool, fields);// devTechs[] = fields;
+                    });
+                    console.log("Tools", self.tools);
+            })
+
+            axios.get(URL_BASE + "/catalogo/strategies/")
+                .then(function (res) {
+                    console.log("Purestra",res.data);
+                    res.data.map(function (entry) {
+                        var fields = entry.fields;
+                        fields.item= entry.pk;
+
+                        self.$set(self.strategies, fields.strategy, fields);// devTechs[] = fields;
                     });
                     self.initializing = false;
-                    console.log("Tools", self.tools);
+                    console.log("Strategies", self.strategies);
             })
 
         break;

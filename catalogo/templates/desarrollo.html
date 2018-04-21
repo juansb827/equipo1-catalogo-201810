@@ -71,7 +71,7 @@
                 <div v-if="item.type == types.TOOL">
                     <h2>Información de la herramienta</h2>
                     <ul>
-                        <li>Tecnologias:
+                        <li>Tecnologia:
                             <div class="form-group">
                                     <select required class="form-control" id="technology" name="technology" v-model="item.technology"
                                             v-bind:class="getClass('technology')" @input="$v.item.technology.$touch()">
@@ -166,12 +166,24 @@
                  <div v-if="item.type == types.EXAMPLE">
                     <h2>Información del Ejemplo:</h2>
                      <ul>
+                         <li>Estrategia Pedagógica:
+                             <div class="form-group">
+                                    <select required class="form-control" id="strategy" name="strategy" v-model="item.strategy"
+                                            v-bind:class="getClass('strategy')" @input="$v.item.strategy.$touch()">
+                                        <option v-bind:value="''">Seleccione una estrategia</option> <!-- key = id de la estrategia -->
+                                        <option v-for="(item, key) in strategies" v-bind:value="key">{{ item.name }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <p class="" v-if="!$v.item.strategy.required">Debe seleccionar una estrategia.</p>
+                                    </div>
+                            </div>
+                         </li>
                          <li>Herramienta:
                              <div class="form-group">
                                     <select required class="form-control" id="tool" name="tool" v-model="item.tool"
                                             v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
                                         <option v-bind:value="''">Seleccione una herramienta</option>
-                                        <option v-for="(tool, key) in tools"v-bind:value="key">{{ tool.name }}</option>
+                                        <option v-for="(item, key) in tools"v-bind:value="key">{{ item.name }}</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
@@ -317,7 +329,12 @@
             <div v-if="item.type == types.EXAMPLE">
                     <h2>Información del Ejemplo</h2>
                     <ul>
-                        <li><strong>Herramienta: </strong>{{ tools[item.tool] ?  tools[item.tool].name : '' }}
+                        <li><strong>Estrategia Pedagógica: </strong>
+                            <a v-bind:href="getItemLink(strategies[item.strategy].item_code, types.STRATEGY)" v-if="strategies[item.strategy]">{{ strategies[item.strategy].name }}</a>
+                        </li>
+                        <li><strong>Herramienta: </strong>
+                            <a v-bind:href="getItemLink(tools[item.tool].item_code, types.TOOL)" v-if="tools[item.tool]">{{ tools[item.tool].name }}</a>
+                        </li>
                         <li> <a v-bind:href="item.exampleUrl">Url del Ejemplo</a>
                         </li>
                     </ul>
@@ -327,7 +344,9 @@
             <div v-if="item.type == types.TUTORIAL">
                     <h2>Información del Tutorial</h2>
                     <ul>
-                        <li><strong>Herramienta: </strong>{{ tools[item.tool] ?  tools[item.tool].name : '' }}
+                        <li><strong>Herramienta: </strong>
+                            <a v-bind:href="getItemLink(tools[item.tool].item_code, types.TOOL)" v-if="tools[item.tool]">{{ tools[item.tool].name }}</a>
+                        </li>
                         <li> <a v-bind:href="item.tutorialUrl">Url del Tutorial</a>
                         </li>
                     </ul>

@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^devTech/$', views.getDevTech, name='getDevTech'),
     url(r'^technologies/$', views.technologies, name='tecnologias'),
     url(r'^tools/$', views.tools, name='tools'),
+    url(r'^strategies/$', views.strategies, name='strategies'),
+
 
     url(r'^verItem/$', views.mostrar_item, name='viewItem'),
     url(r'^aprobarRevision/$', views.aprobarRevision, name='aprobarRevision'),
