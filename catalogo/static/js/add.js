@@ -129,11 +129,16 @@ var app = new Vue({
             operativeSystems: [],
             integration: false,
             functionalDescription: '',
-
+            //EJEMPLO
+            tool: '',
+            exampleUrl: '',
+            //TUTORIAL
+            tutorialUrl: ''
 
 
 
         },
+        tools: {},
         technologies: {},  // tecnologias del catalogo eg. sicua o moodle
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
         licenseTypes : {}
@@ -188,7 +193,7 @@ var app = new Vue({
                 axios.post(URL_BASE + "/catalogo/addEstrategia/", data)
                     .then(function (res) {
                         console.log("Success", res);// return;
-                        window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda=';
+                        window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda='+self.item.name;
 
                     })
                     .catch(function (err) {
@@ -336,6 +341,24 @@ var app = new Vue({
                          }
 
                     break;
+                     case EXAMPLE:
+                         val.item.tool = { required: validators.required }
+                         val.item.exampleUrl = {
+                             required: validators.required,
+                             maxLength: validators.maxLength(300),
+                             url: validators.url
+                         }
+
+                     break;
+                     case TUTORIAL:
+                         val.item.tool = { required: validators.required }
+                         val.item.tutorialUrl = {
+                             required: validators.required,
+                             maxLength: validators.maxLength(300),
+                             url: validators.url
+                         }
+
+                     break;
 
 
 
@@ -464,13 +487,15 @@ function cargarInfo(self, res, data) {
             self.item.integration = subItem.fields.integration;
             self.item.functionalDescription = subItem.fields.functional_description;
             self.item.operativeSystems = subItem.fields.operating_systems.split(',');
-            /*
-            : '',
 
-            operativeSystems: [],
-            integration: false,
-            functionalDescription: '',*/
-
+        break;
+        case EXAMPLE:
+            self.item.tool = subItem.fields.tool;
+            self.item.exampleUrl = subItem.fields.url;
+        break;
+        case TUTORIAL:
+            self.item.tool = subItem.fields.tool;
+            self.item.tutorialUrl = subItem.fields.url;
         break;
     }
 
@@ -525,6 +550,40 @@ function loadLists(self) {
 
 
         break;
+        case EXAMPLE:
+
+
+            axios.get(URL_BASE + "/catalogo/tools/")
+                .then(function (res) {
+                    res.data.map(function (entry) {
+                        var fields = entry.fields;
+                        //fields.image = IMG_BASE + fields.image;
+                        self.$set(self.tools, entry.pk, fields);// devTechs[] = fields;
+                    });
+                    self.initializing = false;
+                    console.log("Tools", self.tools);
+            })
+
+        break;
+        case TUTORIAL:
+            axios.get(URL_BASE + "/catalogo/tools/")
+                .then(function (res) {
+                    res.data.map(function (entry) {
+                        var fields = entry.fields;
+                        //fields.image = IMG_BASE + fields.image;
+                        self.$set(self.tools, entry.pk, fields);// devTechs[] = fields;
+                    });
+                    self.initializing = false;
+                    console.log("Tools", self.tools);
+            })
+        break;
+        case STRATEGY:
+            self.initializing = false;
+            break;
+
+
+
+
 
 
 

@@ -283,35 +283,48 @@ def add_estrategia(request):
         item.tool = ob
 
     elif type == models.TUTORIAL:
-        url = request.POST.get('url')
-        tool = request.POST.get('tool')
+        devPk = data['subclassId'];
+        print "tutorialPk", devPk
 
-        ob = models.Tutorial(
-            name=name,
-            url=url,
-            description=description,
-            tool_id=tool
-        )
+        if devPk == '':
+            ob = models.Tutorial()
+        else:
+            ob = models.Tutorial.objects.get(pk=devPk)
+
+        ob.name = name
+        ob.url = data['tutorialUrl']
+        ob.tool_id = data['tool']
+
         ob.save()
         item.tutorial = ob
     elif type == models.EXAMPLE:
 
-        url = request.POST.get('url')
-        tool = request.POST.get('tool')
-        tech = request.POST.get('tech')
+        devPk = data['subclassId'];
+        print "examplePk", devPk
 
-        ob = Example(
-            name=name,
-            url=url,
-            tool_id=tool,
-            technology_id=tech)
+        if devPk == '':
+            ob = models.Example()
+        else:
+            ob = models.Example.objects.get(pk=devPk)
+
+        ob.name = name
+        ob.url = data['exampleUrl']
+        ob.tool_id = data['tool']
+
         ob.save()
         item.example = ob
 
     elif type == models.STRATEGY:
-        ob = models.Strategy(
-            name=name
-        )
+
+        devPk = data['subclassId'];
+        print "strategyPk", devPk
+
+        if devPk == '':
+            ob = models.Strategy()
+        else:
+            ob = models.Strategy.objects.get(pk=devPk)
+
+        ob.name = name
         ob.save()
         item.strategy = ob
 
@@ -386,8 +399,27 @@ def createReviewVersion(item ):
     elif item.type == models.TOOL:
         tool = models.Tool.objects.get(pk = item.tool.pk)
         tool.pk = None
-        tool.name = tool.name + '+1'
+        tool.name = tool.name
         tool.save()
+        item.tool = tool
+    elif item.type == models.EXAMPLE:
+        example = models.Example.objects.get(pk = item.example.pk)
+        example.pk = None
+        example.name = example.name
+        example.save()
+        item.example = example
+    elif item.type == models.TUTORIAL:
+        tutorial = models.Tutorial.objects.get(pk = item.tutorial.pk)
+        tutorial.pk = None
+        tutorial.name = tutorial.name
+        tutorial.save()
+        item.tutorial = tutorial
+    elif item.type == models.STRATEGY:
+        strategy = models.Strategy.objects.get(pk = item.strategy.pk)
+        strategy.pk = None
+        strategy.name = strategy.name
+        strategy.save()
+        item.strategy = strategy
 
     #Crea unacopia del item
     images = item.images.all()
@@ -417,6 +449,11 @@ def aprobarRevision(request):
 
     return JsonResponse({'mensaje': 'ok'})
 
+def crear_tutorial_view(request):
+    return createItemView(request, models.TUTORIAL)
+
+def crear_ejemplo_view(request):
+    return createItemView(request, models.EXAMPLE)
 
 def crear_herramienta_view(request):
     return createItemView(request, models.TOOL)
@@ -474,13 +511,21 @@ def get_item(request):
         'item':   serializers.serialize("json", [item[0]])
     }
 
-    if (type == models.DEVELOPMENT):
+    if (type == models.DEVELOPMENT):  # TODO remove duplicated code
         techs = item[0].development.dev_technologies.all()
         res['techs'] = serializers.serialize("json", techs)
     elif (type == models.TOOL):
         subItem = models.Tool.objects.filter( pk = item[0].tool.pk )
         res['subItem'] = serializers.serialize("json", subItem)
-
+    elif (type == models.EXAMPLE):
+        subItem = models.Example.objects.filter( pk = item[0].example.pk )
+        res['subItem'] = serializers.serialize("json", subItem)
+    elif (type == models.TUTORIAL):
+        subItem = models.Tutorial.objects.filter( pk = item[0].tutorial.pk )
+        res['subItem'] = serializers.serialize("json", subItem)
+    elif (type == models.STRATEGY):
+        subItem = models.Strategy.objects.filter( pk = item[0].strategy.pk )
+        res['subItem'] = serializers.serialize("json", subItem)
 
 
 
@@ -498,6 +543,10 @@ def getDevTech(request):
 def technologies(request):
     technologies = models.Technology.objects.all()
     return HttpResponse(serializers.serialize("json", technologies))
+
+def tools(request):
+    tools = models.Tool.objects.all()
+    return HttpResponse(serializers.serialize("json", tools))
 
 
 

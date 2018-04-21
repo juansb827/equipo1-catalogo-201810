@@ -77,11 +77,9 @@ class Tool(models.Model):
 
 class Example(models.Model):
     name = models.CharField(max_length=150)
-    thumbnail = CloudinaryField('image', null=True)
-    description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
-    technology = models.ForeignKey(Technology, null=False)
+    technology = models.ForeignKey(Technology, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -89,8 +87,6 @@ class Example(models.Model):
 
 class Tutorial(models.Model):
     name = models.CharField(max_length=150)
-    thumbnail = CloudinaryField('image', null=True)
-    description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
 

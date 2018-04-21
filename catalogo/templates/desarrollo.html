@@ -124,7 +124,7 @@
                             <div class="invalid-feedback">
                                     <p class="" v-if="!$v.item.toolDownloadUrl.required">La URL es obligatoria.</p>
                                     <p class="" v-if="!$v.item.toolDownloadUrl.maxLength">La URL no puede tener mas de {{
-                                        $v.item.downloadUrl.$params.maxLength.max }} caracteres.</p>
+                                        $v.item.toolDownloadUrl.$params.maxLength.max }} caracteres.</p>
                                     <p class="" v-if="!$v.item.toolDownloadUrl.url">Debe ingresar una URL valida</p>
                                 </div>
                         </li>
@@ -162,6 +162,66 @@
 
                     </ul>
                 </div><!-- Fin info herramienta -->
+                <!-- Ejemplo -->
+                 <div v-if="item.type == types.EXAMPLE">
+                    <h2>Información del Ejemplo:</h2>
+                     <ul>
+                         <li>Herramienta:
+                             <div class="form-group">
+                                    <select required class="form-control" id="tool" name="tool" v-model="item.tool"
+                                            v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
+                                        <option v-bind:value="''">Seleccione una herramienta</option>
+                                        <option v-for="(tool, key) in tools"v-bind:value="key">{{ tool.name }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
+                                    </div>
+                            </div>
+                         </li>
+                         <li>URL del ejemplo:
+                            <input type="text" id="exampleUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
+                           v-bind:class="getClass('exampleUrl')"
+                           name="exampleUrl" v-model.trim="item.exampleUrl" @input="$v.item.exampleUrl.$touch()">
+                                <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.exampleUrl.required">La URL es obligatoria.</p>
+                                    <p class="" v-if="!$v.item.exampleUrl.maxLength">La URL no puede tener mas de {{
+                                        $v.item.exampleUrl.$params.maxLength.max }} caracteres.</p>
+                                    <p class="" v-if="!$v.item.exampleUrl.url">Debe ingresar una URL valida</p>
+                                </div>
+                        </li>
+                     </ul>
+                 </div><!-- Fin Ejemplo -->
+
+                <div v-if="item.type == types.TUTORIAL">
+                    <h2>Información del Tutorial:</h2>
+                    <ul>
+                         <li>Herramienta:
+                             <div class="form-group">
+                                    <select required class="form-control" id="tool" name="tool" v-model="item.tool"
+                                            v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
+                                        <option v-bind:value="''">Seleccione una herramienta</option>
+                                        <option v-for="(tool, key) in tools"v-bind:value="key">{{ tool.name }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
+                                    </div>
+                            </div>
+                         </li>
+                         <li>URL del tutorial:
+                            <input type="text" id="tutorialUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
+                           v-bind:class="getClass('tutorialUrl')"
+                           name="tutorialUrl" v-model.trim="item.tutorialUrl" @input="$v.item.tutorialUrl.$touch()">
+                                <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.tutorialUrl.required">La URL es obligatoria.</p>
+                                    <p class="" v-if="!$v.item.tutorialUrl.maxLength">La URL no puede tener mas de {{
+                                        $v.item.tutorialUrl.$params.maxLength.max }} caracteres.</p>
+                                    <p class="" v-if="!$v.item.tutorialUrl.url">Debe ingresar una URL valida</p>
+                                </div>
+                        </li>
+                     </ul>
+
+                </div>
+
 
 
             </div>
@@ -252,6 +312,26 @@
 
                     </ul>
             </div><!-- Fin info herramienta -->
+
+            <!-- Ejemplo -->
+            <div v-if="item.type == types.EXAMPLE">
+                    <h2>Información del Ejemplo</h2>
+                    <ul>
+                        <li><strong>Herramienta: </strong>{{ tools[item.tool] ?  tools[item.tool].name : '' }}
+                        <li> <a v-bind:href="item.exampleUrl">Url del Ejemplo</a>
+                        </li>
+                    </ul>
+            </div><!-- Fin ejemplo-->
+
+            <!-- Tutorial -->
+            <div v-if="item.type == types.TUTORIAL">
+                    <h2>Información del Tutorial</h2>
+                    <ul>
+                        <li><strong>Herramienta: </strong>{{ tools[item.tool] ?  tools[item.tool].name : '' }}
+                        <li> <a v-bind:href="item.tutorialUrl">Url del Tutorial</a>
+                        </li>
+                    </ul>
+            </div><!-- Fin Tutorial-->
 
 
             <h2>Imagenes </h2>

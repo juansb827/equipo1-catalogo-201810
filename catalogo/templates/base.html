@@ -38,9 +38,9 @@
                 {% if user.is_authenticated %}
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:index' %}">{{ user.username }}</a></li>
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:logout' %}">Logout</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:tutorial' %}">Agregar Tutorial</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:example' %}">Agregar Ejemplo</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:estrategia' %}">Agregar Estrategia</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearTutorial' %}">Agregar Tutorial</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearEjemplo' %}">Agregar Ejemplo</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearEstrategia' %}">Agregar Estrategia</a></li>
                     <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearHerramienta' %}">Agregar Herramienta</a></li>
                     <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDesarrollo' %}">Agregar Desarrollo</a></li>
 
