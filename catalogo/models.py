@@ -65,9 +65,11 @@ class Tool(models.Model):
     url = models.CharField(max_length=1000)
     technology = models.ForeignKey(Technology, null=True, blank=True)
     license_type = models.CharField(max_length=150)
+    integration = models.BooleanField(default= False)
     use_restrictions = models.CharField(max_length=500, null=True)
     download_url = models.CharField(max_length=1000, null=True)
-    technical_info = models.CharField(max_length=1000)
+    functional_description = models.CharField(max_length=1000, default='')
+    operating_systems = models.CharField(max_length=150, default='')
 
     def __unicode__(self):
         return self.name

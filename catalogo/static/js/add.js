@@ -121,6 +121,7 @@ var app = new Vue({
             // TECNOLOGIA
             devTechs: [],
             // HERRAMIENTA
+            technology: '',
             licenseType: '',
             useRestrictions: '',
             toolUrl: '',
@@ -133,6 +134,7 @@ var app = new Vue({
 
 
         },
+        technologies: {},  // tecnologias del catalogo eg. sicua o moodle
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
         licenseTypes : {}
     },
@@ -150,6 +152,7 @@ var app = new Vue({
                 console.log("Form con errores");
                 return;
             }
+
             var self = this;
 
             self.loading = true;
@@ -184,8 +187,9 @@ var app = new Vue({
 
                 axios.post(URL_BASE + "/catalogo/addEstrategia/", data)
                     .then(function (res) {
+                        console.log("Success", res); return;
                         window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda=';
-                        console.log("Success", res);
+
                     })
                     .catch(function (err) {
                         console.log("Error", err);
@@ -305,7 +309,8 @@ var app = new Vue({
                          val.item.devTechs = { required: validators.required }
                      break;
                      case TOOL:
-                         val.item.licenseType= { required: validators.required }
+                         val.item.technology = { required: validators.required }
+                         val.item.licenseType = { required: validators.required }
                          val.item.useRestrictions = {
                                         required: validators.required,
                                         maxLength: validators.maxLength(300)
@@ -317,7 +322,7 @@ var app = new Vue({
                              url: validators.url
                          }
 
-                         val.item.downloadUrl = {
+                         val.item.toolDownloadUrl = {
                              required: validators.required,
                              maxLength: validators.maxLength(300),
                              url: validators.url
@@ -392,6 +397,7 @@ var app = new Vue({
 
 /** Trae el item de la db para ver o editar*/
 function fetchItem(self) {
+    self.initializing = true;
     axios.get(URL_BASE + "/catalogo/item/", {
         params: {
             id: window.itemInfo.id,
@@ -400,6 +406,7 @@ function fetchItem(self) {
         }
     })
         .then(function (res) {
+            self.initializing = false;
             console.log("All", res.data);
             var images = JSON.parse(res.data.images);
             var item = JSON.parse(res.data.item);
@@ -427,17 +434,42 @@ function fetchItem(self) {
 
 }
 
-/** Carga info especifica segun tipo de item*/
+/** Carga info especifica del item que se va a ver/editar*/
 function cargarInfo(self, res, data) {
+
+    var subItem = null;
+    if(res.data.subItem)
+        subItem = JSON.parse(res.data.subItem);
+        subItem = subItem[0];
+    console.log("Subitem",subItem);
+
 
     switch (self.item.type) {
         case DEVELOPMENT: //Carga tecnologias de desarrollo
             self.item.subclassId = data.fields.development;
             var techs = JSON.parse(res.data.techs);
-            console.log("Techs", techs);
+            console.log("Techs del item", techs);
             self.item.devTechs = techs.map(function (value) {
                 return value.pk;
             })
+        break;
+        case TOOL:
+            self.item.technology = subItem.fields.technology;
+            self.item.licenseType = subItem.fields.license_type;
+            self.item.useRestrictions = subItem.fields.use_restrictions;
+            self.item.toolUrl = subItem.fields.url;
+            self.item.toolDownloadUrl = subItem.fields.download_url;
+            self.item.integration = subItem.fields.integration;
+            self.item.functionalDescription = subItem.fields.functional_description;
+            self.item.operativeSystems = subItem.fields.operating_systems.split(',');
+            /*
+            : '',
+
+            operativeSystems: [],
+            integration: false,
+            functionalDescription: '',*/
+
+        break;
     }
 
 
@@ -462,8 +494,21 @@ function loadLists(self) {
                 })
         break;
         case TOOL:
+
+            axios.get(URL_BASE + "/catalogo/technologies/")
+                .then(function (res) {
+                    res.data.map(function (entry) {
+                        var fields = entry.fields;
+                        //fields.image = IMG_BASE + fields.image;
+                        self.$set(self.technologies, entry.pk, fields);// devTechs[] = fields;
+                    });
+                    self.initializing = false;
+                    console.log("Tecnologias", self.technologies);
+            })
+
+
             self.licenseTypes = [
-                " Licencias de Software Libre",
+                "Licencia de Software Libre",
                 "Licencia de Dominio Público",
                 "Licencia de Software Comercial",
                 "Licencia Freeware",
@@ -476,7 +521,7 @@ function loadLists(self) {
                 "3": { name : "macOS" , img : ""}
             }
 
-            self.initializing = false;
+
         break;
 
 

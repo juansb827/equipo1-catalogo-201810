@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^crearHerramienta/$', views.crear_herramienta_view, name='crearHerramienta'),
 
     url(r'^devTech/$', views.getDevTech, name='getDevTech'),
+    url(r'^technologies/$', views.technologies, name='tecnologias'),
+
     url(r'^verItem/$', views.mostrar_item, name='viewItem'),
     url(r'^aprobarRevision/$', views.aprobarRevision, name='aprobarRevision'),
     #  url(r'^verItem/([0-9]{1})/([0-9]+)/([0-9]{1})/$', views.mostrar_item, name='viewItem'),

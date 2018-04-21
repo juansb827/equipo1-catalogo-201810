@@ -71,6 +71,18 @@
                 <div v-if="item.type == types.TOOL">
                     <h2>Información de la herramienta</h2>
                     <ul>
+                        <li>Tecnologias:
+                            <div class="form-group">
+                                    <select required class="form-control" id="technology" name="technology" v-model="item.technology"
+                                            v-bind:class="getClass('technology')" @input="$v.item.technology.$touch()">
+                                        <option v-bind:value="''">Seleccione una tecnologia</option>
+                                        <option v-for="(tech, key) in technologies"v-bind:value="key">{{ tech.name }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <p class="" v-if="!$v.item.technology.required">Debe seleccionar una tecnologia.</p>
+                                    </div>
+                            </div>
+                        </li>
                         <li>Tipo de Licencia:
                             <div class="form-group">
                                     <select required class="form-control" id="licenseType" name="licenseType" v-model="item.licenseType"
@@ -107,13 +119,13 @@
                         </li>
                         <li>URL descarga
                             <input type="text" id="downloadUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
-                           v-bind:class="getClass('downloadUrl')"
-                           name="username" v-model.trim="item.downloadUrl" @input="$v.item.downloadUrl.$touch()">
+                           v-bind:class="getClass('toolDownloadUrl')"
+                           name="username" v-model.trim="item.toolDownloadUrl" @input="$v.item.toolDownloadUrl.$touch()">
                             <div class="invalid-feedback">
-                                    <p class="" v-if="!$v.item.downloadUrl.required">La URL es obligatoria.</p>
-                                    <p class="" v-if="!$v.item.downloadUrl.maxLength">La URL no puede tener mas de {{
+                                    <p class="" v-if="!$v.item.toolDownloadUrl.required">La URL es obligatoria.</p>
+                                    <p class="" v-if="!$v.item.toolDownloadUrl.maxLength">La URL no puede tener mas de {{
                                         $v.item.downloadUrl.$params.maxLength.max }} caracteres.</p>
-                                    <p class="" v-if="!$v.item.downloadUrl.url">Debe ingresar una URL valida</p>
+                                    <p class="" v-if="!$v.item.toolDownloadUrl.url">Debe ingresar una URL valida</p>
                                 </div>
                         </li>
                         <li>Información técnica
@@ -177,9 +189,9 @@
                 Guardar Cambios
                 </button>
             </div>
-            {{ item }}
 
-            <pre>{{ $v }}</pre>
+
+
 
         </div><!-- Fin editar item -->
 
@@ -212,6 +224,7 @@
             <div v-if="item.type == types.TOOL">
                     <h2>Información de la herramienta</h2>
                     <ul>
+                        <li><strong>Tecnologia: </strong>{{ technologies[item.technology] ?  technologies[item.technology].name : '' }}
                         <li><strong>Tipo de Licencia: </strong>{{ item.licenseType }}
                         </li>
                         <li><strong>Restricciones de uso</strong>
@@ -221,7 +234,7 @@
                         <li> <a v-bind:href="item.toolUrl">Pagina Web</a>
                         </li>
                         <li>
-                            <a v-bind:href="item.downloadUrl">URL de descarga</a>
+                            <a v-bind:href="item.toolDownloadUrl">URL de descarga</a>
                         </li>
                         <li><strong>Información técnica</strong>
                             <ul>

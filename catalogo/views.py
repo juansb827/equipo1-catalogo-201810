@@ -216,10 +216,7 @@ def estrategia_view(request):
 @csrf_exempt
 def add_estrategia(request):
 
-    data = json.loads(request.body);
-
-
-
+    data = json.loads(request.body)
     name = data['name'];
     description = data['description']
     thumbnail = data['thumbnail']
@@ -229,15 +226,6 @@ def add_estrategia(request):
 
 
 
-
-    """if type == models.TECHNOLOGY:
-        
-    elif type == models.TOOL:
-        
-    elif type == models.TUTORIAL:
-        
-    elif type == models.EXAMPLE:
-      """
 
     if thumbnail == '':
         thumbnail == None
@@ -264,27 +252,36 @@ def add_estrategia(request):
 
     if type == models.TECHNOLOGY:  # TODO: agregar cosas especificas de cada tipo de item
         ob = models.Technology(
-            name=name
+            name=name,
+            description = ':V',
+            url = ''
         )
         ob.save()
         item.technology = ob
     elif type == models.TOOL:
-        url = request.POST.get('url')
-        download_url = request.POST.get('download_url')
-        license = request.POST.get('license')
-        restrictions = request.POST.get('restrictions')
-        tech_info = request.POST.get('tech_info')
-        ob = models.Tool(
-            name=name,
-            description=description,
-            url=url,
-            download_url=download_url,
-            license_type=license,
-            use_restrictions=restrictions,
-            technical_info=tech_info
-        )
+        devPk = data['subclassId'];
+        print "toolPk", devPk
+
+        if devPk == '':
+            ob = models.Tool()
+        else:
+            ob = models.Development.objects.get(pk=devPk)
+
+
+        ob.name = name
+        ob.description = ':v'
+        ob.technology = models.Technology.objects.get( pk = data['technology'])
+        ob.url = data['toolUrl']
+        ob.download_url = data['toolDownloadUrl']
+        ob.license_type = data['licenseType']
+        ob.use_restrictions = data['useRestrictions']
+        ob.integration = data['integration']
+        ob.functional_description = data['functionalDescription']
+        ob.operating_systems = smart_text(",".join(data['operativeSystems']), encoding='utf-8', strings_only=False, errors='strict')
+
         ob.save()
         item.tool = ob
+
     elif type == models.TUTORIAL:
         url = request.POST.get('url')
         tool = request.POST.get('tool')
@@ -376,19 +373,21 @@ def createReviewVersion(item ):
     if len(item_review)>0:
         item_review[0].delete()
 
-
-
-
     #Crea una copia de la subclase del item
     if item.type == models.DEVELOPMENT:
         development = models.Development.objects.get(pk = item.development.pk)
         devTechs =development.dev_technologies.all()
         development.pk = None
-        development.name = development.name+ '+1'
+        development.name = development.name+'+1'
         development.save()
         development.dev_technologies.set(devTechs) # le asigna las mismas tecnologias a la copia
         development.save()
         item.development = development
+    elif item.type == models.TOOL:
+        tool = models.Tool.objects.get(pk = item.tool.pk)
+        tool.pk = None
+        tool.name = tool.name + '+1'
+        tool.save()
 
     #Crea unacopia del item
     images = item.images.all()
@@ -478,6 +477,9 @@ def get_item(request):
     if (type == models.DEVELOPMENT):
         techs = item[0].development.dev_technologies.all()
         res['techs'] = serializers.serialize("json", techs)
+    elif (type == models.TOOL):
+        subItem = models.Tool.objects.filter( pk = item[0].tool.pk )
+        res['subItem'] = serializers.serialize("json", subItem)
 
 
 
@@ -492,6 +494,10 @@ def get_item(request):
 def getDevTech(request):
     techs = models.DevelopmentTechnology.objects.all()
     return HttpResponse(serializers.serialize("json", techs))
+
+def technologies(request):
+    technologies = models.Technology.objects.all()
+    return HttpResponse(serializers.serialize("json", technologies))
 
 
 
