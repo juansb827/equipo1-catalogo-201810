@@ -371,6 +371,14 @@ def createReviewVersion(item ):
 
     print 'createReviewVersion',item.type
 
+    #Si ya hay una version 'Review' del item la borra
+    item_review = models.Item.objects.filter(item_code=item.item_code,version='1')
+    if len(item_review)>0:
+        item_review[0].delete()
+
+
+
+
     #Crea una copia de la subclase del item
     if item.type == models.DEVELOPMENT:
         development = models.Development.objects.get(pk = item.development.pk)
@@ -411,6 +419,8 @@ def aprobarRevision(request):
     return JsonResponse({'mensaje': 'ok'})
 
 
+def crear_herramienta_view(request):
+    return createItemView(request, models.TOOL)
 
 def crear_estrategia_view(request):
     return createItemView(request, models.STRATEGY)

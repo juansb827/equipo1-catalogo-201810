@@ -23,54 +23,47 @@
 
 <body>
 
-<!-- navbar -->
 
-<nav class="navbar navbar-expand-lg fixed-top ">
-    <a class="navbar-brand" href="{% url 'catalogo:index' %}">Home</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+	<!-- navbar -->
 
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">
-        <ul class="navbar-nav mr-4">
-            {% if user.is_authenticated %}
-                <li><a class="nav-link" data-value="about" href="{% url 'catalogo:index' %}">{{ user.username }}</a>
-                </li>
-                <li><a class="nav-link" data-value="about" href="{% url 'catalogo:logout' %}">Logout</a></li>
-                <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:tutorial' %}">Agregar
-                    Tutorial</a></li>
-                <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:example' %}">Agregar
-                    Ejemplo</a></li>
-                <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:estrategia' %}">Agregar
-                    Estrategia</a></li>
-                <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDesarrollo' %}">Agregar
-                    Desarrollo</a></li>
-                <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:tool' %}">Agregar
-                    Herramienta</a>
-                </li>
-            {% else %}
-                <!-- <li><a class="nav-link" data-value="about" href="{% url 'catalogo:addUser' %}">Registro</a></li> -->
-                <li><a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Login</a></li>
-            {% endif %}
+	<nav class="navbar navbar-expand-lg fixed-top ">
+		<a class="navbar-brand" href="{% url 'catalogo:index' %}">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+		 aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-        </ul>
-    </div>
+		<div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4">
+                {% if user.is_authenticated %}
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:index' %}">{{ user.username }}</a></li>
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:logout' %}">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:tutorial' %}">Agregar Tutorial</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:example' %}">Agregar Ejemplo</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:estrategia' %}">Agregar Estrategia</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearHerramienta' %}">Agregar Herramienta</a></li>
+                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDesarrollo' %}">Agregar Desarrollo</a></li>
 
-</nav>
+                {% else %}
+                    <!-- <li><a class="nav-link" data-value="about" href="{% url 'catalogo:addUser' %}">Registro</a></li> -->
+                    <li><a class="nav-link" data-value="about" href="{% url 'catalogo:login' %}">Login</a></li>
+                {% endif %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-<!-- header -->
-{% block content %}
-{% endblock %}
+            </ul>
+        </div>
+
+	</nav>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<!-- header -->
+	{% block content %}
+    {% endblock %}
 
 
 
 
-<script type="text/javascript" src='{% static '/js/main.js' %}'></script>
+    <script type="text/javascript" src='{% static '/js/main.js' %}'></script>
+
 
 </body>

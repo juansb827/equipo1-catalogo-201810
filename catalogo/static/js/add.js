@@ -9,6 +9,16 @@ EXAMPLE = "4"
 STRATEGY = "5"
 DEVELOPMENT = "6"
 
+var typeName = {
+     "-1" :"Todas las categorias",
+      "1" :  "Tecnologia",
+     "2":"Herramienta",
+     "3"  :"Tutorial",
+      "4" :"Ejemplo",
+     "5" :"Estrategia Pedagógica",
+     "6":"Desarrollo"
+}
+
 
 Vue.use(window.vuelidate.default)
 
@@ -87,19 +97,44 @@ var app = new Vue({
         currentImage: 0,
         winStart: 0,
         winEnd: 3,
+        types : {
+            TECHNOLOGY: TECHNOLOGY,
+            TOOL: TOOL,
+            TUTORIAL: TUTORIAL,
+            EXAMPLE: EXAMPLE,
+            STRATEGY: STRATEGY,
+            DEVELOPMENT: DEVELOPMENT
+        },
+        typeName: typeName,
+
+
+
         item: {
             id: window.itemInfo.id,
             subclassId: '',
             type: window.itemInfo.type,
             version: window.itemInfo.version || 0,
-            name: '',//'Desarrollo 20',
-            description: '',// 'Integer tincidunt ante vel ante blandit, nec pharetra risus pulvinar. Quisque tellus velit, lobortis non quam ac, eleifend volutpat dolor. Duis at pellentesque sem, ut viverra arcu. Praesent euismod lacinia nisl, sit amet auctor urna posuere eget. ',
-            devTechs: [],
+            name: '',
+            description: '',
             images: [],
+            thumbnail: '',
+            // TECNOLOGIA
+            devTechs: [],
+            // HERRAMIENTA
+            licenseType: '',
+            useRestrictions: '',
+            toolUrl: '',
+            toolDownloadUrl: '',
+            operativeSystems: [],
+            integration: false,
+            functionalDescription: '',
 
-            thumbnail: ''
+
+
+
         },
-        devTechs: {} //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
+        devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
+        licenseTypes : {}
     },
     methods: {
         getClass: function (fieldName) {
@@ -238,39 +273,87 @@ var app = new Vue({
             return this.item.images.slice(this.winStart, this.winEnd + 1);
         }
     },
-    validations: {
-        item: {
-            name: {
-                required: validators.required,
-                maxLength: validators.maxLength(20)
-            },
-            description: {
-                required: validators.required,
-                maxLength: validators.maxLength(300)
+    validations: function(){
 
-            },
-            devTechs: {
-                required: validators.required
-            },
-            images: {
-                required: validators.required,
-                $each: {
-                    remoteId: {
-                        required: validators.required
-                    }
-                }
-            }
-        }
+
+                 var  val ={
+                         item : {
+                                    name: {
+                                        required: validators.required,
+                                        maxLength: validators.maxLength(20)
+                                    },
+                                    description: {
+                                        required: validators.required,
+                                        maxLength: validators.maxLength(300)
+
+                                    }
+                                    ,
+                                    images: {
+                                        required: validators.required,
+                                        $each: {
+                                            remoteId: {
+                                                required: validators.required
+                                            }
+                                        }
+                                    }
+
+                        }
+                 }
+
+                 switch (this.item.type){
+                     case DEVELOPMENT:
+                         val.item.devTechs = { required: validators.required }
+                     break;
+                     case TOOL:
+                         val.item.licenseType= { required: validators.required }
+                         val.item.useRestrictions = {
+                                        required: validators.required,
+                                        maxLength: validators.maxLength(300)
+
+                                    }
+                         val.item.toolUrl = {
+                             required: validators.required,
+                             maxLength: validators.maxLength(300),
+                             url: validators.url
+                         }
+
+                         val.item.downloadUrl = {
+                             required: validators.required,
+                             maxLength: validators.maxLength(300),
+                             url: validators.url
+                         }
+
+                         val.item.operativeSystems = { required: validators.required }
+
+                         val.item.functionalDescription = {
+                                        required: validators.required,
+                                        maxLength: validators.maxLength(300)
+                         }
+
+                    break;
+
+
+
+
+                 }
+
+                 return val;
+
+
+
     },
     created: function () {
 
-        if (this.item.version == 0) {
+
+
+
+        if (this.item.version == 0) {  //Si es borrador
             this.readOnly = false;
             this.editing = true;
-        } else if (this.item.version > 0) {
+        } else if (this.item.version > 0) { //Si no es borrador
             this.readOnly = true;
             this.editing = false;
-            if (this.item.version == 1) {
+            if (this.item.version == 1) { //Si es revision
                 this.showApprovalButton = true;
             }
         }
@@ -377,6 +460,25 @@ function loadLists(self) {
                     //self.vm.$set('devTechs', self.devTechs);
                     console.log("DEvTechs", self.devTechs);
                 })
+        break;
+        case TOOL:
+            self.licenseTypes = [
+                " Licencias de Software Libre",
+                "Licencia de Dominio Público",
+                "Licencia de Software Comercial",
+                "Licencia Freeware",
+                "Licencia de Software Propietario",
+
+            ]
+            self.operativeSystems = {
+                "1": { name : "Windows" , img : ""},
+                "2": { name : "Linux" , img : ""},
+                "3": { name : "macOS" , img : ""}
+            }
+
+            self.initializing = false;
+        break;
+
 
 
     }
