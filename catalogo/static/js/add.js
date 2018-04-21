@@ -187,7 +187,7 @@ var app = new Vue({
 
                 axios.post(URL_BASE + "/catalogo/addEstrategia/", data)
                     .then(function (res) {
-                        console.log("Success", res); return;
+                        console.log("Success", res);// return;
                         window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda=';
 
                     })
@@ -438,9 +438,11 @@ function fetchItem(self) {
 function cargarInfo(self, res, data) {
 
     var subItem = null;
-    if(res.data.subItem)
+    if(res.data.subItem){
         subItem = JSON.parse(res.data.subItem);
         subItem = subItem[0];
+    }
+
     console.log("Subitem",subItem);
 
 
