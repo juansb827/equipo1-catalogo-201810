@@ -19,13 +19,14 @@
 
     <div class="container" style="padding: 100px;display:none" id="vue-app" v-bind:style="{ display: true }">
         <div class="item-edit" v-if="editing">
-            <h1>Desarrollo</h1>
+
+            <h1>{{ typeName[item.type] }}</h1>
 
             <div class="estrategia item">
 
                 <div class="form-group">
                     <label for="name">Nombre:</label>
-                    <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="20"
+                    <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="50"
                            v-bind:class="getClass('name')"
 
                            name="username" v-model.trim="item.name" @input="$v.item.name.$touch()">
@@ -48,22 +49,107 @@
                             $v.item.description.$params.maxLength.max }} caracteres.</p>
                     </div>
                 </div>
+                <!-- DESARROLLO -->
+                <div v-if="item.type == types.DEVELOPMENT ">
+                    <div class="tech" >
+                        <h2>Desarrollado con:</h2>
+                        <div class="tech-checks">
 
-                <div class="tech">
-                    <h2>Desarrollado con:</h2>
-                    <div class="tech-checks">
+                            <label class="" v-for="(tech,key) in devTechs">
+                                <input type="checkbox" :value="key" v-model="item.devTechs"/>
+                                <span class="custom-control-description">{{ tech.name }}</span>
+                            </label>
+                            <div class="invalid-feedback" style="display: block" v-if="$v.item.devTechs.$error">
+                                <p class="" v-if="!$v.item.devTechs.required">Debe seleccionar almenos un elemento.</p>
+                            </div>
 
-                        <label class="" v-for="(tech,key) in devTechs">
-                            <input type="checkbox" :value="key" v-model="item.devTechs"/>
-                            <span class="custom-control-description">{{ tech.name }}</span>
-                        </label>
-                        <div class="invalid-feedback" style="display: block" v-if="$v.item.devTechs.$error">
-                            <p class="" v-if="!$v.item.devTechs.required">Debe seleccionar almenos un elemento.</p>
+
                         </div>
-
-
                     </div>
-                </div>
+                </div><!-- fin info desarrollo ->
+                <!-- HERRAMIENTA -->
+                <div v-if="item.type == types.TOOL">
+                    <h2>Información de la herramienta</h2>
+                    <ul>
+                        <li>Tipo de Licencia:
+                            <div class="form-group">
+                                    <select required class="form-control" id="licenseType" name="licenseType" v-model="item.licenseType"
+                                            v-bind:class="getClass('licenseType')" @input="$v.item.licenseType.$touch()">
+                                        <option v-bind:value="''">Seleccione una herramienta</option>
+                                        <option v-for="license in licenseTypes"v-bind:value="license">{{ license }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <p class="" v-if="!$v.item.licenseType.required">Debe seleccionar el tipo de licencia.</p>
+                                    </div>
+                            </div>
+                        </li>
+                        <li>Restricciones de uso
+                            <textarea class="form-control" rows="5" id="useRestrictions"
+                                      v-bind:class="getClass('useRestrictions')"
+                                      @input="$v.item.useRestrictions.$touch()" v-model.trim="item.useRestrictions"></textarea>
+                            <div style="text-align: right">{{ item.useRestrictions.length }}/{{ $v.item.useRestrictions.$params.maxLength.max }}</div>
+                            <div class="invalid-feedback">
+                                <p class="" v-if="!$v.item.useRestrictions.required">Las restricciones de uso son obligatorias.</p>
+                                <p class="" v-if="!$v.item.useRestrictions.maxLength">Las restricciones de uso no pueden tener mas de {{
+                                    $v.item.useRestrictions.$params.maxLength.max }} caracteres.</p>
+                            </div>
+                        </li>
+                        <li>URL sitio
+                            <input type="text" id="toolUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
+                           v-bind:class="getClass('toolUrl')"
+                           name="username" v-model.trim="item.toolUrl" @input="$v.item.toolUrl.$touch()">
+                                <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.toolUrl.required">La URL es obligatoria.</p>
+                                    <p class="" v-if="!$v.item.toolUrl.maxLength">La URL no puede tener mas de {{
+                                        $v.item.toolUrl.$params.maxLength.max }} caracteres.</p>
+                                    <p class="" v-if="!$v.item.toolUrl.url">Debe ingresar una URL valida</p>
+                                </div>
+                        </li>
+                        <li>URL descarga
+                            <input type="text" id="downloadUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
+                           v-bind:class="getClass('downloadUrl')"
+                           name="username" v-model.trim="item.downloadUrl" @input="$v.item.downloadUrl.$touch()">
+                            <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.downloadUrl.required">La URL es obligatoria.</p>
+                                    <p class="" v-if="!$v.item.downloadUrl.maxLength">La URL no puede tener mas de {{
+                                        $v.item.downloadUrl.$params.maxLength.max }} caracteres.</p>
+                                    <p class="" v-if="!$v.item.downloadUrl.url">Debe ingresar una URL valida</p>
+                                </div>
+                        </li>
+                        <li>Información técnica
+                            <ul>
+                                <li>Sistemas operativos:
+
+                                    <label class="" v-for="(os,key) in operativeSystems" style="margin-left: 1em" >
+                                        <input type="checkbox" :value="key"  v-model="item.operativeSystems"  />
+                                        <span class="custom-control-description">{{ os.name }}</span>
+                                    </label>
+                                    <div class="invalid-feedback" style="display: block" v-if="$v.item.operativeSystems.$error">
+                                        <p class="" v-if="!$v.item.operativeSystems.required">Debe seleccionar almenos un Sistema operativo.</p>
+                                    </div>
+
+                                </li>
+                                <li>Integración con Sistema de Gestión de Aprendizaje (LMS) ? :
+                                    <label class="" style="margin-left: 1em" value="">
+                                        <input type="checkbox"  v-model="item.integration"/>
+                                    </label>
+                                </li>
+                                <li>Descripción Funcional
+                                    <textarea class="form-control" rows="5" id="functionalDescription"
+                                      v-bind:class="getClass('functionalDescription')"
+                                      @input="$v.item.functionalDescription.$touch()" v-model.trim="item.functionalDescription"></textarea>
+                                    <div style="text-align: right">{{ item.functionalDescription.length }}/{{ $v.item.functionalDescription.$params.maxLength.max }}</div>
+                                    <div class="invalid-feedback">
+                                        <p class="" v-if="!$v.item.functionalDescription.required">La descripción funcional es obligatoria.</p>
+                                        <p class="" v-if="!$v.item.functionalDescription.maxLength">La descripción funcional no puede tener mas de {{
+                                            $v.item.description.$params.maxLength.max }} caracteres.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div><!-- Fin info herramienta -->
 
 
             </div>
@@ -91,7 +177,9 @@
                 Guardar Cambios
                 </button>
             </div>
+            {{ item }}
 
+            <pre>{{ $v }}</pre>
 
         </div><!-- Fin editar item -->
 
@@ -107,20 +195,55 @@
 
             <p>{{ item.description || 'Sin descripcion'}}</p>
 
-            <div class="tech-imgs">
-                <div v-for="key in item.devTechs" class="card">
-                    <img v-bind:src="devTechs[key].image">
-                    <div class="footer">
-                        <a style="color:#007bff" class="card-link">{{ devTechs[key].name }}</a>
+            <!-- Desarrollo -->
+            <div  v-if="item.type == types.DEVELOPMENT">
+                <div class="tech-imgs" v-if="item.type == types.DEVELOPMENT">
+                    <div v-for="key in item.devTechs" class="card">
+                        <img v-bind:src="devTechs[key].image">
+                        <div class="footer">
+                            <a style="color:#007bff" class="card-link">{{ devTechs[key].name }}</a>
+                        </div>
                     </div>
-                </div>
 
-            </div>
+                </div>
+            </div><!-- fin desarrollo -->
+
+            <!-- Herramienta -->
+            <div v-if="item.type == types.TOOL">
+                    <h2>Información de la herramienta</h2>
+                    <ul>
+                        <li><strong>Tipo de Licencia: </strong>{{ item.licenseType }}
+                        </li>
+                        <li><strong>Restricciones de uso</strong>
+                            <p>{{ item.useRestrictions }}</p>
+
+                        </li>
+                        <li> <a v-bind:href="item.toolUrl">Pagina Web</a>
+                        </li>
+                        <li>
+                            <a v-bind:href="item.downloadUrl">URL de descarga</a>
+                        </li>
+                        <li><strong>Información técnica</strong>
+                            <ul>
+                                <li><i>Sistemas operativos:</i>
+                                    <span v-for="(id,index in item.operativeSystems"> {{ index > 0 ? ', ': ''  }} {{ operativeSystems[id].name }}</span>
+                                </li>
+                                <li><i>Integración con Sistema de Gestión de Aprendizaje (LMS): </i> {{ item.integration ? 'Si':'No' }}
+                                </li>
+
+                                <li><i>Descripción Funcional</i>
+                                    <p>{{ item.functionalDescription }}</p>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+            </div><!-- Fin info herramienta -->
+
 
             <h2>Imagenes </h2>
 
             <div class="gallery">
-                <!-- Images used to open the lightbox -->
 
                 <div>
                     <div v-for="(img, index) in item.images" class="card"

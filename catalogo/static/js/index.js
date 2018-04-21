@@ -1,6 +1,6 @@
 var URL_BASE = window.location.origin;
 
-var tipos = [
+var tipos = [ /* Se ponene en un array para que sean mostrados en el mismo orden siempre*/
     { key: "-1" , val :"Todas las categorias"},
     { key: "1" , val :"Tecnologia"},
     { key: "2" , val :"Herramienta"},

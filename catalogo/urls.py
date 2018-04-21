@@ -19,6 +19,8 @@ urlpatterns = [
     #rutas para creacion de items
     url(r'^crearEstrategia/$', views.crear_estrategia_view, name='crearEstrategia'),
     url(r'^crearDesarrollo/$', views.crear_desarrollo_view, name='crearDesarrollo'),
+    url(r'^crearHerramienta/$', views.crear_herramienta_view, name='crearHerramienta'),
+
     url(r'^devTech/$', views.getDevTech, name='getDevTech'),
     url(r'^verItem/$', views.mostrar_item, name='viewItem'),
     url(r'^aprobarRevision/$', views.aprobarRevision, name='aprobarRevision'),
