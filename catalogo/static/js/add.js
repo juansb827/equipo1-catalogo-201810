@@ -590,10 +590,10 @@ function loadLists(self) {
                 .then(function (res) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        //fields.image = IMG_BASE + fields.image;
-                        self.$set(self.tools, entry.pk, fields);// devTechs[] = fields;
+                        fields.item= entry.pk;
+                        self.$set(self.tools, fields.tool, fields);// devTechs[] = fields;
                     });
-                    self.initializing = false;
+                    self.initializing  = false;
                     console.log("Tools", self.tools);
             })
         break;
