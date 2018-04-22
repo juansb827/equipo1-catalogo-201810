@@ -145,32 +145,41 @@ def search_item(request):
     type = request.GET['type']
     # type='1'
 
+    authenticated = request.user.is_authenticated()
+
     if name is not None:
         name = name.strip()
 
     print('type', name, type)
 
     query = Item.objects.all()
+    if not authenticated: query = query.filter(version='2')
 
     if name is not None and name != "":
 
-        tech = Item.objects.filter(Q(type='1')).filter(name__icontains=name)
+        tech = query.filter(Q(type='1')).filter(name__icontains=name)
+
 
         # el nombre contiene name o el nombre de su tecnologia contiene name
         tools = query.filter(type='2').filter(
             Q(name__icontains=name) | Q(tool__technology__id__in=tech.values('technology')))
 
+
         # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
         tutoriales = query.filter(type='3').filter(
             Q(name__icontains=name) | Q(tutorial__tool__id__in=tools.values('tool')))
+
 
         # el nombre contiene name , el nombre de su herramienta contiene name, el nombre de su tecnologia contiene name
         examples = query.filter(type='4').filter(
             Q(name__icontains=name) | Q(example__tool__id__in=tools.values('tool')))
 
+
         strategies = query.filter(type='5').filter(Q(name__icontains=name))
 
+
         developments = query.filter(type='6').filter(Q(name__icontains=name))
+
 
         if type == '1':
             query = tech
@@ -191,6 +200,9 @@ def search_item(request):
         # No escribio un criterio de busqueda pero selecciono un tipo de item
         if type != '-1':
             query = query.filter(type=type)
+
+
+
 
     return HttpResponse(serializers.serialize("json", query))
 
@@ -547,6 +559,7 @@ def getDevTech(request):
     return HttpResponse(serializers.serialize("json", techs))
 
 def technologies(request):
+
     technologies = models.Technology.objects.all()
     return HttpResponse(serializers.serialize("json", technologies))
 
