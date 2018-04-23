@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^addTutorial/$', views.add_tutorial, name='addTutorial'),
     url(r'^estrategia/$', views.estrategia_view, name='estrategia'),
     url(r'^addEstrategia/$', views.add_estrategia, name='addEstrategia'),
-    url(r'^caracHerramienta/$', views.carac_herramienta_view, name='caracHerramienta')
+    url(r'^caracHerramienta/$', views.carac_herramienta_view, name='caracHerramienta'),
 ]

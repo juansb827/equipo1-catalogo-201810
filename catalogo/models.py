@@ -56,6 +56,11 @@ class Technology(models.Model):
     def __unicode__(self):
         return self.name
 
+class Feature(models.Model):
+    description = models.CharField(max_length=150)
+
+    def __unicode__(self):
+        return self.name
 
 class Tool(models.Model):
     name = models.CharField(max_length=150)
@@ -63,6 +68,7 @@ class Tool(models.Model):
     description = models.CharField(max_length=500)
     url = models.CharField(max_length=1000)
     technology = models.ForeignKey(Technology, null=True, blank=True)
+    feature = models.ForeignKey(Feature, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -129,3 +135,4 @@ class Item(models.Model):
 class Image(models.Model):
     item =models.ForeignKey(Item)
     image = CloudinaryField('image', null=True)
+

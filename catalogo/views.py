@@ -16,7 +16,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Item, Example, Tutorial
+from models import UserForm, Item, Example, Tutorial, Feature, Tool
 import models as models
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_NAME'),
@@ -309,4 +309,21 @@ def logout_view(request):
 
 def carac_herramienta_view(request):
     #testing commit againa again again!
-    return render(request, 'carac_herramienta.html', {})
+    print "llego algo"
+    print "request.method = ", request.method
+
+    #treedimax = Tool(name='3DStudio Max')
+    #print treedimax
+
+    if request.method == 'POST':
+        tool = request.POST.get('tool')
+        print "tool = ", tool
+
+        results=Tool.objects.all()
+        #filter(name__icontains=tool)
+        print results
+
+        return render(request, 'carac_herramienta.html',{'tool':tool,'results':results})
+    else:
+        return render(request, 'carac_herramienta.html')
+

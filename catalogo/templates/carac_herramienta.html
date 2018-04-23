@@ -1,10 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
+    <h1>Ingreso de caracteristicas de herramientas</h1>
+    <div class="login-container">
+        <div class="overlayed">
+            <div class="login-area">
+                <div class="container">
+                    <form id="formAddExample" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name">Herramienta</label>
+                            <input required type="text" class="form-control" id="tool" name="tool" placeholder="Nombre" value="{{tool}}">
+                        </div>
+
+                        <div class="form-group">
+                                <label for="toolfinded">Herramientas encontradas</label>
+                                <select class="form-control" id="toolfinded" name="toolfinded">
+                                    <option disabled selected value>Seleccione una herramienta</option>
+                                    {% for entry in results %}
+                                        <option value="{{ results.fields.name }}">{{ results.fields.name }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+
+                    <div class="form-group">
+                                <label for="description">caracteristicas</label>
+                                <textarea id="description" name="description">
+
+                                </textarea>
+                        </div>
+
+
+                        <button type="submit" class="btn  main-button">Buscar Herramienta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    /*
+    var URL_BASE=window.location.origin;
+    var toolValue = $('#tool').value;
+
+    $('#tool').keypress(function (e) {
+        e.preventDefault();
+
+        var formData = new FormData($("#formAddExample")[0]);
+        formData.append('type','4')
+        formData.append('thumbnail','')
+        formData.append('images',[])
+        formData.append('tool','66')
+        $.ajax({
+            url: URL_BASE+"/catalogo/caracHerramienta/",
+            type: 'POST',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(){
+                //window.location.reload()
+                $('#tool').value = 'julian'
+            }
+
+        });
+
+    });
+    */
+</script>
+
+{% endblock %}
+
+
+
+
+

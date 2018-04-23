@@ -75,6 +75,27 @@
         });
 
     });
+
+    $('#name').keypress(function (e) {
+        e.preventDefault();
+
+
+        var formData = new FormData($("#formAddExample")[0]);
+        formData.append('type','4')
+        formData.append('thumbnail','')
+        formData.append('images',[])
+        $.ajax({
+            url: URL_BASE+"/catalogo/addEstrategia/",
+            type: $(this).attr('method'),
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(){window.location.reload()}
+
+        });
+
+    });
 </script>
 
 {% endblock %}
