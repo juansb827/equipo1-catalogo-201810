@@ -1,12 +1,13 @@
 # encoding: utf-8
 from unittest import TestCase
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 class FunctionalTest(TestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome("D:\\Descargas\\chromedriver.exe")
+        self.browser = webdriver.Chrome("C:\\Users\\CarriCas\\Documents\\Maestria\\MetodologiasAgiles\\Kata02_Web\\chromedriver.exe")
         self.browser.implicitly_wait(2)
 
     def tearDown(self):
@@ -39,4 +40,55 @@ class FunctionalTest(TestCase):
 
         self.assertIn('Guardar', button.text)
 
-    #Agregar nueva prueba
+    #Agregar nueva prueba para login
+
+    def test_login(self):
+        self.browser.get('http://127.0.0.1:8000/')
+        link =  self.browser.find_element_by_id('id_login')
+        link.click()
+
+        username = self.browser.find_element_by_id('username')
+        username.send_keys('af.carrion')
+
+        password = self.browser.find_element_by_id('password')
+        password.send_keys('Natalia123')
+
+        btnLogin = self.browser.find_element_by_id('btnLogin')
+        btnLogin.click()
+
+        a = self.browser.find_element(By.XPATH, '//a[text()="af.carrion"]')
+        self.assertIn('af.carrion', a.text)
+
+    def test_revision(self):
+        self.browser.get('http://127.0.0.1:8000')
+        link = self.browser.find_element_by_id('id_login')
+        link.click()
+        self.browser.implicitly_wait(1)
+
+        username = self.browser.find_element_by_id('username')
+        username.send_keys('af.carrion')
+
+        password = self.browser.find_element_by_id('id_password')
+        password.send_keys('Natalia123')
+
+        btnLogin = self.browser.find_element_by_id('btnLogin')
+        btnLogin.click()
+
+        link = self.browser.find_element_by_id('addEstrategia')
+        link.click()
+        self.browser.implicitly_wait(1)
+
+        name = self.browser.find_element_by_id('nameEstrategia')
+        name.send_keys('PruebaTest')
+
+        description = self.browser.find_element_by_id('description')
+        description.send_keys('Descripcion de la estrategia')
+
+        file_input = self.browser.find_element_by_id('imgInp')
+        file_input.send_keys("C:\ideport-col.jpg")
+
+        btnRevision = self.browser.find_element_by_id('btnRevision')
+        btnRevision.click()
+
+        a = self.browser.find_element(By.XPATH, '//a[text()="Estrategia Pedagógica - En Revisión"]')
+        self.assertIn('Estrategia Pedagógica - En Revisión', a.text)
