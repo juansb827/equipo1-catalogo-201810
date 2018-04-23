@@ -308,4 +308,5 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('catalogo:index'))
 
 def carac_herramienta_view(request):
+    #testing commit againa again again!
     return render(request, 'carac_herramienta.html', {})
