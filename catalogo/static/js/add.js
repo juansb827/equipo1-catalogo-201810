@@ -1,5 +1,5 @@
 var URL_BASE = window.location.origin;
-var IMG_BASE = 'https://res.cloudinary.com/hn6nvsi2y/';
+
 //http://localhost:8000/catalogo/verItem/?type=6&code=55&ver=0
 
 TECHNOLOGY = "1"
@@ -67,7 +67,7 @@ Vue.component('temp', {
 
 
                 ;
-                utils.uploadPhoto(file, 'big_image', function (remoteId) {
+                utils.uploadPhoto(file, 'big_image', window.CLOUDINARY_NAME, function (remoteId) {
                     console.log("on up", remoteId);
                     img.remoteId = remoteId;
                     img.uploading = false;
@@ -164,7 +164,7 @@ var app = new Vue({
 
             self.loading = true;
             if (!self.item.id) {  // si el item no existe en la bd
-                utils.uploadPhoto(self.item.images[0].file, 'thumbnail', function (remoteId) {
+                utils.uploadPhoto(self.item.images[0].file, 'thumbnail', window.CLOUDINARY_NAME, function (remoteId) {
                     self.item.thumbnail = remoteId;
                     sendData();
                 });
@@ -452,7 +452,7 @@ function fetchItem(self) {
             self.item.thumbnail = data.fields.thumbnail;
 
             self.item.images = images.map(function (img) {
-                img.src = IMG_BASE + img.remoteId;
+                img.src = utils.getImageUrl(window.CLOUDINARY_NAME, img.remoteId);
                 return img;
             })
 
@@ -519,7 +519,7 @@ function loadLists(self) {
                 .then(function (res) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        fields.image = IMG_BASE + fields.image;
+                        fields.image = utils.getImageUrl(window.CLOUDINARY_NAME, fields.image);
                         self.$set(self.devTechs,entry.pk,fields);// devTechs[] = fields;
                     });
                     self.initializing = false;
@@ -533,7 +533,7 @@ function loadLists(self) {
                 .then(function (res) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        //fields.image = IMG_BASE + fields.image;
+
                         self.$set(self.technologies, entry.pk, fields);// devTechs[] = fields;
                     });
                     self.initializing = false;

@@ -2,6 +2,7 @@
 
 {% block content %}
     <script>
+        window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
         window.itemInfo = {
             id: {{  itemId }}+'' ,
             type: {{ itemType }}+'',

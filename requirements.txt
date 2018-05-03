@@ -3,3 +3,4 @@ Django==1.11.9
 psycopg2==2.7.3.2
 pytz==2018.3
 cloudinary
+dj-database-url

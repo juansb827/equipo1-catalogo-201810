@@ -12,14 +12,14 @@ utils = {
             }
 
         },
-        uploadPhoto: function (file, preset, cb) {
-                this.send(file, preset, function (data) {
+        uploadPhoto: function (file, preset, cloudinaryName, cb) {
+                this.send(file, preset, cloudinaryName, function (data) {
                     var res = JSON.parse(data.target.response);
                     var imgPath = res.public_id;
                     cb(imgPath);
                 });
         },
-        send: function (file, preset, cb) {
+        send: function (file, preset, cloudinaryName, cb ) {
             var formData = new FormData();
             formData.append('upload_preset', preset);
             formData.append('file', file);
@@ -35,7 +35,7 @@ utils = {
             }, false)
 
 
-            xhr.open("post", "https://api.cloudinary.com/v1_1/hn6nvsi2y/image/upload");
+            xhr.open("post", "https://api.cloudinary.com/v1_1/"+cloudinaryName+"/image/upload");
 
             xhr.send(formData);
 
@@ -82,6 +82,14 @@ utils.addUrlParam = function(search, key, val){
 
   return params;
 };
+
+/**
+ *
+ */
+
+utils.getImageUrl = function (cloudinaryName, imageId) {
+    return 'https://res.cloudinary.com/'+cloudinaryName+'/' + imageId;
+}
 
 
 window.utils = utils;

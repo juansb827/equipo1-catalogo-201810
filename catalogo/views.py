@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import json
 import os
 
-import cloudinary.api
+#import cloudinary.api
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core import serializers
@@ -20,16 +20,12 @@ from django.views.decorators.csrf import csrf_exempt
 
 from models import UserForm, Item, Example, Tutorial, Tool
 import models as models
+CLOUDINARY_NAME = os.environ.get('CLOUDINARY_NAME')
 
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_NAME'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
-)
 
 
 def index(request):
-    return render(request, 'index.html', {})
+    return render(request, 'index.html', { 'CLOUDINARY_NAME' : CLOUDINARY_NAME })
 
 
 # def login(request):
@@ -486,7 +482,8 @@ def createItemView(request,type):
     return render(request, 'desarrollo.html', {
         'itemType': type,
         'itemId': '',
-        'itemVer': ''
+        'itemVer': '',
+        'CLOUDINARY_NAME': CLOUDINARY_NAME
     })
 
 
@@ -497,7 +494,8 @@ def mostrar_item(request):
     return render(request, 'desarrollo.html', {
             'itemType': request.GET['type'],
             'itemId': request.GET['code'],
-            'itemVer': request.GET['ver']
+            'itemVer': request.GET['ver'],
+            'CLOUDINARY_NAME': CLOUDINARY_NAME
     })
 
 

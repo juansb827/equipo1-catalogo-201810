@@ -73,7 +73,7 @@ var app = new Vue({
                 self.items = data.map(function (val) {
                     var item = val.fields;
                     if (item.thumbnail)
-                        item.thumbnail = 'https://res.cloudinary.com/hn6nvsi2y/' + item.thumbnail;
+                        item.thumbnail = utils.getImageUrl(window.CLOUDINARY_NAME, item.thumbnail);
                     else
                         item.thumbnail = '../../static/images/no_image2.svg';
 
