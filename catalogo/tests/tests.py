@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 class FunctionalTest(TestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome("C:\\Users\\CarriCas\\Documents\\Maestria\\MetodologiasAgiles\\Kata02_Web\\chromedriver.exe")
+        self.browser = webdriver.Chrome(executable_path=r"chromedriver.exe")
         self.browser.implicitly_wait(2)
 
     def tearDown(self):
