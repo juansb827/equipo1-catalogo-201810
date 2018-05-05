@@ -4,52 +4,51 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/equipo.css' %}">
 
-    <div class="about" id="about">
-        <div class="container">
-            <div class="row">
-                <div class="image-area col-lg-4 col-md-4 col-sm-12 ">
-                    <img src="https://byuc.files.wordpress.com/2012/07/avat-2.jpg" class="img-fluid">
-                    <span >Miembro de conectate</span>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-12 desc">
 
-                    <h1 id="name">D.John</h1>
-                    <p id="description">
-                       ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <h4>Herramientas que domina</h4>
-                    <ul id="tools">
-                        <li>Herramienta 1</li>
-                        <li>Herramienta 2</li>
-                        <li>Herramienta 3</li>
-                    </ul>
-                    <h4>Areas de experiencia</h4>
-                    <ul id="experience">
-                        <li>UX</li>
-                        <li>Desarrollo Web</li>
-                        <li>Desarrollo Movil</li>
-                    </ul>
-                    <h4>Proyectos en los que ha trabajado</h4>
-                    <ul id="projects">
-                        <li><span class="project-name">Proyecto N </span> - <span class="project-des">Encargado del diseño de la interfaz de la pagina principal</span></li>
-                        <li><span class="project-name">Proyecto Y </span> - <span class="project-des">Encargado modelamiento de la base de datos</span></li>
-                        <li><span class="project-name">Proyecto P </span> - <span class="project-des">Responsable de la version movil </span></li>
-                    </ul>
-                    <h4>Contacto</h4>
-                    <ul >
-                        <li>Email: <span id="email">juan.perez@conecta.te</span></li>
-                        <li>Extension: <span id="extension">443</span></li>
 
-                    </ul>
+    {% verbatim  %}
 
+    <div id="vue-app">
+        <div class="about" id="about" >
+            <div class="container">
+                <div class="row">
+                    <div class="image-area col-lg-4 col-md-4 col-sm-12 ">
+                        <img src="https://byuc.files.wordpress.com/2012/07/avat-2.jpg" class="img-fluid">
+                        <span >Miembro de conectate</span>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 desc">
+
+                        <h1 id="name">{{ currentMember.name }}</h1>
+                        <p id="description">
+                           {{ currentMember.description }}
+                        </p>
+                        <h4>Herramientas que domina</h4>
+                        <ul id="tools">
+                            <li v-for="tool in currentMember.tools"><a :href="tool.url">{{ tool.name }}</a></li>
+                        </ul>
+                        <h4>Areas de experiencia</h4>
+                        <ul id="experience">
+                            <li v-for="area in currentMember.areas">{{ area }}</li>
+                        </ul>
+                        <h4>Proyectos en los que ha trabajado</h4>
+                        <ul id="projects">
+                            <li v-for="project in currentMember.projects"><span class="project-name">{{ project.name }}</span> - <span class="project-des">{{ project.description }}</span></li>
+
+                        </ul>
+                        <h4>Contacto</h4>
+                        <ul >
+                            <li>Email: <span id="email">{{ currentMember.email }}</span></li>
+                            <li>Extension: <span id="extension">{{ currentMember.extension }}</span></li>
+
+                        </ul>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    {% endverbatim  %}
+
+    <script   type="text/javascript" src="{% static '/js/team.js' %}"></script>
 {% endblock  %}
