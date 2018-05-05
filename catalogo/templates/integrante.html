@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/equipo.css' %}">
+
+    <div class="about" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="image-area col-lg-4 col-md-4 col-sm-12 ">
+                    <img src="https://byuc.files.wordpress.com/2012/07/avat-2.jpg" class="img-fluid">
+                    <span >Miembro de conectate</span>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-12 desc">
+
+                    <h1>D.John</h1>
+                    <p>
+                       ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <h4>Herramientas que domina</h4>
+                    <ul>
+                        <li>Herramienta 1</li>
+                        <li>Herramienta 2</li>
+                        <li>Herramienta 3</li>
+                    </ul>
+                    <h4>Areas de experiencia</h4>
+                    <ul>
+                        <li>UX</li>
+                        <li>Desarrollo Web</li>
+                        <li>Desarrollo Movil</li>
+                    </ul>
+                    <h4>Proyectos en los que ha trabajado</h4>
+                    <ul>
+                        <li>Proyecto N - Encargado del diseño de la interfaz de la pagina principal</li>
+                        <li>Proyecto Y - Encargado modelamiento de la base de datos</li>
+                        <li>Proyecto P - Responsable de la version movil </li>
+                    </ul>
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li>Email: juan.perez@conecta.te</li>
+                        <li>Extension: 443</li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock  %}

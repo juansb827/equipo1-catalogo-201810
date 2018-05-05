@@ -1,0 +1,32 @@
+.about{
+	margin: 4em 0;
+	padding: 1em;
+	position: relative;
+}
+.about h1{
+	color:#10828C;
+
+}
+.about .image-area{
+    text-align: center;
+}
+.about img{
+
+    width: 100%;
+}
+.about span{
+	display: block;
+	color: #888;
+
+}
+.about .desc{
+	padding: 2em;
+	border-left:4px solid #10828C;
+}
+.about .desc h4, .about .desc h1{
+	color: #10828C;
+}
+.about .desc p{
+	line-height:2;
+	color:#888;
+}

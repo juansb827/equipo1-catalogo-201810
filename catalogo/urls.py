@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^estrategia/$', views.estrategia_view, name='estrategia'),
     url(r'^addEstrategia/$', views.add_estrategia, name='addEstrategia'),
 
+    url(r'^equipo/detalle/$', views.integrante_view, name='detalleIntegrante'),
     # rutas para creacion de items
     url(r'^crearEstrategia/$', views.crear_estrategia_view, name='crearEstrategia'),
     url(r'^crearDesarrollo/$', views.crear_desarrollo_view, name='crearDesarrollo'),

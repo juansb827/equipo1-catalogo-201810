@@ -571,7 +571,9 @@ def strategies(request):
     #return HttpResponse(serializers.serialize("json", strategies))
 
 
-
+def integrante_view(request):
+    #testing commit againa again again!
+    return render(request, 'integrante.html', { 'member_id' : 5 })
 
 
 def logout_view(request):
