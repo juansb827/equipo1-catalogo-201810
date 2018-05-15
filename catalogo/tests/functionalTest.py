@@ -77,7 +77,8 @@ class FunctionalTest(TestCase):
         extension = self.browser.find_element_by_id('extension')
         self.assertTrue(extension, "El asesor deberia tener extension")
 
-
+    def test_detalle_miembro(self):
+        pass
 
 
 
