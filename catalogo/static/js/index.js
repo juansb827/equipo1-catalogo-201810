@@ -14,8 +14,10 @@ var tipos = [ /* Se ponene en un array para que sean mostrados en el mismo orden
 var estados = ["Borrador","En Revisión","Aprobado"]
 var app = new Vue({
     el: '#vue-app',
+
     data:
-        {
+        {   userId : window.userId,
+            showStatus: window.authenticated,
             searching: false,
             searchOptions: {
                 words: '',
@@ -85,7 +87,13 @@ var app = new Vue({
                     item.typeName= tipos[item.type].val;
 
                     item.statusName =   estados[item.version];
+
+                    if(item.version != 2 && item.author != self.userId ){
+                        return null
+                    }
                     return item;
+                }).filter(function (value) {
+                    return value !=  null;
                 });
                 console.log('Processed - Self ', self.items);
 

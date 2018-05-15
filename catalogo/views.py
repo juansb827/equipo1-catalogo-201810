@@ -20,7 +20,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from models import UserForm, Item, Example, Tutorial, Tool
 import models as models
-CLOUDINARY_NAME = os.environ.get('CLOUDINARY_NAME')
+CLOUDINARY_NAME = os.environ.get('CLOUDINARY_URL').split('@')[1]
+print("NAME", CLOUDINARY_NAME)
+
 
 
 
@@ -235,6 +237,7 @@ def add_estrategia(request):
     #getlist('images[]')
     images = data['images']
     type = data['type']
+    author = data['author']
 
 
 
@@ -256,6 +259,7 @@ def add_estrategia(request):
     item.description=smart_text(description, encoding='utf-8', strings_only=False, errors='strict')
     item.thumbnail=thumbnail
     item.status='1'
+    item.author_id = author
 
 
 

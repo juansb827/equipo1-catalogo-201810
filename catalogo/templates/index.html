@@ -72,7 +72,7 @@
                                     <p class="card-text"> {{ item.description | shorten }}</p>
                                 </div>
                                 <div class="card-footer">
-                                    <a style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} - {{ item.statusName }}</a>
+                                    <a style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} <span v-if="showStatus">- {{ item.statusName }}</span></a>
                                 </div>
                             </div>
                     </div>

@@ -160,6 +160,7 @@ class Item(models.Model):
     version = models.IntegerField(default=0)  # Version del item
     status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
     images = models.ManyToManyField(Image)
+    author = models.ForeignKey(User, null=True, blank=True)
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]

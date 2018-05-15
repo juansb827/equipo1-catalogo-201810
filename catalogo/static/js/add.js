@@ -89,6 +89,7 @@ Vue.component('temp', {
 var app = new Vue({
     el: '#vue-app',
     data: {
+        userId : window.userId,
         editing: true,
         readOnly: false,
         showApprovalButton: false,
@@ -118,6 +119,7 @@ var app = new Vue({
             description: '',
             images: [],
             thumbnail: '',
+            author: window.userId,
             // TECNOLOGIA
             devTechs: [],
             // HERRAMIENTA
@@ -385,10 +387,16 @@ var app = new Vue({
             this.readOnly = false;
             this.editing = true;
         } else if (this.item.version > 0) { //Si no es borrador
+
             this.readOnly = true;
             this.editing = false;
+
             if (this.item.version == 1) { //Si es revision
                 this.showApprovalButton = true;
+            }else if(this.item.version == 2 && this.userId){
+                this.readOnly = false;
+                this.editing = true;
+
             }
         }
 
@@ -446,6 +454,7 @@ function fetchItem(self) {
 
             console.log("Images", images);
             console.log("Data", item[0]);
+
             var data = item[0];
             self.item.name = data.fields.name;
             self.item.description = data.fields.description;
