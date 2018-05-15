@@ -24,13 +24,42 @@ var app = new Vue({
                 type: -1
             },
             items: [],
+            itemsInfo: {},
             currentPage: 1,
             tipos: tipos
         }
     ,
     methods: {
-        getItemLink: function (item) {
-            return URL_BASE + '/catalogo/verItem/?type='+item.type+'&code='+item.item_code+'&ver='+item.version;
+        showMessages: function( messages ){
+            alert(messages);
+        },
+        editItem: function ( item ) {
+            console.log("editing", item);
+
+            var messages = [];
+
+            if( this.itemsInfo[item.item_code] ){
+                if(this.itemsInfo[item.item_code].onRevision){
+                    messages.push("El elemento tiene cambios pendientes por aprobación.");
+                }
+
+                if( this.itemsInfo[item.item_code].editingByCurrentUser) {
+                    messages.push("Ya tiene una version en borrador de este elemento.");
+                }
+            }
+
+            if(messages.length > 0){
+                this.showMessages(messages);
+                return;
+            }
+
+
+
+            window.location = this.getItemLink(item, true);
+        },
+        getItemLink: function (item, edit) {
+            edit = edit ? 1 : 0;
+            return URL_BASE + '/catalogo/verItem/?type='+item.type+'&e='+edit +'&code='+item.item_code+'&ver='+item.version;
         },
         goToPage: function (index) {
             if (index > 0 && index <= this.pageCount) this.currentPage = index;
@@ -88,14 +117,47 @@ var app = new Vue({
 
                     item.statusName =   estados[item.version];
 
-                    if(item.version != 2 && item.author != self.userId ){
-                        return null
+                    if ( self.userId){
+                        if (item.version == 2){
+                        item.editable = true;
+                        }
+
+                        if ( !self.itemsInfo[item.item_code] ){
+                            self.itemsInfo[item.item_code] = {
+                                onRevision: false,
+                                editingByCurrentUser: false
+                            };
+                        }
+
+                        if( item.version == 1)
+                            self.itemsInfo[item.item_code].onRevision = true;
+                        if( item.version == 0 && item.author == self.userId)
+                            self.itemsInfo[item.item_code].editingByCurrentUser = true;
+
+                        switch( item.version ){
+                            case 0:
+                                item.iconName = "draft.png";
+                                break;
+                            case 1:
+                                item.iconName = "magnifying_glass.png";
+                                break;
+                            case 2:
+                                item.iconName = "check.png";
+                                break;
+                        }
+
+                        if(item.version == 0 && item.author != self.userId ){ //Solo el autor ve su borrador
+                            return null
+                        }
                     }
+
+
+
                     return item;
                 }).filter(function (value) {
                     return value !=  null;
                 });
-                console.log('Processed - Self ', self.items);
+                console.log('Processed - Self ', self.itemsInfo);
 
 
 

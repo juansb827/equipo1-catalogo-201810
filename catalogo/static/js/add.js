@@ -93,6 +93,7 @@ var app = new Vue({
         editing: true,
         readOnly: false,
         showApprovalButton: false,
+        disableApproval: false,
         loading: false,
         initializing: false,
         currentImage: 0,
@@ -119,7 +120,7 @@ var app = new Vue({
             description: '',
             images: [],
             thumbnail: '',
-            author: window.userId,
+            author: '',
             // TECNOLOGIA
             devTechs: [],
             // HERRAMIENTA
@@ -165,6 +166,8 @@ var app = new Vue({
             var self = this;
 
             self.loading = true;
+
+
             if (!self.item.id) {  // si el item no existe en la bd
                 utils.uploadPhoto(self.item.images[0].file, 'thumbnail', window.CLOUDINARY_NAME, function (remoteId) {
                     self.item.thumbnail = remoteId;
@@ -174,8 +177,18 @@ var app = new Vue({
                 sendData();
             }
 
+
+
             function sendData() {
                 var data = utils.sliceKey(self.item, 'images');
+
+                if(data.version == 2){
+                   data.item_code = data.id;
+                   data.id = "";
+                }
+
+                data.author = self.userId;
+
 
                 data.sendToReview = sendToReview || '';
                 //Les deja  solo el id a las tecnologias de desarrollo
@@ -209,11 +222,17 @@ var app = new Vue({
 
             }
         },
-        sendApproval: function () {
+        sendApproval: function (approved) {
+
+            if(approved && this.disableApproval)
+                return;
             var self = this;
             var data = {
                 'item_code': self.item.id,
-                'version':  self.item.version
+                'version':  self.item.version,
+                'approved': approved,
+                'author_id': self.item.author
+
             };
             console.log('sending aproval',data);
             this.loading = true;
@@ -381,11 +400,13 @@ var app = new Vue({
     created: function () {
 
 
+        var edit = utils.getParameterByName('e') == "1";
+        console.log("");
 
-
-        if (this.item.version == 0) {  //Si es borrador
+        if (this.item.version == 0 || edit ) {  //Si es borrador
             this.readOnly = false;
             this.editing = true;
+
         } else if (this.item.version > 0) { //Si no es borrador
 
             this.readOnly = true;
@@ -393,10 +414,6 @@ var app = new Vue({
 
             if (this.item.version == 1) { //Si es revision
                 this.showApprovalButton = true;
-            }else if(this.item.version == 2 && this.userId){
-                this.readOnly = false;
-                this.editing = true;
-
             }
         }
 
@@ -456,16 +473,21 @@ function fetchItem(self) {
             console.log("Data", item[0]);
 
             var data = item[0];
+            self.disableApproval = data.fields.author == self.userId;
             self.item.name = data.fields.name;
             self.item.description = data.fields.description;
             self.item.thumbnail = data.fields.thumbnail;
+            self.item.author = data.fields.author;
 
             self.item.images = images.map(function (img) {
                 img.src = utils.getImageUrl(window.CLOUDINARY_NAME, img.remoteId);
                 return img;
             })
 
+
+
             cargarInfo(self, res, data);
+            console.log("CargoItem", self.item);
 
         })
 

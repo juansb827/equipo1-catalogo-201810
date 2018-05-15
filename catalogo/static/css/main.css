@@ -101,7 +101,7 @@ html,h1,h2,h3,h4,h5,h6,a{
   overflow: hidden;
 }
 
- .blog .card img{
+ .blog .card-thumbnail{
   
   width: 100%;
   min-height: 12em;

@@ -253,7 +253,7 @@ def add_estrategia(request):
         item = Item()
         item.type = int(smart_text(type, encoding='utf-8', strings_only=False, errors='strict'))
     else:
-        item = Item.objects.get(item_code= itemCode, version=0)
+        item = Item.objects.get(item_code= itemCode, version=0, author=author)
 
     item.name=smart_text(name, encoding='utf-8', strings_only=False, errors='strict')
     item.description=smart_text(description, encoding='utf-8', strings_only=False, errors='strict')
@@ -369,7 +369,12 @@ def add_estrategia(request):
     item.save()
 
     if item.item_code == -1:
-        item.item_code = item.pk
+        print "Version ", data['version']
+        if data['version'] == "2":
+            print "Created draft of an aproved item"
+            item.item_code = data['item_code']
+        else:
+            item.item_code = item.pk
         item.save()
 
     item.images.clear()
@@ -397,7 +402,13 @@ def add_estrategia(request):
 """ Crea una copia del item """
 def createReviewVersion(item ):
 
+    item.version = 1
+    item.save()
+    return
+
     print 'createReviewVersion',item.type
+
+
 
     #Si ya hay una version 'Review' del item la borra
     item_review = models.Item.objects.filter(item_code=item.item_code,version='1')
@@ -454,14 +465,20 @@ def aprobarRevision(request):
 
     item_code = data['item_code']
     version = data['version']
+    approved = data['approved']
+    author_id = data['author_id']
 
-    # revisa si ya existe una version aprobada y la elimina
-    aprobada = models.Item.objects.filter(item_code=item_code, version=2)
-    if len( aprobada) != 0:
-        aprobada[0].delete()
+    item = models.Item.objects.get(item_code=item_code, version=1, author = author_id)
+    if approved:
+        # revisa si ya existe una version aprobada y la elimina
+        aprobada = models.Item.objects.filter(item_code=item_code, version=2)
+        if len( aprobada) != 0:
+            aprobada[0].delete()
 
-    item = models.Item.objects.get(item_code=item_code, version=1)
-    item.version = 2
+        item.version = 2
+    else: #La devuelve a borrador
+        item.version = 0
+
     item.save()
 
 
