@@ -48,7 +48,7 @@
                        placeholder="" v-model.trim="searchOptions.words">
 
 
-                <button class="btn btn-outline-secondary main-button  col-sm-3 ml-1" v-on:click.prevent="buscar(true)">Buscar</button>
+                <button id="btnBuscar" class="btn btn-outline-secondary main-button  col-sm-3 ml-1" v-on:click.prevent="buscar(true)">Buscar</button>
 
             </form>
             <div class="loader-container" v-if="searching">
@@ -62,7 +62,7 @@
 
                 <div class="row item-row">
                     <div class="col-md-4 col-lg-4 col-sm-12" v-for="(item,index) in paginatedItems" style="margin-bottom: 2em">
-                            <div class="card">
+                            <div id="card" class="card">
                                 <div class="card-img">
                                     <img v-bind:src="item.thumbnail">
                                 </div>
@@ -72,7 +72,7 @@
                                     <p class="card-text"> {{ item.description | shorten }}</p>
                                 </div>
                                 <div class="card-footer">
-                                    <a style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} <span v-if="showStatus">- {{ item.statusName }}</span></a>
+                                    <a v-bind:id="getItemLink(item)" style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} <span v-if="showStatus">- {{ item.statusName }}</span></a>
                                 </div>
                             </div>
                     </div>

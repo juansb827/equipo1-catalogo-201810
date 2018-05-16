@@ -2,6 +2,9 @@
 from unittest import TestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class FunctionalTest(TestCase):
@@ -77,8 +80,32 @@ class FunctionalTest(TestCase):
         extension = self.browser.find_element_by_id('extension')
         self.assertTrue(extension, "El asesor deberia tener extension")
 
-    def test_detalle_miembro(self):
-        pass
+    def test_detalle_herramientas(self):
+        # Navega hasta la pagina principal
+        # TODO: ir a la pagina del equipo y hacer click en un asesor
+
+        driver = webdriver.Chrome(executable_path=r"chromedriver.exe")
+        driver.get("http://localhost:8000/catalogo/")
+        select = Select(driver.find_element_by_id("idCategoria"))
+        select.select_by_visible_text('Herramienta')
+
+        try:
+            element = WebDriverWait(driver, 1000).until(
+                EC.presence_of_element_located((By.ID, "card")
+                )
+            )
+            buscar = driver.find_element_by_id('btnBuscar')
+            buscar.send_keys("\n")
+
+            herramienta = driver.find_element_by_id('http://localhost:8000/catalogo/verItem/?type=2&code=102&ver=2')
+            herramienta.send_keys("\n")
+
+
+        finally:
+            driver.implicitly_wait(100)
+            driver.quit()
+
+
 
 
 
