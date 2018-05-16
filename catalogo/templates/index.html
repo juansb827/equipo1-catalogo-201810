@@ -2,6 +2,9 @@
 
 {% block content %}
     <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
         window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
     </script>
 {% verbatim  %}
@@ -64,15 +67,27 @@
                     <div class="col-md-4 col-lg-4 col-sm-12" v-for="(item,index) in paginatedItems" style="margin-bottom: 2em">
                             <div class="card">
                                 <div class="card-img">
-                                    <img v-bind:src="item.thumbnail">
+                                    <img src="../../static/images/warning.png" style="position: absolute; width: 2em; height: 2em;margin: 1em"
+                                         v-if="item.version == 2 &&
+                                             ( itemsInfo[item.item_code] &&
+                                                  (itemsInfo[item.item_code].onRevision || itemsInfo[item.item_code].editingByCurrentUser))"
+                                         title="Este elemento ya esta siendo editado o tiene cambios pendientes.">
+                                    <img class="card-thumbnail" v-bind:src="item.thumbnail">
                                 </div>
 
-                                <div class="card-body">
+                                <div class="card-body" style="position: relative">
+                                    <div class="edit-btn" v-if="item.editable" v-on:click="editItem( item )">
+                                        <img style="position: absolute;right: 0.5em;  top: 0.5em;height: 2em;" src="../../static/images/pencil.svg" height="50px">
+                                    </div>
                                     <h4 class="card-title"> {{ item.name  }} </h4>
                                     <p class="card-text"> {{ item.description | shorten }}</p>
                                 </div>
-                                <div class="card-footer">
+                                <div class="card-footer" style="position:relative">
                                     <a style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} <span v-if="showStatus">- {{ item.statusName }}</span></a>
+                                    <div class="" v-if="item.iconName" >
+                                        <img style="position: absolute;right: 0.5em;  top: 0.5em;height: 2em;" v-bind:src="'../../static/images/'+item.iconName" height="50px">
+                                    </div>
+
                                 </div>
                             </div>
                     </div>
@@ -96,7 +111,31 @@
             </ul>
 
 
+         <!-- Dialog modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ modal.title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <span>{{ modal.subtitle }}</span>
+                <ul>
+                    <li v-for="msg in modal.messages">{{ msg }}</li>
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+
+              </div>
+            </div>
+          </div>
         </div>
+
+        </div> <!-- end of vue app -->
 
 
     </div>

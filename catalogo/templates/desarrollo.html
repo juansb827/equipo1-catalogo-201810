@@ -374,8 +374,14 @@
             </div>
 
             <div style="display: flex;flex-wrap: wrap" v-if="showApprovalButton">
-                <button v-on:click="sendApproval()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-grow: 1;">
+                <div v-if="disableApproval" style="width: 100%; text-align: center">Otro usuario debe aprobar sus cambios</div>
+                <button v-on:click="sendApproval(true)" class="btn btn-outline-secondary btn-lg btn-block main-button"
+                        v-bind:class="{ 'disabled-btn': disableApproval }"style="flex-grow: 1;" >
                     Aprobar versión
+                </button>
+                <button v-on:click="sendApproval(false)" class="btn btn-outline-secondary btn-lg btn-block main-button"
+                        style="flex-grow: 1;" >
+                    Rechazar
                 </button>
             </div>
         </div>
@@ -426,6 +432,9 @@
 
         <div id="snackbar" v-bind:class="{show: loading}">Un momento por favor...</div>
         <div id="snackbar" v-bind:class="{show: initializing}">Cargando información...</div>
+
+
+
     </div><!-- end of vue -->
 
 

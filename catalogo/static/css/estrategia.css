@@ -2,6 +2,11 @@
     height: 12em;
 }
 
+.disabled-btn{
+    background-color: #6c757d;
+    opacity: 0.25;
+}
+
 .fileinput-button{
     position: relative;
      width: 200px;
