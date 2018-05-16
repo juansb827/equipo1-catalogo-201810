@@ -17,6 +17,11 @@ var app = new Vue({
 
     data:
         {   userId : window.userId,
+            modal: {
+                title: '',
+                subtitle: '',
+                messages: []
+            },
             showStatus: window.authenticated,
             searching: false,
             searchOptions: {
@@ -31,7 +36,10 @@ var app = new Vue({
     ,
     methods: {
         showMessages: function( messages ){
-            alert(messages);
+            $('#exampleModal').modal('show');
+            this.modal.title = "No se puede editar el elemento";
+            this.modal.subtitle = "Razones:"
+            this.modal.messages = messages;
         },
         editItem: function ( item ) {
             console.log("editing", item);
