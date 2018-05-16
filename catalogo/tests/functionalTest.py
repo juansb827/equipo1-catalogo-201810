@@ -84,26 +84,32 @@ class FunctionalTest(TestCase):
         # Navega hasta la pagina principal
         # TODO: ir a la pagina del equipo y hacer click en un asesor
 
-        driver = webdriver.Chrome(executable_path=r"chromedriver.exe")
-        driver.get("http://localhost:8000/catalogo/")
-        select = Select(driver.find_element_by_id("idCategoria"))
+        self.browser = webdriver.Chrome(executable_path=r"chromedriver.exe")
+        self.browser.get("http://localhost:8000/catalogo/")
+        select = Select(self.browser.find_element_by_id("idCategoria"))
         select.select_by_visible_text('Herramienta')
 
         try:
-            element = WebDriverWait(driver, 1000).until(
+            element = WebDriverWait(self.browser, 10).until(
                 EC.presence_of_element_located((By.ID, "card")
                 )
             )
-            buscar = driver.find_element_by_id('btnBuscar')
+            buscar = self.browser.find_element_by_id('btnBuscar')
             buscar.send_keys("\n")
-
-            herramienta = driver.find_element_by_id('http://localhost:8000/catalogo/verItem/?type=2&code=102&ver=2')
+            herramienta = self.browser.find_element_by_id('http://localhost:8000/catalogo/verItem/?type=2&code=102&ver=2')
             herramienta.send_keys("\n")
 
+            # Verifica que este el nombre
+            nombre = self.browser.find_element_by_id('name1')
+            self.assertTrue(nombre)
+
+            # Verifica que este la descripcion
+            descripcion = self.browser.find_element_by_id('description1')
+            self.assertTrue(descripcion)
 
         finally:
-            driver.implicitly_wait(100)
-            driver.quit()
+            self.browser.implicitly_wait(100)
+            self.browser.quit()
 
 
 
