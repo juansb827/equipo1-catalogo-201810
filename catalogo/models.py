@@ -167,11 +167,12 @@ class Item(models.Model):
 class Member(models.Model):
     name = models.CharField(max_length=150)
     email = models.EmailField()
-    profile = models.CharField(max_length=1000)
+    profile = models.CharField(max_length=100|0)
     tools = models.ManyToManyField(Tool)
     experience_areas = models.CharField(max_length=200)
     projects = models.ManyToManyField(Development)
     phone_extension = models.IntegerField(default=0)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name

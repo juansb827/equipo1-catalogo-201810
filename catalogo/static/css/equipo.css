@@ -1,32 +1,52 @@
-.about{
-	margin: 4em 0;
-	padding: 1em;
-	position: relative;
+.about {
+    margin: 4em 0;
+    padding: 1em;
+    position: relative;
 }
-.about h1{
-	color:#10828C;
 
+.about h1 {
+    color: #10828C;
 }
-.about .image-area{
+
+.about .image-area {
     text-align: center;
 }
-.about img{
 
+.about img {
     width: 100%;
 }
-.about span{
 
-	color: #888;
+.about span {
+    color: #888;
+}
 
+.desc {
+    padding: 2em;
+    border-left: 4px solid #10828C;
 }
-.about .desc{
-	padding: 2em;
-	border-left:4px solid #10828C;
+
+.desc h4, .about .desc h1 {
+    color: #10828C;
 }
-.about .desc h4, .about .desc h1{
-	color: #10828C;
+
+.desc p {
+    line-height: 2;
+    color: #888;
 }
-.about .desc p{
-	line-height:2;
-	color:#888;
+
+.team {
+    margin: 4em 0;
+    padding: 1em;
+}
+
+.team h1 {
+    color: #10828C;
+}
+
+.team .image-area {
+    text-align: center;
+}
+
+.team span {
+    color: #888;
 }
