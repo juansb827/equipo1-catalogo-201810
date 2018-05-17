@@ -51,7 +51,7 @@
                        placeholder="" v-model.trim="searchOptions.words">
 
 
-                <button class="btn btn-outline-secondary main-button  col-sm-3 ml-1" v-on:click.prevent="buscar(true)">Buscar</button>
+                <button id="btnBuscar" class="btn btn-outline-secondary main-button  col-sm-3 ml-1" v-on:click.prevent="buscar(true)">Buscar</button>
 
             </form>
             <div class="loader-container" v-if="searching">
@@ -65,7 +65,7 @@
 
                 <div class="row item-row">
                     <div class="col-md-4 col-lg-4 col-sm-12" v-for="(item,index) in paginatedItems" style="margin-bottom: 2em">
-                            <div class="card">
+                            <div id="card" class="card">
                                 <div class="card-img">
                                     <img src="../../static/images/warning.png" style="position: absolute; width: 2em; height: 2em;margin: 1em"
                                          v-if="item.version == 2 &&
@@ -83,12 +83,12 @@
                                     <p class="card-text"> {{ item.description | shorten }}</p>
                                 </div>
                                 <div class="card-footer" style="position:relative">
-                                    <a style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} <span v-if="showStatus">- {{ item.statusName }}</span></a>
+                                    <a  v-bind:id="getItemLink(item)" style="color:#007bff" class="card-link" v-bind:href="getItemLink(item)">{{ item.typeName }} <span v-if="showStatus">- {{ item.statusName }}</span></a>
                                     <div class="" v-if="item.iconName" >
                                         <img style="position: absolute;right: 0.5em;  top: 0.5em;height: 2em;" v-bind:src="'../../static/images/'+item.iconName" height="50px">
                                     </div>
 
-                                </div>
+
                             </div>
                     </div>
                 </div>
