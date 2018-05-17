@@ -65,7 +65,7 @@ class Tool(models.Model):
     url = models.CharField(max_length=1000)
     technology = models.ForeignKey(Technology, null=True, blank=True)
     license_type = models.CharField(max_length=150)
-    integration = models.BooleanField(default= False)
+    integration = models.BooleanField(default=False)
     use_restrictions = models.CharField(max_length=500, null=True)
     download_url = models.CharField(max_length=1000, null=True)
     functional_description = models.CharField(max_length=1000, default='')
@@ -74,15 +74,16 @@ class Tool(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Strategy(models.Model):
     name = models.CharField(max_length=300)
+
 
 class Example(models.Model):
     name = models.CharField(max_length=150)
     url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
     strategy = models.ForeignKey(Strategy, null=True, blank=True)
-
 
     def __unicode__(self):
         return self.name
@@ -92,9 +93,6 @@ class Tutorial(models.Model):
     name = models.CharField(max_length=150)
     url = models.CharField(max_length=1000)
     tool = models.ForeignKey(Tool, null=False)
-
-
-
 
 
 class DevelopmentTechnology(models.Model):
@@ -164,3 +162,16 @@ class Item(models.Model):
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
+
+
+class Member(models.Model):
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    profile = models.CharField(max_length=1000)
+    tools = models.ManyToManyField(Tool)
+    experience_areas = models.CharField(max_length=200)
+    projects = models.ManyToManyField(Development)
+    phone_extension = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.name

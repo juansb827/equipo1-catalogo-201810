@@ -25,12 +25,11 @@ urlpatterns = [
     url(r'^crearEjemplo/$', views.crear_ejemplo_view, name='crearEjemplo'),
     url(r'^crearTutorial/$', views.crear_tutorial_view, name='crearTutorial'),
 
-
     url(r'^devTech/$', views.getDevTech, name='getDevTech'),
+    url(r'^miembros/$', views.getMembers, name='getMembers'),
     url(r'^technologies/$', views.technologies, name='tecnologias'),
     url(r'^tools/$', views.tools, name='tools'),
     url(r'^strategies/$', views.strategies, name='strategies'),
-
 
     url(r'^verItem/$', views.mostrar_item, name='viewItem'),
     url(r'^aprobarRevision/$', views.aprobarRevision, name='aprobarRevision'),
@@ -39,8 +38,3 @@ urlpatterns = [
     url(r'^caracHerramienta/$', views.crear_herramienta_view, name='caracHerramienta')
 
 ]
-
-
-
-
-

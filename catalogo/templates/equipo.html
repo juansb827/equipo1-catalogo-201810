@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/equipo.css' %}">
+    {% for currentMember in members %}
+        <div class="about" id="about">
+            <div class="container">
+                <div class="row">
+                    <div class="image-area col-lg-4 col-md-4 col-sm-12 ">
+                        <img src="https://byuc.files.wordpress.com/2012/07/avat-2.jpg" class="img-fluid">
+                        <span>Miembro de conectate</span>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 desc">
+
+                        <h1 id="name">{{ currentMember.name }}</h1>
+                        <p id="description">
+                            {{ currentMember.profile }}
+                        </p>
+                        <h4>Herramientas que domina</h4>
+                        <ul id="tools">
+                            {% for tool in currentMember.tools %}
+                                <li><a href={{ tool.url }}>{{ tool.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <h4>Areas de experiencia</h4>
+                        <ul id="experience">
+                            <li>{{ currentMember.experience_areas }}</li>
+                        </ul>
+                        <h4>Proyectos en los que ha trabajado</h4>
+                        <ul id="projects">
+                            {% for projects in currentMember.projects %}
+                                <li><span
+                                        class="project-name">{{ project.name }}</span> - <span
+                                        class="project-des">{{ project.description }}</span></li>
+                            {% endfor %}
+
+                        </ul>
+                        <h4>Contacto</h4>
+                        <ul>
+                            <li>Email: <span id="email">{{ currentMember.email }}</span></li>
+                            <li>Extension: <span id="extension">{{ currentMember.phone_extension }}</span></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
