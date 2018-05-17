@@ -18,16 +18,14 @@ class FunctionalTest(TestCase):
     def tearDownClass(inst):
         inst.browser.quit()
 
-
-
     def test_detalle_miembro(self):
         # Navega hasta la pagina de miembro
-        #TODO: ir a la pagina del equipo y hacer click en un asesor
+        # TODO: ir a la pagina del equipo y hacer click en un asesor
         self.browser.get("http://localhost:8000/catalogo/equipo/detalle/")
 
         # Verifica que este el nombre
         nombre = self.browser.find_element_by_id('name')
-        self.assertTrue( nombre)
+        self.assertTrue(nombre)
 
         # Verifica que este la descripcion
         descripcion = self.browser.find_element_by_id('description')
@@ -35,7 +33,7 @@ class FunctionalTest(TestCase):
 
         # Verifica que tenga herramientas
         herramientas = self.browser.find_element_by_id('tools').find_elements_by_tag_name('li')
-        self.assertTrue( len(herramientas) > 0, "El asesor deberia tener herramientas")
+        self.assertTrue(len(herramientas) > 0, "El asesor deberia tener herramientas")
 
         # Verifica que cada herramienta tenga el nombre
         herramientaVacia = False
@@ -44,7 +42,7 @@ class FunctionalTest(TestCase):
                 herramientaVacia = True
                 break
 
-        self.assertTrue( not herramientaVacia, "El nombre de la herramienta no deberia estar vacio")
+        self.assertTrue(not herramientaVacia, "El nombre de la herramienta no deberia estar vacio")
 
         # Verifica que tenga areas de experiencia
         areas = self.browser.find_element_by_id('experience').find_elements_by_tag_name('li')
@@ -70,11 +68,12 @@ class FunctionalTest(TestCase):
             if (not nombre.text) or (not contribucion.text):
                 proyectoVacio = True
                 break
-        self.assertTrue(not proyectoVacio, "El nombre del proyecto y la contribucion del asesor sobre este no deberian estar vacios")
+        self.assertTrue(not proyectoVacio,
+                        "El nombre del proyecto y la contribucion del asesor sobre este no deberian estar vacios")
 
         # Verifica que el asesor tenga email
         email = self.browser.find_element_by_id('email')
-        self.assertTrue( email, "El asesor deberia tener email")
+        self.assertTrue(email, "El asesor deberia tener email")
 
         # Verifica que el asesor tenga extension
         extension = self.browser.find_element_by_id('extension')
@@ -83,8 +82,6 @@ class FunctionalTest(TestCase):
     def test_detalle_herramientas(self):
         # Navega hasta la pagina principal
         # TODO: ir a la pagina del equipo y hacer click en un asesor
-
-        self.browser = webdriver.Chrome(executable_path=r"chromedriver.exe")
         self.browser.get("http://localhost:8000/catalogo/")
         select = Select(self.browser.find_element_by_id("idCategoria"))
         select.select_by_visible_text('Herramienta')
@@ -92,11 +89,12 @@ class FunctionalTest(TestCase):
         try:
             element = WebDriverWait(self.browser, 10).until(
                 EC.presence_of_element_located((By.ID, "card")
-                )
+                                               )
             )
             buscar = self.browser.find_element_by_id('btnBuscar')
             buscar.send_keys("\n")
-            herramienta = self.browser.find_element_by_id('http://localhost:8000/catalogo/verItem/?type=2&code=102&ver=2')
+            herramienta = self.browser.find_element_by_id(
+                'http://localhost:8000/catalogo/verItem/?type=2&code=102&ver=2')
             herramienta.send_keys("\n")
 
             # Verifica que este el nombre
@@ -111,9 +109,27 @@ class FunctionalTest(TestCase):
             self.browser.implicitly_wait(100)
             self.browser.quit()
 
+    def test_equipo(self):
 
+        # Navega hasta la pagina del equipo
+        self.browser.get("http://localhost:8000/catalogo/equipo/")
+        # Verifica que exista un miembro
+        # Verifica que este el nombre
+        nombre = self.browser.find_element_by_id('name')
+        self.assertTrue(nombre)
 
+        # Verifica que este la descripcion
+        descripcion = self.browser.find_element_by_id('description')
+        self.assertTrue(descripcion)
 
+        # Verifica que tenga areas de experiencia
+        areas = self.browser.find_element_by_id('experience').find_elements_by_tag_name('li')
+        self.assertTrue(len(areas) > 0, "El asesor deberia tener areas de experiencia")
 
-
-
+        # Verifica que las areas de experiencia tengan nombres
+        areaVacia = False
+        for area in areas:
+            if not area.text:
+                areaVacia = True
+                break
+        self.assertTrue(not areaVacia, "El nombre de la area de experiencia no deberia estar vacio")
