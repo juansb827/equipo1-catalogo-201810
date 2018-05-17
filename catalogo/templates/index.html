@@ -7,7 +7,7 @@
         })
         window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
     </script>
-{% verbatim  %}
+
     <!-- header -->
     <header class="header ">
         <div class="overlayed">
@@ -22,9 +22,11 @@
                                 sunt in culpa qui officia deserunt
                                 mollit anim id est laborum.</p>
                         </b>
-                        <button id="verCatalogo" class="btn btn-outline-secondary btn-lg" data-value="blog" href="#">Ver
+                        <button id="verCatalogo" class="btn btn-outline-secondary btn-lg" data-value="blog" href="#" style="width:10em">Ver
                             catálogo
                         </button>
+                        <a id="verEquipo" class="btn btn-outline-secondary btn-lg" href="{% url 'catalogo:detalleIntegrante' %}" style="width: 10em">Ver Equipo
+                        </a>
                     </h1>
                 </div>
             </div>
@@ -32,7 +34,7 @@
     </header>
 
 
-
+{% verbatim  %}
 
     <!-- Catálogo -->
     <div class="blog" id="blog">
