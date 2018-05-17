@@ -2,45 +2,45 @@ var URL_BASE = window.location.origin;
 
 //http://localhost:8000/catalogo/verItem/?type=6&code=55&ver=0
 
-TECHNOLOGY = "1"
-TOOL = "2"
-TUTORIAL = "3"
-EXAMPLE = "4"
-STRATEGY = "5"
-DEVELOPMENT = "6"
+TECHNOLOGY = "1";
+TOOL = "2";
+TUTORIAL = "3";
+EXAMPLE = "4";
+STRATEGY = "5";
+DEVELOPMENT = "6";
 
 var typeName = {
-     "-1" :"Todas las categorias",
-      "1" :  "Tecnologia",
-     "2":"Herramienta",
-     "3"  :"Tutorial",
-      "4" :"Ejemplo",
-     "5" :"Estrategia Pedagógica",
-     "6":"Desarrollo"
-}
+    "-1": "Todas las categorias",
+    "1": "Tecnologia",
+    "2": "Herramienta",
+    "3": "Tutorial",
+    "4": "Ejemplo",
+    "5": "Estrategia Pedagógica",
+    "6": "Desarrollo"
+};
 
 
-Vue.use(window.vuelidate.default)
+Vue.use(window.vuelidate.default);
 
 var temp =
-    '<div>' +
-    '<span class="btn btn-success fileinput-button">' +
-    '            <i class="glyphicon glyphicon-plus"></i>' +
-    '            <span>Agregar imagen...</span>' +
-    '            <input id="imgInp" type="file" class="upload-button" v-on:change="newFile">' +
-    '</span>' +
-    '<div class="images" style="display: flex;flex-wrap:wrap; justify-content:center" v-if="images.length">' +
-    '            <div class="card" v-for="img in images" >' +
-    '                <img class="img-preview" v-bind:src="img.src" v-bind:class="{uploading : img.uploading}">' +
-    '                <div class="wrapper" v-if="img.uploading">' +
-    '                    <div class="loader-container-2">' +
-    '                        <div id="search-loader" class="loader-2"></div>' +
-    '                   </div>' +
-    '                </div>' +
-    '                <div class="delete" v-on:click="removeImg"><img style="height:50px" src="../../static/images/delete.svg"></div>' +
-    '            </div>' +
-    '</div>' +
-    '</div>';
+    "<div>" +
+    "<span class='btn btn-success fileinput-button'>" +
+    "            <i class='glyphicon glyphicon-plus'></i>" +
+    "            <span>Agregar imagen...</span>" +
+    "            <input id='imgInp'' type='file' class='upload-button' v-on:change='newFile'>" +
+    "</span>" +
+    "<div class='images' style='display: flex;flex-wrap:wrap; justify-content:center' v-if='images.length'>" +
+    "            <div class='card' v-for='img in images' >" +
+    "                <img class='img-preview' v-bind:src='img.src' v-bind:class=''{uploading : img.uploading}'>" +
+    "                <div class='wrapper' v-if='img.uploading'>" +
+    "                    <div class='loader-container-2'>" +
+    "                        <div id='search-loader' class='loader-2'></div>" +
+    "                   </div>" +
+    "                </div>" +
+    "                <div class='delete' v-on:click='removeImg'> <img style='height:50px' src='../../static/images/delete.svg'></div>" +
+    "            </div>" +
+    "</div>" +
+    "</div>";
 
 
 Vue.component('temp', {
@@ -66,9 +66,7 @@ Vue.component('temp', {
                 self.images.push(img);
 
 
-                ;
                 utils.uploadPhoto(file, 'big_image', window.CLOUDINARY_NAME, function (remoteId) {
-                    console.log("on up", remoteId);
                     img.remoteId = remoteId;
                     img.uploading = false;
                 })
@@ -89,7 +87,7 @@ Vue.component('temp', {
 var app = new Vue({
     el: '#vue-app',
     data: {
-        userId : window.userId,
+        userId: window.userId,
         editing: true,
         readOnly: false,
         showApprovalButton: false,
@@ -99,7 +97,7 @@ var app = new Vue({
         currentImage: 0,
         winStart: 0,
         winEnd: 3,
-        types : {
+        types: {
             TECHNOLOGY: TECHNOLOGY,
             TOOL: TOOL,
             TUTORIAL: TUTORIAL,
@@ -108,7 +106,6 @@ var app = new Vue({
             DEVELOPMENT: DEVELOPMENT
         },
         typeName: typeName,
-
 
 
         item: {
@@ -140,13 +137,12 @@ var app = new Vue({
             tutorialUrl: ''
 
 
-
         },
         strategies: {},
         tools: {},
         technologies: {},  // tecnologias del catalogo eg. sicua o moodle
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
-        licenseTypes : {}
+        licenseTypes: {}
     },
     methods: {
         getClass: function (fieldName) {
@@ -156,10 +152,8 @@ var app = new Vue({
             }
         },
         submit: function (sendToReview) {
-            console.log("Data to be sent", this.item);
             if (this.$v.$invalid) {
                 this.$v.item.$touch();
-                console.log("Form con errores");
                 return;
             }
 
@@ -178,13 +172,12 @@ var app = new Vue({
             }
 
 
-
             function sendData() {
                 var data = utils.sliceKey(self.item, 'images');
 
-                if(data.version == 2){
-                   data.item_code = data.id;
-                   data.id = "";
+                if (data.version === 2) {
+                    data.item_code = data.id;
+                    data.id = "";
                 }
 
                 data.author = self.userId;
@@ -201,20 +194,15 @@ var app = new Vue({
                     return !img.id; // Ignora las que tengan Id, por que ya estan en la db
                 })*/
                     return img.remoteId;
-                })
-
-
-                console.log("Transformed", data);
+                });
 
 
                 axios.post(URL_BASE + "/catalogo/addEstrategia/", data)
                     .then(function (res) {
-                        console.log("Success", res);// return;
-                        window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda='+self.item.name;
+                        window.location.href = URL_BASE + '/catalogo/?type=' + self.item.type + '&busqueda=' + self.item.name;
 
                     })
                     .catch(function (err) {
-                        console.log("Error", err);
                     })
                     .finally(function () {
                         self.loading = true;
@@ -224,26 +212,23 @@ var app = new Vue({
         },
         sendApproval: function (approved) {
 
-            if(approved && this.disableApproval)
+            if (approved && this.disableApproval)
                 return;
             var self = this;
             var data = {
                 'item_code': self.item.id,
-                'version':  self.item.version,
+                'version': self.item.version,
                 'approved': approved,
                 'author_id': self.item.author
 
             };
-            console.log('sending aproval',data);
             this.loading = true;
 
             axios.post(URL_BASE + "/catalogo/aprobarRevision/", data)
                 .then(function (res) {
-                    window.location.href = URL_BASE + '/catalogo/?type='+self.item.type+'&busqueda='+self.item.name;
-                    console.log("Success Aproval", res);
+                    window.location.href = URL_BASE + '/catalogo/?type=' + self.item.type + '&busqueda=' + self.item.name;
                 })
                 .catch(function (err) {
-                    console.log("Error Aproval", err);
                 })
                 .finally(function () {
                     this.loading = false;
@@ -251,7 +236,6 @@ var app = new Vue({
 
         },
         test: function () {
-            console.log("Sending to review", this.item)
             this.submit(true);
 
 
@@ -260,12 +244,8 @@ var app = new Vue({
             $('.carousel').carousel(i);
         },
         changeSlide: function (i) {
-            console.log("previ", i);
-            var length = this.item.images.length
+            var length = this.item.images.length;
             i = (length + (i % length)) % length; //
-
-            console.log("next", i);
-
 
             var offset = 0;
             /* Slides the 4-images windows  :V */
@@ -278,7 +258,6 @@ var app = new Vue({
             this.winStart += offset;
             this.winEnd += offset;
             this.currentImage = i;
-            console.log('s', this.winStart, 'e', this.winEnd, this.currentImage);
 
 
         },
@@ -292,15 +271,14 @@ var app = new Vue({
             document.getElementById('galleryModal').style.display = "none";
         },
         showPreview: function () {
-            console.log("show PReview");
             this.editing = false;
         },
         showEditMode: function () {
             this.editing = true;
         },
-        getItemLink: function (item_code,type) {
-            return URL_BASE + '/catalogo/verItem/?type='+type+'&code='+item_code+'&ver=2';
-        },
+        getItemLink: function (item_code, type) {
+            return URL_BASE + '/catalogo/verItem/?type=' + type + '&code=' + item_code + '&ver=2';
+        }
 
     },
     computed: {
@@ -308,102 +286,98 @@ var app = new Vue({
             return this.item.images.slice(this.winStart, this.winEnd + 1);
         }
     },
-    validations: function(){
+    validations: function () {
 
 
-                 var  val ={
-                         item : {
-                                    name: {
-                                        required: validators.required,
-                                        maxLength: validators.maxLength(20)
-                                    },
-                                    description: {
-                                        required: validators.required,
-                                        maxLength: validators.maxLength(300)
+        var val = {
+            item: {
+                name: {
+                    required: validators.required,
+                    maxLength: validators.maxLength(20)
+                },
+                description: {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300)
 
-                                    }
-                                    ,
-                                    images: {
-                                        required: validators.required,
-                                        $each: {
-                                            remoteId: {
-                                                required: validators.required
-                                            }
-                                        }
-                                    }
-
+                }
+                ,
+                images: {
+                    required: validators.required,
+                    $each: {
+                        remoteId: {
+                            required: validators.required
                         }
-                 }
+                    }
+                }
 
-                 switch (this.item.type){
-                     case DEVELOPMENT:
-                         val.item.devTechs = { required: validators.required }
-                     break;
-                     case TOOL:
-                         val.item.technology = { required: validators.required }
-                         val.item.licenseType = { required: validators.required }
-                         val.item.useRestrictions = {
-                                        required: validators.required,
-                                        maxLength: validators.maxLength(300)
+            }
+        };
 
-                                    }
-                         val.item.toolUrl = {
-                             required: validators.required,
-                             maxLength: validators.maxLength(300),
-                             url: validators.url
-                         }
+        switch (this.item.type) {
+            case DEVELOPMENT:
+                val.item.devTechs = {required: validators.required};
+                break;
+            case TOOL:
+                val.item.technology = {required: validators.required};
+                val.item.licenseType = {required: validators.required};
+                val.item.useRestrictions = {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300)
 
-                         val.item.toolDownloadUrl = {
-                             required: validators.required,
-                             maxLength: validators.maxLength(300),
-                             url: validators.url
-                         }
+                };
+                val.item.toolUrl = {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300),
+                    url: validators.url
+                };
 
-                         val.item.operativeSystems = { required: validators.required }
+                val.item.toolDownloadUrl = {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300),
+                    url: validators.url
+                };
 
-                         val.item.functionalDescription = {
-                                        required: validators.required,
-                                        maxLength: validators.maxLength(300)
-                         }
+                val.item.operativeSystems = {required: validators.required};
 
-                    break;
-                     case EXAMPLE:
-                         val.item.strategy = { required: validators.required }
-                         val.item.tool = { required: validators.required }
-                         val.item.exampleUrl = {
-                             required: validators.required,
-                             maxLength: validators.maxLength(300),
-                             url: validators.url
-                         }
+                val.item.functionalDescription = {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300)
+                };
 
-                     break;
-                     case TUTORIAL:
-                         val.item.tool = { required: validators.required }
-                         val.item.tutorialUrl = {
-                             required: validators.required,
-                             maxLength: validators.maxLength(300),
-                             url: validators.url
-                         }
+                break;
+            case EXAMPLE:
+                val.item.strategy = {required: validators.required};
+                val.item.tool = {required: validators.required};
+                val.item.exampleUrl = {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300),
+                    url: validators.url
+                };
 
-                     break;
+                break;
+            case TUTORIAL:
+                val.item.tool = {required: validators.required};
+                val.item.tutorialUrl = {
+                    required: validators.required,
+                    maxLength: validators.maxLength(300),
+                    url: validators.url
+                };
+
+                break;
 
 
+        }
 
-
-                 }
-
-                 return val;
-
+        return val;
 
 
     },
     created: function () {
 
 
-        var edit = utils.getParameterByName('e') == "1";
-        console.log("");
+        var edit = utils.getParameterByName('e') === "1";
 
-        if (this.item.version == 0 || edit ) {  //Si es borrador
+        if (this.item.version === 0 || edit) {  //Si es borrador
             this.readOnly = false;
             this.editing = true;
 
@@ -412,7 +386,7 @@ var app = new Vue({
             this.readOnly = true;
             this.editing = false;
 
-            if (this.item.version == 1) { //Si es revision
+            if (this.item.version === 1) { //Si es revision
                 this.showApprovalButton = true;
             }
         }
@@ -427,10 +401,10 @@ var app = new Vue({
             'http://apclandscape.us.com/wp-content/themes/land3/images/sliders/slide1.jpg',
             'http://images.nationalgeographic.com.es/medio/2015/12/21/bf63ef82rio_narcea_tineo_720x480.jpg'
 
-        ]
+        ];
 
         loadLists(this);
-        if(this.item.id > 0)
+        if (this.item.id > 0)
             fetchItem(self); //Solo se trae para editar
 
 
@@ -442,12 +416,11 @@ var app = new Vue({
         $('.carousel').on('slide.bs.carousel', function (e) {
             var slideFrom = $(this).find('.active').index();
             var slideTo = $(e.relatedTarget).index();
-            console.log(slideFrom + ' => ' + slideTo);
             self.changeSlide(slideTo);
         });
     }
 
-})
+});
 
 /** Trae el item de la db para ver o editar*/
 function fetchItem(self) {
@@ -456,24 +429,20 @@ function fetchItem(self) {
         params: {
             id: window.itemInfo.id,
             type: window.itemInfo.type,
-            version: window.itemInfo.version,
+            version: window.itemInfo.version
         }
     })
         .then(function (res) {
             self.initializing = false;
-            console.log("All", res.data);
             var images = JSON.parse(res.data.images);
             var item = JSON.parse(res.data.item);
-            if (item.length == 0) {
-                console.log("No se encontro el item");
+            if (item.length === 0) {
                 return
             }
 
-            console.log("Images", images);
-            console.log("Data", item[0]);
 
             var data = item[0];
-            self.disableApproval = data.fields.author == self.userId;
+            self.disableApproval = data.fields.author === self.userId;
             self.item.name = data.fields.name;
             self.item.description = data.fields.description;
             self.item.thumbnail = data.fields.thumbnail;
@@ -482,12 +451,10 @@ function fetchItem(self) {
             self.item.images = images.map(function (img) {
                 img.src = utils.getImageUrl(window.CLOUDINARY_NAME, img.remoteId);
                 return img;
-            })
-
+            });
 
 
             cargarInfo(self, res, data);
-            console.log("CargoItem", self.item);
 
         })
 
@@ -498,23 +465,20 @@ function fetchItem(self) {
 function cargarInfo(self, res, data) {
 
     var subItem = null;
-    if(res.data.subItem){
+    if (res.data.subItem) {
         subItem = JSON.parse(res.data.subItem);
         subItem = subItem[0];
     }
-
-    console.log("Subitem",subItem);
 
 
     switch (self.item.type) {
         case DEVELOPMENT: //Carga tecnologias de desarrollo
             self.item.subclassId = data.fields.development;
             var techs = JSON.parse(res.data.techs);
-            console.log("Techs del item", techs);
             self.item.devTechs = techs.map(function (value) {
                 return value.pk;
-            })
-        break;
+            });
+            break;
         case TOOL:
             self.item.technology = subItem.fields.technology;
             self.item.licenseType = subItem.fields.license_type;
@@ -525,16 +489,16 @@ function cargarInfo(self, res, data) {
             self.item.functionalDescription = subItem.fields.functional_description;
             self.item.operativeSystems = subItem.fields.operating_systems.split(',');
 
-        break;
+            break;
         case EXAMPLE:
             self.item.strategy = subItem.fields.strategy;
             self.item.tool = subItem.fields.tool;
             self.item.exampleUrl = subItem.fields.url;
-        break;
+            break;
         case TUTORIAL:
             self.item.tool = subItem.fields.tool;
             self.item.tutorialUrl = subItem.fields.url;
-        break;
+            break;
     }
 
 
@@ -551,13 +515,12 @@ function loadLists(self) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
                         fields.image = utils.getImageUrl(window.CLOUDINARY_NAME, fields.image);
-                        self.$set(self.devTechs,entry.pk,fields);// devTechs[] = fields;
+                        self.$set(self.devTechs, entry.pk, fields);// devTechs[] = fields;
                     });
                     self.initializing = false;
                     //self.vm.$set('devTechs', self.devTechs);
-                    console.log("DEvTechs", self.devTechs);
-                })
-        break;
+                });
+            break;
         case TOOL:
 
             axios.get(URL_BASE + "/catalogo/technologies/")
@@ -568,8 +531,7 @@ function loadLists(self) {
                         self.$set(self.technologies, entry.pk, fields);// devTechs[] = fields;
                     });
                     self.initializing = false;
-                    console.log("Tecnologias", self.technologies);
-            })
+                });
 
 
             self.licenseTypes = [
@@ -579,63 +541,54 @@ function loadLists(self) {
                 "Licencia Freeware",
                 "Licencia de Software Propietario",
 
-            ]
+            ];
             self.operativeSystems = {
-                "1": { name : "Windows" , img : ""},
-                "2": { name : "Linux" , img : ""},
-                "3": { name : "macOS" , img : ""}
-            }
+                "1": {name: "Windows", img: ""},
+                "2": {name: "Linux", img: ""},
+                "3": {name: "macOS", img: ""}
+            };
 
 
-        break;
+            break;
         case EXAMPLE:
-
 
 
             axios.get(URL_BASE + "/catalogo/tools/")
                 .then(function (res) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        fields.item= entry.pk;
+                        fields.item = entry.pk;
                         self.$set(self.tools, fields.tool, fields);// devTechs[] = fields;
                     });
-                    console.log("Tools", self.tools);
-            })
+                });
 
             axios.get(URL_BASE + "/catalogo/strategies/")
                 .then(function (res) {
-                    console.log("Purestra",res.data);
+                    ;
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        fields.item= entry.pk;
+                        fields.item = entry.pk;
 
                         self.$set(self.strategies, fields.strategy, fields);// devTechs[] = fields;
                     });
                     self.initializing = false;
-                    console.log("Strategies", self.strategies);
-            })
+                });
 
-        break;
+            break;
         case TUTORIAL:
             axios.get(URL_BASE + "/catalogo/tools/")
                 .then(function (res) {
                     res.data.map(function (entry) {
                         var fields = entry.fields;
-                        fields.item= entry.pk;
+                        fields.item = entry.pk;
                         self.$set(self.tools, fields.tool, fields);// devTechs[] = fields;
                     });
-                    self.initializing  = false;
-                    console.log("Tools", self.tools);
-            })
-        break;
+                    self.initializing = false;
+                });
+            break;
         case STRATEGY:
             self.initializing = false;
             break;
-
-
-
-
-
 
 
     }

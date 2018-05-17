@@ -1,22 +1,23 @@
 var URL_BASE = window.location.origin;
 
-var tipos = [ /* Se ponene en un array para que sean mostrados en el mismo orden siempre*/
-    { key: "-1" , val :"Todas las categorias"},
-    { key: "1" , val :"Tecnologia"},
-    { key: "2" , val :"Herramienta"},
-    { key: "3" , val :"Tutorial"},
-    { key: "4" , val :"Ejemplo"},
-    { key: "5" , val :"Estrategia Pedagógica"},
-    { key: "6" , val :"Desarrollo"}
+var tipos = [/* Se ponene en un array para que sean mostrados en el mismo orden siempre*/
+    {key: "-1", val: "Todas las categorias"},
+    {key: "1", val: "Tecnologia"},
+    {key: "2", val: "Herramienta"},
+    {key: "3", val: "Tutorial"},
+    {key: "4", val: "Ejemplo"},
+    {key: "5", val: "Estrategia Pedagógica"},
+    {key: "6", val: "Desarrollo"}
 
-]
+];
 
-var estados = ["Borrador","En Revisión","Aprobado"]
+var estados = ["Borrador", "En Revisión", "Aprobado"];
 var app = new Vue({
     el: '#vue-app',
 
     data:
-        {   userId : window.userId,
+        {
+            userId: window.userId,
             modal: {
                 title: '',
                 subtitle: '',
@@ -35,39 +36,37 @@ var app = new Vue({
         }
     ,
     methods: {
-        showMessages: function( messages ){
+        showMessages: function (messages) {
             $('#exampleModal').modal('show');
             this.modal.title = "No se puede editar el elemento";
-            this.modal.subtitle = "Razones:"
+            this.modal.subtitle = "Razones:";
             this.modal.messages = messages;
         },
-        editItem: function ( item ) {
-            console.log("editing", item);
+        editItem: function (item) {
 
             var messages = [];
 
-            if( this.itemsInfo[item.item_code] ){
-                if(this.itemsInfo[item.item_code].onRevision){
+            if (this.itemsInfo[item.item_code]) {
+                if (this.itemsInfo[item.item_code].onRevision) {
                     messages.push("El elemento tiene cambios pendientes por aprobación.");
                 }
 
-                if( this.itemsInfo[item.item_code].editingByCurrentUser) {
+                if (this.itemsInfo[item.item_code].editingByCurrentUser) {
                     messages.push("Ya tiene una version en borrador de este elemento.");
                 }
             }
 
-            if(messages.length > 0){
+            if (messages.length > 0) {
                 this.showMessages(messages);
                 return;
             }
-
 
 
             window.location = this.getItemLink(item, true);
         },
         getItemLink: function (item, edit) {
             edit = edit ? 1 : 0;
-            return URL_BASE + '/catalogo/verItem/?type='+item.type+'&e='+edit +'&code='+item.item_code+'&ver='+item.version;
+            return URL_BASE + '/catalogo/verItem/?type=' + item.type + '&e=' + edit + '&code=' + item.item_code + '&ver=' + item.version;
         },
         goToPage: function (index) {
             if (index > 0 && index <= this.pageCount) this.currentPage = index;
@@ -86,7 +85,7 @@ var app = new Vue({
             this.currentPage = 1;
             var self = this;
 
-            if(scroll == false){ //Search on page reload
+            if (scroll === false) { //Search on page reload
                 self.searchOptions.type = utils.getParameterByName('type') || -1;
                 self.searchOptions.words = utils.getParameterByName('busqueda') || '';
                 scroll = true;
@@ -94,20 +93,16 @@ var app = new Vue({
 
             var searchParams = {
                 type: self.searchOptions.type, name: self.searchOptions.words
-            }
+            };
 
-            window.history.pushState('catalogo/', 'Title', '/catalogo/?type='+searchParams.type+'&busqueda='+searchParams.name)
+            window.history.pushState('catalogo/', 'Title', '/catalogo/?type=' + searchParams.type + '&busqueda=' + searchParams.name);
 
 
-
-            console.log("searchOarams",searchParams);
-
-            axios.get(URL_BASE + "/catalogo/searchItems",{
+            axios.get(URL_BASE + "/catalogo/searchItems", {
                 params: searchParams
             }).then(function (response) {
-                this.loading=false;
-                var data= response.data;
-                console.log("data",data);
+                this.loading = false;
+                var data = response.data;
                 self.searching = false;
                 self.items = data.map(function (val) {
                     var item = val.fields;
@@ -116,33 +111,32 @@ var app = new Vue({
                     else
                         item.thumbnail = '../../static/images/no_image2.svg';
 
-                    if(!tipos[item.type]){
-                        console.log("item",item);
+                    if (!tipos[item.type]) {
                         return null;
                     }
 
-                    item.typeName= tipos[item.type].val;
+                    item.typeName = tipos[item.type].val;
 
-                    item.statusName =   estados[item.version];
+                    item.statusName = estados[item.version];
 
-                    if ( self.userId){
-                        if (item.version == 2){
-                        item.editable = true;
+                    if (self.userId) {
+                        if (item.version === 2) {
+                            item.editable = true;
                         }
 
-                        if ( !self.itemsInfo[item.item_code] ){
+                        if (!self.itemsInfo[item.item_code]) {
                             self.itemsInfo[item.item_code] = {
                                 onRevision: false,
                                 editingByCurrentUser: false
                             };
                         }
 
-                        if( item.version == 1)
+                        if (item.version === 1)
                             self.itemsInfo[item.item_code].onRevision = true;
-                        if( item.version == 0 && item.author == self.userId)
+                        if (item.version === 0 && item.author === self.userId)
                             self.itemsInfo[item.item_code].editingByCurrentUser = true;
 
-                        switch( item.version ){
+                        switch (item.version) {
                             case 0:
                                 item.iconName = "draft.png";
                                 break;
@@ -154,32 +148,27 @@ var app = new Vue({
                                 break;
                         }
 
-                        if(item.version == 0 && item.author != self.userId ){ //Solo el autor ve su borrador
+                        if (item.version === 0 && item.author !== self.userId) { //Solo el autor ve su borrador
                             return null
                         }
                     }
 
 
-
                     return item;
                 }).filter(function (value) {
-                    return value !=  null;
+                    return value != null;
                 });
-                console.log('Processed - Self ', self.itemsInfo);
 
 
-
-                if(scroll){
+                if (scroll) {
                     $("body,html").animate({
                         scrollTop: $('#palabrasBusqueda').first().offset().top
-                    },1000)
+                    }, 1000)
                 }
 
             }).catch(function (err) {
-                this.loading=false;
-                console.log("Error en la busqueda", err);
+                this.loading = false;
             })
-
 
 
         }
@@ -194,7 +183,6 @@ var app = new Vue({
             return this.items.slice(offset, offset + itemsPerPage);
         },
         pageCount: function () {
-            console.log('pc', Math.ceil(this.items.length / 6));
             return Math.ceil(this.items.length / 6);
         }
     },

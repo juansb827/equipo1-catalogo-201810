@@ -8,4 +8,4 @@ $("#verCatalogo").click(function(){
      scrollTop:  $('.header').height() -  $('nav').height() 
     },1000)
     
-   })
+   });
