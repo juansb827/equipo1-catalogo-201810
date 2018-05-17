@@ -18,7 +18,9 @@
                             </p>
                             <h4>Areas de experiencia</h4>
                             <ul id="experience">
-                                <li>{{ currentMember.experience_areas }}</li>
+                                {% for area in currentMember.experience_areas.all %}
+                                    <li>{{ area.name }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
