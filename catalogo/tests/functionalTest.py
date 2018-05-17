@@ -109,7 +109,7 @@ class FunctionalTest(TestCase):
             self.browser.implicitly_wait(100)
             self.browser.quit()
 
-    def test_equipo(self):
+    def test_equipo_HU45(self):
 
         # Navega hasta la pagina del equipo
         self.browser.get("http://localhost:8000/catalogo/equipo/")
@@ -121,6 +121,11 @@ class FunctionalTest(TestCase):
         # Verifica que este la descripcion
         descripcion = self.browser.find_element_by_id('description')
         self.assertTrue(descripcion)
+
+    def test_areas_exp_HU47(self):
+
+        # Navega hasta la pagina del equipo
+        self.browser.get("http://localhost:8000/catalogo/equipo/")
 
         # Verifica que tenga areas de experiencia
         areas = self.browser.find_element_by_id('experience').find_elements_by_tag_name('li')
