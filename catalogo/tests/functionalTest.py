@@ -81,7 +81,9 @@ class FunctionalTest(TestCase):
 
     def test_detalle_herramientas(self):
         # Navega hasta la pagina principal
-        # TODO: ir a la pagina del equipo y hacer click en un asesor
+        # TODO: ir a la pagina principal y hacer click en buscar.
+
+        self.browser = webdriver.Chrome(executable_path=r"chromedriver.exe")
         self.browser.get("http://localhost:8000/catalogo/")
         select = Select(self.browser.find_element_by_id("idCategoria"))
         select.select_by_visible_text('Herramienta')
@@ -93,8 +95,8 @@ class FunctionalTest(TestCase):
             )
             buscar = self.browser.find_element_by_id('btnBuscar')
             buscar.send_keys("\n")
-            herramienta = self.browser.find_element_by_id(
-                'http://localhost:8000/catalogo/verItem/?type=2&code=102&ver=2')
+
+            herramienta = self.browser.find_element_by_class_name('card-link')
             herramienta.send_keys("\n")
 
             # Verifica que este el nombre
@@ -121,6 +123,39 @@ class FunctionalTest(TestCase):
         # Verifica que este la descripcion
         descripcion = self.browser.find_element_by_id('description')
         self.assertTrue(descripcion)
+
+    def test_detalle_desarrollos(self):
+        # Navega hasta la pagina principal
+        # TODO: ir a la pagina principal y listar desarrollo y dar click en buscar
+
+        self.browser = webdriver.Chrome(executable_path=r"chromedriver.exe")
+        self.browser.get("http://localhost:8000/catalogo/")
+        select = Select(self.browser.find_element_by_id("idCategoria"))
+        select.select_by_visible_text('Desarrollo')
+
+        try:
+            element = WebDriverWait(self.browser, 10).until(
+                EC.presence_of_element_located((By.ID, "card")
+                )
+            )
+            buscar = self.browser.find_element_by_id('btnBuscar')
+            buscar.send_keys("\n")
+            desarrollo = self.browser.find_element_by_class_name('card-link')
+            desarrollo.send_keys("\n")
+
+            # Verifica que este el nombre
+            nombre = self.browser.find_element_by_id('name1')
+            self.assertTrue(nombre)
+
+            # Verifica que este la descripcion
+            descripcion = self.browser.find_element_by_id('description1')
+            self.assertTrue(descripcion)
+
+        finally:
+            self.browser.implicitly_wait(100)
+            self.browser.quit()
+
+
 
     def test_areas_exp_HU47(self):
 
