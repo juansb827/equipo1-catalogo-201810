@@ -113,6 +113,7 @@ class FunctionalTest(TestCase):
 
     def test_detalle_desarrollos(self):
         # Navega hasta la pagina principal
+        # Desarrollos
         # TODO: ir a la pagina principal y listar desarrollo y dar click en buscar
 
         self.browser = webdriver.Chrome(executable_path=r"chromedriver.exe")
