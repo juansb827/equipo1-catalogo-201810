@@ -123,7 +123,7 @@ class FunctionalTest(TestCase):
         try:
             element = WebDriverWait(self.browser, 10).until(
                 EC.presence_of_element_located((By.ID, "card")
-                                               )
+                )
             )
             buscar = self.browser.find_element_by_id('btnBuscar')
             buscar.send_keys("\n")
