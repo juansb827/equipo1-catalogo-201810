@@ -197,3 +197,11 @@ class Member(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Taxonomia(models.Model):
+    name = models.CharField(max_length=150)
+    description = models.CharField(max_length=500, default='')
+
+    def __unicode__(self):
+        return self.name
