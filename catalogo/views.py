@@ -587,7 +587,7 @@ def get_item(request):
 # TODO: unir los metodos en uno solo
 def getMembers(request):
     members = models.Member.objects.all()
-    context = {'members': members}
+    context = {'members': members, 'CLOUDINARY_NAME': CLOUDINARY_NAME}
     return render(request, 'equipo.html', context)
 
 
@@ -614,7 +614,14 @@ def strategies(request):
 
 def integrante_view(request):
     # testing commit againa again again!
-    return render(request, 'integrante.html', {'member_id': 5})
+    id = request.GET['id']
+    print "iintegrante id", id
+    member = models.Member.objects.get(pk=id)
+    return render(request, 'integrante.html', {'member': member, 'CLOUDINARY_NAME': CLOUDINARY_NAME})
+
+
+
+
 
 
 def logout_view(request):

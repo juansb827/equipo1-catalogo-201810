@@ -1,3 +1,5 @@
+window.URL_BASE = window.location.origin;
+
 utils = {
     readURL: function (input, cb) {
 
@@ -88,6 +90,10 @@ utils.addUrlParam = function (search, key, val) {
 utils.getImageUrl = function (cloudinaryName, imageId) {
     return 'https://res.cloudinary.com/' + cloudinaryName + '/' + imageId;
 };
+
+utils.getItemLink = function (item_code, type) {
+            return URL_BASE + '/catalogo/verItem/?type=' + type + '&code=' + item_code + '&ver=2';
+}
 
 
 window.utils = utils;

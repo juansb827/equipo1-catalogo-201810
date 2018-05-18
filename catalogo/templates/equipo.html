@@ -2,17 +2,23 @@
 
 {% block content %}
     {% load static %}
+
     <link rel="stylesheet" type="text/css" href="{% static '/css/equipo.css' %}">
+    <script>
+        function getImage(s){
+            console.log(s);
+        }
+    </script>
     <div class="container">
         <div class="row">
             {% for currentMember in members %}
                 <div class="team col-lg-4">
                     <div class="desc">
                         <div class="image-area col-lg-4 col-md-4 col-sm-12 ">
-                            <img src="https://byuc.files.wordpress.com/2012/07/avat-2.jpg" class="img-fluid">
+                            <img src="https://res.cloudinary.com/{{ CLOUDINARY_NAME }}/{{ currentMember.image }} " class="img-fluid">
                         </div>
                         <div class="col-lg-8 col-md-8 col-sm-12">
-                            <h1 id="name">{{ currentMember.name }}</h1>
+                            <h1 id="name"><a href="{% url 'catalogo:detalleIntegrante' %}?id={{ currentMember.pk }}">{{ currentMember.name }}</a></h1>
                             <p id="description">
                                 {{ currentMember.profile }}
                             </p>

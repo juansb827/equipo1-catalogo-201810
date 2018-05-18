@@ -173,7 +173,7 @@ class Item(models.Model):
 
 
     def __unicode__(self):
-        return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]
+        return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1] +" v"+str(self.version)
 
 
 class ExperienceArea(models.Model):
@@ -185,11 +185,13 @@ class ExperienceArea(models.Model):
 
 class Member(models.Model):
     name = models.CharField(max_length=150)
+    image = CloudinaryField('image', null=True)
+    description = models.CharField(max_length=500, default='')
     email = models.EmailField()
     profile = models.CharField(max_length=100 | 0)
-    tools = models.ManyToManyField(Tool)
+    tools = models.ManyToManyField(Item,   limit_choices_to={'type': TOOL, 'version': 2})
     experience_areas = models.ManyToManyField(ExperienceArea)
-    projects = models.ManyToManyField(Development)
+    projects = models.ManyToManyField(Item, related_name='member_involved', limit_choices_to={'type': DEVELOPMENT, 'version': 2})
     phone_extension = models.IntegerField(default=0)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 

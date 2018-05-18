@@ -3,18 +3,58 @@
 {% block content %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/equipo.css' %}">
+    <script type="text/javascript" src='{% static '/js/utils.js' %}'></script>
+    <script>
+        window.memberInfo = {
+         id: {{ member.pk }},
+         avatarUrl:  window.utils.getImageUrl('{{ CLOUDINARY_NAME }}', '{{ member.image.public_id }}'), //'https://byuc.files.wordpress.com/2012/07/avat-2.jpg',
+         description: '{{ member.description }}',
+         name: '{{ member.name }}',
+         email: '{{ member.email }}',
+         profile: '{{ member.profile }}',
+         phone_extension: '{{ member.phone_extension }}',
+         tools: [],
+         areas: [],
+         projects: []
+        }
+
+        console.log('mem', '{{ member.image.public_id }}');
+
+         {% for tool in member.tools.all %}
+             window.memberInfo.tools.push({
+                name: '{{tool.name }}',
+                type: '{{ tool.type }}',
+                item_code: '{{ tool.item_code }}',
+                url: window.utils.getItemLink('{{ tool.item_code }}', '{{ tool.type }}' )
+
+             });
+        {% endfor %}
+
+        {% for area in member.experience_areas.all %}
+             window.memberInfo.areas.push(                 '{{  area.name }}' );
+        {% endfor %}
+
+        {% for project in member.projects.all %}
+             window.memberInfo.projects.push(    {
+                 name: '{{  project.name }}',
+                 description: '{{  project.description }}'
+             }   );
+        {% endfor %}
 
 
+
+
+    </script>
 
     {% verbatim  %}
 
     <div id="vue-app">
-        <div class="about" id="about" >
+        <div class="about" id="about" style="margin-top: 10em">
             <div class="container">
                 <div class="row">
                     <div class="image-area col-lg-4 col-md-4 col-sm-12 ">
-                        <img src="https://byuc.files.wordpress.com/2012/07/avat-2.jpg" class="img-fluid">
-                        <span >Miembro de conectate</span>
+                        <img v-bind:src="currentMember.avatarUrl" class="img-fluid">
+                        <span >{{ currentMember.profile }}</span>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-12 desc">
 
@@ -38,7 +78,7 @@
                         <h4>Contacto</h4>
                         <ul >
                             <li>Email: <span id="email">{{ currentMember.email }}</span></li>
-                            <li>Extension: <span id="extension">{{ currentMember.extension }}</span></li>
+                            <li>Extension: <span id="extension">{{ currentMember.phone_extension }}</span></li>
                         </ul>
 
                     </div>
@@ -50,4 +90,5 @@
     {% endverbatim  %}
 
     <script   type="text/javascript" src="{% static '/js/team.js' %}"></script>
+
 {% endblock  %}
