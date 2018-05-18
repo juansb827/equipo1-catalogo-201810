@@ -1,17 +1,21 @@
 var URL_BASE = window.location.origin;
 
-var tipos = [/* Se ponene en un array para que sean mostrados en el mismo orden siempre*/
-    {key: "-1", val: "Todas las categorias"},
-    {key: "1", val: "Tecnologia"},
-    {key: "2", val: "Herramienta"},
-    {key: "3", val: "Tutorial"},
-    {key: "4", val: "Ejemplo"},
-    {key: "5", val: "Estrategia Pedagógica"},
-    {key: "6", val: "Desarrollo"}
 
-];
 
-var estados = ["Borrador", "En Revisión", "Aprobado"];
+var tipos = [ /* Se ponene en un array para que sean mostrados en el mismo orden siempre*/
+    { key: "-1" , val :"Todas las categorias"},
+    { key: "1" , val :"Tecnologia"},
+    { key: "2" , val :"Herramienta"},
+    { key: "3" , val :"Tutorial"},
+    { key: "4" , val :"Ejemplo"},
+    { key: "5" , val :"Estrategia Pedagógica"},
+    { key: "6" , val :"Desarrollo"},
+    { key: "7"  ,  val: "Disciplina"}
+
+]
+
+var estados = ["Borrador","En Revisión","Aprobado"]
+
 var app = new Vue({
     el: '#vue-app',
 
@@ -98,7 +102,11 @@ var app = new Vue({
             window.history.pushState('catalogo/', 'Title', '/catalogo/?type=' + searchParams.type + '&busqueda=' + searchParams.name);
 
 
+
+            self.itemsInfo = {};
+
             axios.get(URL_BASE + "/catalogo/searchItems", {
+
                 params: searchParams
             }).then(function (response) {
                 this.loading = false;

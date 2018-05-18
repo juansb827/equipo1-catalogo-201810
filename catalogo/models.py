@@ -111,13 +111,22 @@ class Development(models.Model):
         return self.name
 
 
+class Discipline(models.Model):
+    name = models.CharField(max_length=150)
+    tools = models.ManyToManyField(Tool)
+
+    def __unicode__(self):
+        return self.name
+
+
 ITEM_TYPE_CHOICES = (
     ('1', 'TECHNOLOGY'),
     ('2', 'TOOL'),
     ('3', 'TUTORIAL'),
     ('4', 'EXAMPLE'),
     ('5', 'STRATEGY'),
-    ('6', 'DEVELOPMENT')
+    ('6', 'DEVELOPMENT'),
+    ('7', 'DISCIPLINE')
 )
 
 TECHNOLOGY = "1"
@@ -126,6 +135,7 @@ TUTORIAL = "3"
 EXAMPLE = "4"
 STRATEGY = "5"
 DEVELOPMENT = "6"
+DISCIPLINE = "7"
 
 ITEM_TYPE_STATUS = (
     ('1', 'IN REVIEW'),
@@ -154,11 +164,13 @@ class Item(models.Model):
     example = models.ForeignKey(Example, null=True, blank=True)
     strategy = models.ForeignKey(Strategy, null=True, blank=True)
     development = models.ForeignKey(Development, null=True, blank=True)
+    discipline = models.ForeignKey(Discipline, null=True, blank=True)
     item_code = models.IntegerField(default=-1)  # Relaciona diferentes versiones de un mismo item
     version = models.IntegerField(default=0)  # Version del item
     status = models.CharField(max_length=1, choices=ITEM_TYPE_STATUS)
     images = models.ManyToManyField(Image)
     author = models.ForeignKey(User, null=True, blank=True)
+
 
     def __unicode__(self):
         return self.name + "   " + ITEM_TYPE_CHOICES[int(self.type) - 1][1]

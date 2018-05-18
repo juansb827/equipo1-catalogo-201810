@@ -172,6 +172,11 @@ def search_item(request):
 
         developments = query.filter(type='6').filter(Q(name__icontains=name))
 
+
+        disciplines = query.filter(type='7').filter(Q(name__icontains=name))
+
+
+
         if type == '1':
             query = tech
         elif type == '2':
@@ -184,8 +189,10 @@ def search_item(request):
             query = strategies
         elif type == '6':
             query = developments
+        elif type == '7':
+            query = disciplines
         else:
-            query = tech.union(tools).union(tutoriales).union(examples).union(strategies).union(developments)
+            query = tech.union(tools).union(tutoriales).union(examples).union(strategies).union(developments).union(disciplines)
 
     else:
         # No escribio un criterio de busqueda pero selecciono un tipo de item
@@ -252,8 +259,7 @@ def add_estrategia(request):
     if type == models.TECHNOLOGY:  # TODO: agregar cosas especificas de cada tipo de item
         ob = models.Technology(
             name=name,
-            description=':V',
-            url=''
+            description = ':V'
         )
         ob.save()
         item.technology = ob
@@ -347,6 +353,31 @@ def add_estrategia(request):
 
         ob.save()
         item.development = ob
+
+    elif type == models.DISCIPLINE:
+        devPk = data['subclassId']
+        print "disciplinePk", devPk
+
+        if devPk == '':
+            ob = models.Discipline(
+                name=name
+            )
+            ob.save()
+        else:
+            ob = models.Discipline.objects.get(pk=devPk)
+            ob.tools.clear()
+            ob.save()
+
+        for _tool in data['tools']:  # the list of devTechs PK's
+            print "tool", _tool
+            ob.tools.add(_tool)
+
+        ob.save()
+        item.discipline = ob
+
+    for tech in data['devTechs']:  # the list of devTechs PK's
+        print "tech", tech
+        ob.dev_technologies.add(tech)
 
     item.save()
 
@@ -465,6 +496,10 @@ def aprobarRevision(request):
     return JsonResponse({'mensaje': 'ok'})
 
 
+def crear_disciplina_view(request):
+    return createItemView(request, models.DISCIPLINE)
+
+
 def crear_tutorial_view(request):
     return createItemView(request, models.TUTORIAL)
 
@@ -541,6 +576,9 @@ def get_item(request):
         res['subItem'] = serializers.serialize("json", subItem)
     elif (type == models.STRATEGY):
         subItem = models.Strategy.objects.filter(pk=item[0].strategy.pk)
+        res['subItem'] = serializers.serialize("json", subItem)
+    elif (type == models.DISCIPLINE):
+        subItem = models.Discipline.objects.filter( pk = item[0].discipline.pk )
         res['subItem'] = serializers.serialize("json", subItem)
 
     return HttpResponse(json.dumps(res))

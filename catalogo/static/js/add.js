@@ -2,12 +2,14 @@ var URL_BASE = window.location.origin;
 
 //http://localhost:8000/catalogo/verItem/?type=6&code=55&ver=0
 
+
 TECHNOLOGY = "1";
 TOOL = "2";
 TUTORIAL = "3";
 EXAMPLE = "4";
 STRATEGY = "5";
 DEVELOPMENT = "6";
+DISCIPLINE = "7";
 
 var typeName = {
     "-1": "Todas las categorias",
@@ -16,8 +18,11 @@ var typeName = {
     "3": "Tutorial",
     "4": "Ejemplo",
     "5": "Estrategia Pedagógica",
-    "6": "Desarrollo"
+    "6": "Desarrollo",
+    "7": "Disciplina"
 };
+
+
 
 
 Vue.use(window.vuelidate.default);
@@ -103,7 +108,8 @@ var app = new Vue({
             TUTORIAL: TUTORIAL,
             EXAMPLE: EXAMPLE,
             STRATEGY: STRATEGY,
-            DEVELOPMENT: DEVELOPMENT
+            DEVELOPMENT: DEVELOPMENT,
+            DISCIPLINE: DISCIPLINE
         },
         typeName: typeName,
 
@@ -134,7 +140,9 @@ var app = new Vue({
             tool: '',
             exampleUrl: '',
             //TUTORIAL
-            tutorialUrl: ''
+            tutorialUrl: '',
+            //DISCIPLINA
+            tools: []
 
 
         },
@@ -289,6 +297,7 @@ var app = new Vue({
     validations: function () {
 
 
+
         var val = {
             item: {
                 name: {
@@ -298,9 +307,7 @@ var app = new Vue({
                 description: {
                     required: validators.required,
                     maxLength: validators.maxLength(300)
-
-                }
-                ,
+                },
                 images: {
                     required: validators.required,
                     $each: {
@@ -364,6 +371,11 @@ var app = new Vue({
                 };
 
                 break;
+            case DISCIPLINE:
+                val.item.tools = { required: validators.required }
+                break;
+
+
 
 
         }
@@ -499,6 +511,10 @@ function cargarInfo(self, res, data) {
             self.item.tool = subItem.fields.tool;
             self.item.tutorialUrl = subItem.fields.url;
             break;
+        case DISCIPLINE:
+            self.item.tools = subItem.fields.tools;
+        break;
+
     }
 
 
@@ -560,7 +576,10 @@ function loadLists(self) {
                         fields.item = entry.pk;
                         self.$set(self.tools, fields.tool, fields);// devTechs[] = fields;
                     });
+
                 });
+
+
 
             axios.get(URL_BASE + "/catalogo/strategies/")
                 .then(function (res) {
@@ -588,6 +607,18 @@ function loadLists(self) {
             break;
         case STRATEGY:
             self.initializing = false;
+            break;
+        case DISCIPLINE:
+            self.initializing = false;
+            axios.get(URL_BASE + "/catalogo/tools/")
+                .then(function (res) {
+                    res.data.map(function (entry) {
+                        var fields = entry.fields;
+                        fields.item= entry.pk;
+                        self.$set(self.tools, fields.tool, fields);// devTechs[] = fields;
+                    });
+                    console.log("Tools", self.tools);
+            })
             break;
 
 
