@@ -235,6 +235,23 @@
 
                 </div>
 
+                <div v-if="item.type == types.DISCIPLINE">
+                    <h2>Herramientas usadas en la disciplina:</h2>
+
+                        <ul>
+                            <li v-for="(tool, key) in tools">
+                                <label class="" >
+                                        <input type="checkbox" :value="key" v-model="item.tools"/>
+                                        <span class="custom-control-description">{{ tool.name }}</span>
+                                </label>
+                            </li>
+                        </ul>
+                        <div class="invalid-feedback" style="display: block" v-if="$v.item.tools.$error">
+                                <p class="" v-if="!$v.item.tools.required">Debe seleccionar almenos un elemento.</p>
+                        </div>
+
+                </div>
+
 
 
             </div>
@@ -279,6 +296,19 @@
             <h1 id="name1">{{ item.name || 'Sin titulo'}}</h1>
 
             <p id="description1">{{ item.description || 'Sin descripcion'}}</p>
+
+              <!-- Disciplina -->
+            <div  v-if="item.type == types.DISCIPLINE">
+                <div class="tech-imgs" v-if="item.type == types.DISCIPLINE">
+                    <h4 style="width: 100%">Herramientas usadas en la disciplina:</h4>
+                    <ul>
+                        <li v-for="key in item.tools" class="ca">
+                            <a v-bind:href="getItemLink(tools[key].item_code, types.TOOL)" v-if="tools[key]">{{ tools[key].name }}</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div><!-- fin Disciplina -->
 
             <!-- Desarrollo -->
             <div  v-if="item.type == types.DEVELOPMENT">

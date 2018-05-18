@@ -7,7 +7,8 @@ var tipos = [ /* Se ponene en un array para que sean mostrados en el mismo orden
     { key: "3" , val :"Tutorial"},
     { key: "4" , val :"Ejemplo"},
     { key: "5" , val :"Estrategia Pedagógica"},
-    { key: "6" , val :"Desarrollo"}
+    { key: "6" , val :"Desarrollo"},
+    { key: "7"  ,  val: "Disciplina"}
 
 ]
 
@@ -101,6 +102,8 @@ var app = new Vue({
 
 
             console.log("searchOarams",searchParams);
+
+            self.itemsInfo = {};
 
             axios.get(URL_BASE + "/catalogo/searchItems",{
                 params: searchParams
