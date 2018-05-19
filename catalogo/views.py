@@ -138,7 +138,7 @@ def add_user_view(request):
 
 @csrf_exempt
 def search_item(request):
-    name = request.GET['name'];
+    name = request.GET['name']
     type = request.GET['type']
     # type='1'
 
@@ -640,4 +640,13 @@ def taxonomiasMain(request):
     return render(request, 'taxonomiasmain.html')
 
 def crear_taxonomia_view(request):
+    print "request.method = ", request.method
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        name = data['name']
+        description = data['description']
+
+        print data, '  ', name, ' ', description
+
     return render(request, 'addTaxonomia.html')

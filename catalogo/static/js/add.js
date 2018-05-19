@@ -289,6 +289,29 @@ var app = new Vue({
         },
         getItemLink: function (item_code, type) {
             return URL_BASE + '/catalogo/verItem/?type=' + type + '&code=' + item_code + '&ver=2';
+        },
+        addTaxonomy: function(){
+
+            var self = this;
+            var data = {
+                'name': self.name,
+                'description': self.description
+            };
+            this.loading = true;
+
+            axios.defaults.xsrfCookieName = 'csrftoken';
+            axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+            axios.post(URL_BASE + "/catalogo/crearTaxonomia/", data)
+                .then(function (res) {
+                    //window.location.href = URL_BASE + '/catalogo/?type=' + self.item.type + '&busqueda=' + self.item.name;
+                })
+                .catch(function (err) {
+                })
+                .finally(function () {
+                    this.loading = false;
+                })
+
         }
 
     },
