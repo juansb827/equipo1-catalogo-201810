@@ -632,3 +632,6 @@ def logout_view(request):
 def carac_herramienta_view(request):
     # testing commit againa again again!
     return render(request, 'carac_herramienta.html', {})
+
+def taxonomiasMain(request):
+    return render(request, 'taxonomiasmain.html')

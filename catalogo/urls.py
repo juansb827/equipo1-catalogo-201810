@@ -36,6 +36,8 @@ urlpatterns = [
     url(r'^aprobarRevision/$', views.aprobarRevision, name='aprobarRevision'),
     #  url(r'^verItem/([0-9]{1})/([0-9]+)/([0-9]{1})/$', views.mostrar_item, name='viewItem'),
     url(r'^item/$', views.get_item, name='getItem'),
-    url(r'^caracHerramienta/$', views.crear_herramienta_view, name='caracHerramienta')
+    url(r'^caracHerramienta/$', views.crear_herramienta_view, name='caracHerramienta'),
+    url(r'^taxonomiasMain/$', views.taxonomiasMain, name='taxonomiasMain')
+
 
 ]
