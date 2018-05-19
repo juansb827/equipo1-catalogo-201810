@@ -111,7 +111,8 @@ var app = new Vue({
             EXAMPLE: EXAMPLE,
             STRATEGY: STRATEGY,
             DEVELOPMENT: DEVELOPMENT,
-            DISCIPLINE: DISCIPLINE
+            DISCIPLINE: DISCIPLINE,
+            TAXONOMY: TAXONOMY
         },
         typeName: typeName,
 
@@ -376,7 +377,9 @@ var app = new Vue({
             case DISCIPLINE:
                 val.item.tools = { required: validators.required }
                 break;
-
+            case TAXONOMY:
+                val.item.tools = { required: validators.required }
+                break;
 
 
 

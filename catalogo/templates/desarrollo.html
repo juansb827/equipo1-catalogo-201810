@@ -4,7 +4,7 @@
     <script>
         window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
         window.itemInfo = {
-            id: {{  itemId }}+'' ,
+            id: {{  itemId }}+'',
             type: {{ itemType }}+'',
             version: {{ itemVer }}+''
         }
@@ -44,7 +44,9 @@
                     <textarea class="form-control" rows="5" id="description"
                               v-bind:class="getClass('description')"
                               @input="$v.item.description.$touch()" v-model.trim="item.description"></textarea>
-                    <div style="text-align: right">{{ item.description.length }}/{{ $v.item.description.$params.maxLength.max }}</div>
+                    <div style="text-align: right">{{ item.description.length }}/{{
+                        $v.item.description.$params.maxLength.max }}
+                    </div>
                     <div class="invalid-feedback">
                         <p class="" v-if="!$v.item.description.required">La descripción es obligatoria.</p>
                         <p class="" v-if="!$v.item.description.maxLength">La descripción no puede tener mas de {{
@@ -53,7 +55,7 @@
                 </div>
                 <!-- DESARROLLO -->
                 <div v-if="item.type == types.DEVELOPMENT ">
-                    <div class="tech" >
+                    <div class="tech">
                         <h2>Desarrollado con:</h2>
                         <div class="tech-checks">
 
@@ -75,87 +77,107 @@
                     <ul>
                         <li>Tecnologia:
                             <div class="form-group">
-                                    <select required class="form-control" id="technology" name="technology" v-model="item.technology"
-                                            v-bind:class="getClass('technology')" @input="$v.item.technology.$touch()">
-                                        <option v-bind:value="''">Seleccione una tecnologia</option>
-                                        <option v-for="(tech, key) in technologies"v-bind:value="key">{{ tech.name }}</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <p class="" v-if="!$v.item.technology.required">Debe seleccionar una tecnologia.</p>
-                                    </div>
+                                <select required class="form-control" id="technology" name="technology"
+                                        v-model="item.technology"
+                                        v-bind:class="getClass('technology')" @input="$v.item.technology.$touch()">
+                                    <option v-bind:value="''">Seleccione una tecnologia</option>
+                                    <option v-for="(tech, key) in technologies" v-bind:value="key">{{ tech.name }}
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.technology.required">Debe seleccionar una tecnologia.</p>
+                                </div>
                             </div>
                         </li>
                         <li>Tipo de Licencia:
                             <div class="form-group">
-                                    <select required class="form-control" id="licenseType" name="licenseType" v-model="item.licenseType"
-                                            v-bind:class="getClass('licenseType')" @input="$v.item.licenseType.$touch()">
-                                        <option v-bind:value="''">Seleccione una herramienta</option>
-                                        <option v-for="license in licenseTypes"v-bind:value="license">{{ license }}</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <p class="" v-if="!$v.item.licenseType.required">Debe seleccionar el tipo de licencia.</p>
-                                    </div>
+                                <select required class="form-control" id="licenseType" name="licenseType"
+                                        v-model="item.licenseType"
+                                        v-bind:class="getClass('licenseType')" @input="$v.item.licenseType.$touch()">
+                                    <option v-bind:value="''">Seleccione una herramienta</option>
+                                    <option v-for="license in licenseTypes" v-bind:value="license">{{ license }}
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.licenseType.required">Debe seleccionar el tipo de
+                                        licencia.</p>
+                                </div>
                             </div>
                         </li>
                         <li>Restricciones de uso
                             <textarea class="form-control" rows="5" id="useRestrictions"
                                       v-bind:class="getClass('useRestrictions')"
-                                      @input="$v.item.useRestrictions.$touch()" v-model.trim="item.useRestrictions"></textarea>
-                            <div style="text-align: right">{{ item.useRestrictions.length }}/{{ $v.item.useRestrictions.$params.maxLength.max }}</div>
+                                      @input="$v.item.useRestrictions.$touch()"
+                                      v-model.trim="item.useRestrictions"></textarea>
+                            <div style="text-align: right">{{ item.useRestrictions.length }}/{{
+                                $v.item.useRestrictions.$params.maxLength.max }}
+                            </div>
                             <div class="invalid-feedback">
-                                <p class="" v-if="!$v.item.useRestrictions.required">Las restricciones de uso son obligatorias.</p>
-                                <p class="" v-if="!$v.item.useRestrictions.maxLength">Las restricciones de uso no pueden tener mas de {{
+                                <p class="" v-if="!$v.item.useRestrictions.required">Las restricciones de uso son
+                                    obligatorias.</p>
+                                <p class="" v-if="!$v.item.useRestrictions.maxLength">Las restricciones de uso no pueden
+                                    tener mas de {{
                                     $v.item.useRestrictions.$params.maxLength.max }} caracteres.</p>
                             </div>
                         </li>
                         <li>URL sitio
-                            <input type="text" id="toolUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
-                           v-bind:class="getClass('toolUrl')"
-                           name="username" v-model.trim="item.toolUrl" @input="$v.item.toolUrl.$touch()">
-                                <div class="invalid-feedback">
-                                    <p class="" v-if="!$v.item.toolUrl.required">La URL es obligatoria.</p>
-                                    <p class="" v-if="!$v.item.toolUrl.maxLength">La URL no puede tener mas de {{
-                                        $v.item.toolUrl.$params.maxLength.max }} caracteres.</p>
-                                    <p class="" v-if="!$v.item.toolUrl.url">Debe ingresar una URL valida</p>
-                                </div>
+                            <input type="text" id="toolUrl" class="form-control form-control-lg " placeholder=""
+                                   maxlength="300"
+                                   v-bind:class="getClass('toolUrl')"
+                                   name="username" v-model.trim="item.toolUrl" @input="$v.item.toolUrl.$touch()">
+                            <div class="invalid-feedback">
+                                <p class="" v-if="!$v.item.toolUrl.required">La URL es obligatoria.</p>
+                                <p class="" v-if="!$v.item.toolUrl.maxLength">La URL no puede tener mas de {{
+                                    $v.item.toolUrl.$params.maxLength.max }} caracteres.</p>
+                                <p class="" v-if="!$v.item.toolUrl.url">Debe ingresar una URL valida</p>
+                            </div>
                         </li>
                         <li>URL descarga
-                            <input type="text" id="downloadUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
-                           v-bind:class="getClass('toolDownloadUrl')"
-                           name="username" v-model.trim="item.toolDownloadUrl" @input="$v.item.toolDownloadUrl.$touch()">
+                            <input type="text" id="downloadUrl" class="form-control form-control-lg " placeholder=""
+                                   maxlength="300"
+                                   v-bind:class="getClass('toolDownloadUrl')"
+                                   name="username" v-model.trim="item.toolDownloadUrl"
+                                   @input="$v.item.toolDownloadUrl.$touch()">
                             <div class="invalid-feedback">
-                                    <p class="" v-if="!$v.item.toolDownloadUrl.required">La URL es obligatoria.</p>
-                                    <p class="" v-if="!$v.item.toolDownloadUrl.maxLength">La URL no puede tener mas de {{
-                                        $v.item.toolDownloadUrl.$params.maxLength.max }} caracteres.</p>
-                                    <p class="" v-if="!$v.item.toolDownloadUrl.url">Debe ingresar una URL valida</p>
-                                </div>
+                                <p class="" v-if="!$v.item.toolDownloadUrl.required">La URL es obligatoria.</p>
+                                <p class="" v-if="!$v.item.toolDownloadUrl.maxLength">La URL no puede tener mas de {{
+                                    $v.item.toolDownloadUrl.$params.maxLength.max }} caracteres.</p>
+                                <p class="" v-if="!$v.item.toolDownloadUrl.url">Debe ingresar una URL valida</p>
+                            </div>
                         </li>
                         <li>Información técnica
                             <ul>
                                 <li>Sistemas operativos:
 
-                                    <label class="" v-for="(os,key) in operativeSystems" style="margin-left: 1em" >
-                                        <input type="checkbox" :value="key"  v-model="item.operativeSystems"  />
+                                    <label class="" v-for="(os,key) in operativeSystems" style="margin-left: 1em">
+                                        <input type="checkbox" :value="key" v-model="item.operativeSystems"/>
                                         <span class="custom-control-description">{{ os.name }}</span>
                                     </label>
-                                    <div class="invalid-feedback" style="display: block" v-if="$v.item.operativeSystems.$error">
-                                        <p class="" v-if="!$v.item.operativeSystems.required">Debe seleccionar almenos un Sistema operativo.</p>
+                                    <div class="invalid-feedback" style="display: block"
+                                         v-if="$v.item.operativeSystems.$error">
+                                        <p class="" v-if="!$v.item.operativeSystems.required">Debe seleccionar almenos
+                                            un Sistema operativo.</p>
                                     </div>
 
                                 </li>
                                 <li>Integración con Sistema de Gestión de Aprendizaje (LMS) ? :
                                     <label class="" style="margin-left: 1em" value="">
-                                        <input type="checkbox"  v-model="item.integration"/>
+                                        <input type="checkbox" v-model="item.integration"/>
                                     </label>
                                 </li>
                                 <li>Descripción Funcional
                                     <textarea class="form-control" rows="5" id="functionalDescription"
-                                      v-bind:class="getClass('functionalDescription')"
-                                      @input="$v.item.functionalDescription.$touch()" v-model.trim="item.functionalDescription"></textarea>
-                                    <div style="text-align: right">{{ item.functionalDescription.length }}/{{ $v.item.functionalDescription.$params.maxLength.max }}</div>
+                                              v-bind:class="getClass('functionalDescription')"
+                                              @input="$v.item.functionalDescription.$touch()"
+                                              v-model.trim="item.functionalDescription"></textarea>
+                                    <div style="text-align: right">{{ item.functionalDescription.length }}/{{
+                                        $v.item.functionalDescription.$params.maxLength.max }}
+                                    </div>
                                     <div class="invalid-feedback">
-                                        <p class="" v-if="!$v.item.functionalDescription.required">La descripción funcional es obligatoria.</p>
-                                        <p class="" v-if="!$v.item.functionalDescription.maxLength">La descripción funcional no puede tener mas de {{
+                                        <p class="" v-if="!$v.item.functionalDescription.required">La descripción
+                                            funcional es obligatoria.</p>
+                                        <p class="" v-if="!$v.item.functionalDescription.maxLength">La descripción
+                                            funcional no puede tener mas de {{
                                             $v.item.description.$params.maxLength.max }} caracteres.</p>
                                     </div>
                                 </li>
@@ -165,127 +187,137 @@
                     </ul>
                 </div><!-- Fin info herramienta -->
                 <!-- Ejemplo -->
-                 <div v-if="item.type == types.EXAMPLE">
+                <div v-if="item.type == types.EXAMPLE">
                     <h2>Información del Ejemplo:</h2>
-                     <ul>
-                         <li>Estrategia Pedagógica:
-                             <div class="form-group">
-                                    <select required class="form-control" id="strategy" name="strategy" v-model="item.strategy"
-                                            v-bind:class="getClass('strategy')" @input="$v.item.strategy.$touch()">
-                                        <option v-bind:value="''">Seleccione una estrategia</option> <!-- key = id de la estrategia -->
-                                        <option v-for="(item, key) in strategies" v-bind:value="key">{{ item.name }}</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <p class="" v-if="!$v.item.strategy.required">Debe seleccionar una estrategia.</p>
-                                    </div>
-                            </div>
-                         </li>
-                         <li>Herramienta:
-                             <div class="form-group">
-                                    <select required class="form-control" id="tool" name="tool" v-model="item.tool"
-                                            v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
-                                        <option v-bind:value="''">Seleccione una herramienta</option>
-                                        <option v-for="(item, key) in tools"v-bind:value="key">{{ item.name }}</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
-                                    </div>
-                            </div>
-                         </li>
-                         <li>URL del ejemplo:
-                            <input type="text" id="exampleUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
-                           v-bind:class="getClass('exampleUrl')"
-                           name="exampleUrl" v-model.trim="item.exampleUrl" @input="$v.item.exampleUrl.$touch()">
+                    <ul>
+                        <li>Estrategia Pedagógica:
+                            <div class="form-group">
+                                <select required class="form-control" id="strategy" name="strategy"
+                                        v-model="item.strategy"
+                                        v-bind:class="getClass('strategy')" @input="$v.item.strategy.$touch()">
+                                    <option v-bind:value="''">Seleccione una estrategia</option>
+                                    <!-- key = id de la estrategia -->
+                                    <option v-for="(item, key) in strategies" v-bind:value="key">{{ item.name }}
+                                    </option>
+                                </select>
                                 <div class="invalid-feedback">
-                                    <p class="" v-if="!$v.item.exampleUrl.required">La URL es obligatoria.</p>
-                                    <p class="" v-if="!$v.item.exampleUrl.maxLength">La URL no puede tener mas de {{
-                                        $v.item.exampleUrl.$params.maxLength.max }} caracteres.</p>
-                                    <p class="" v-if="!$v.item.exampleUrl.url">Debe ingresar una URL valida</p>
+                                    <p class="" v-if="!$v.item.strategy.required">Debe seleccionar una estrategia.</p>
                                 </div>
+                            </div>
                         </li>
-                     </ul>
-                 </div><!-- Fin Ejemplo -->
+                        <li>Herramienta:
+                            <div class="form-group">
+                                <select required class="form-control" id="tool" name="tool" v-model="item.tool"
+                                        v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
+                                    <option v-bind:value="''">Seleccione una herramienta</option>
+                                    <option v-for="(item, key) in tools" v-bind:value="key">{{ item.name }}</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>URL del ejemplo:
+                            <input type="text" id="exampleUrl" class="form-control form-control-lg " placeholder=""
+                                   maxlength="300"
+                                   v-bind:class="getClass('exampleUrl')"
+                                   name="exampleUrl" v-model.trim="item.exampleUrl"
+                                   @input="$v.item.exampleUrl.$touch()">
+                            <div class="invalid-feedback">
+                                <p class="" v-if="!$v.item.exampleUrl.required">La URL es obligatoria.</p>
+                                <p class="" v-if="!$v.item.exampleUrl.maxLength">La URL no puede tener mas de {{
+                                    $v.item.exampleUrl.$params.maxLength.max }} caracteres.</p>
+                                <p class="" v-if="!$v.item.exampleUrl.url">Debe ingresar una URL valida</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- Fin Ejemplo -->
 
                 <div v-if="item.type == types.TUTORIAL">
                     <h2>Información del Tutorial:</h2>
                     <ul>
-                         <li>Herramienta:
-                             <div class="form-group">
-                                    <select required class="form-control" id="tool" name="tool" v-model="item.tool"
-                                            v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
-                                        <option v-bind:value="''">Seleccione una herramienta</option>
-                                        <option v-for="(tool, key) in tools"v-bind:value="key">{{ tool.name }}</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
-                                    </div>
-                            </div>
-                         </li>
-                         <li>URL del tutorial:
-                            <input type="text" id="tutorialUrl" class="form-control form-control-lg " placeholder="" maxlength="300"
-                           v-bind:class="getClass('tutorialUrl')"
-                           name="tutorialUrl" v-model.trim="item.tutorialUrl" @input="$v.item.tutorialUrl.$touch()">
+                        <li>Herramienta:
+                            <div class="form-group">
+                                <select required class="form-control" id="tool" name="tool" v-model="item.tool"
+                                        v-bind:class="getClass('tool')" @input="$v.item.tool.$touch()">
+                                    <option v-bind:value="''">Seleccione una herramienta</option>
+                                    <option v-for="(tool, key) in tools" v-bind:value="key">{{ tool.name }}</option>
+                                </select>
                                 <div class="invalid-feedback">
-                                    <p class="" v-if="!$v.item.tutorialUrl.required">La URL es obligatoria.</p>
-                                    <p class="" v-if="!$v.item.tutorialUrl.maxLength">La URL no puede tener mas de {{
-                                        $v.item.tutorialUrl.$params.maxLength.max }} caracteres.</p>
-                                    <p class="" v-if="!$v.item.tutorialUrl.url">Debe ingresar una URL valida</p>
+                                    <p class="" v-if="!$v.item.tool.required">Debe seleccionar una herramienta.</p>
                                 </div>
+                            </div>
                         </li>
-                     </ul>
+                        <li>URL del tutorial:
+                            <input type="text" id="tutorialUrl" class="form-control form-control-lg " placeholder=""
+                                   maxlength="300"
+                                   v-bind:class="getClass('tutorialUrl')"
+                                   name="tutorialUrl" v-model.trim="item.tutorialUrl"
+                                   @input="$v.item.tutorialUrl.$touch()">
+                            <div class="invalid-feedback">
+                                <p class="" v-if="!$v.item.tutorialUrl.required">La URL es obligatoria.</p>
+                                <p class="" v-if="!$v.item.tutorialUrl.maxLength">La URL no puede tener mas de {{
+                                    $v.item.tutorialUrl.$params.maxLength.max }} caracteres.</p>
+                                <p class="" v-if="!$v.item.tutorialUrl.url">Debe ingresar una URL valida</p>
+                            </div>
+                        </li>
+                    </ul>
 
                 </div>
 
                 <div v-if="item.type == types.DISCIPLINE">
                     <h2>Herramientas usadas en la disciplina:</h2>
 
-                        <ul>
-                            <li v-for="(tool, key) in tools">
-                                <label class="" >
-                                        <input type="checkbox" :value="key" v-model="item.tools"/>
-                                        <span class="custom-control-description">{{ tool.name }}</span>
-                                </label>
-                            </li>
-                        </ul>
-                        <div class="invalid-feedback" style="display: block" v-if="$v.item.tools.$error">
-                                <p class="" v-if="!$v.item.tools.required">Debe seleccionar almenos un elemento.</p>
-                        </div>
+                    <ul>
+                        <li v-for="(tool, key) in tools">
+                            <label class="">
+                                <input type="checkbox" :value="key" v-model="item.tools"/>
+                                <span class="custom-control-description">{{ tool.name }}</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="invalid-feedback" style="display: block" v-if="$v.item.tools.$error">
+                        <p class="" v-if="!$v.item.tools.required">Debe seleccionar almenos un elemento.</p>
+                    </div>
 
                 </div>
 
                 <!-- AGREGAR TAXONOMIA -->
                 <div v-if="item.type == types.TAXONOMY">
-                    <h2>types.TAXONOMY</h2>
+                    <p> </p>
                 </div>
 
             </div>
 
-            <div v-if="item.type!=types.TAXONOMY">
-                <h2>Imagenes</h2>
 
-                <temp class="" v-bind:images="item.images" ></temp>
+                <div>
+                    <h2>Imagenes</h2>
 
-                <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
-                    <p class="" v-if="!$v.item.images.required">Debe seleccionar almenos una imagen.</p>
-                    <p class="" v-if="$v.item.images.required && !$v.item.images.$each.errors">Debe esperar a que todas las imagenes sean subidas.</p>
+                    <temp class="" v-bind:images="item.images"></temp>
+
+                    <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
+                        <p class="" v-if="!$v.item.images.required">Debe seleccionar almenos una imagen.</p>
+                        <p class="" v-if="$v.item.images.required && !$v.item.images.$each.errors">Debe esperar a que
+                            todas las imagenes sean subidas.</p>
+                    </div>
+
+
+                    <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
+                        <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg  main-button "
+                                style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                            Vista previa
+                        </button>
+                        <button v-on:click="test()" class="btn btn-outline-secondary btn-lg main-button  "
+                                style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                            Enviar a revisión
+                        </button>
+
+                        <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button"
+                                style="flex-basis: 100%;margin-bottom:1em">
+                            Guardar Cambios
+                        </button>
+                    </div>
                 </div>
-
-
-
-                <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
-                    <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg  main-button " style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
-                        Vista previa
-                    </button>
-                    <button v-on:click="test()" class="btn btn-outline-secondary btn-lg main-button  "  style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
-                        Enviar a revisión
-                    </button>
-
-                    <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-basis: 100%;margin-bottom:1em" >
-                    Guardar Cambios
-                    </button>
-                </div>
-            </div>
-
 
 
         </div><!-- Fin editar item -->
@@ -294,7 +326,8 @@
 
         <div class="item-preview" v-if="!editing ">
             <div style="display: flex;flex-wrap: wrap" v-if="!readOnly">
-                <button v-on:click="showEditMode()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-grow: 1;">
+                <button v-on:click="showEditMode()" class="btn btn-outline-secondary btn-lg btn-block main-button"
+                        style="flex-grow: 1;">
                     Regresar a modo de edición
                 </button>
             </div>
@@ -302,13 +335,14 @@
 
             <p id="description1">{{ item.description || 'Sin descripcion'}}</p>
 
-              <!-- Disciplina -->
-            <div  v-if="item.type == types.DISCIPLINE">
+            <!-- Disciplina -->
+            <div v-if="item.type == types.DISCIPLINE">
                 <div class="tech-imgs" v-if="item.type == types.DISCIPLINE">
                     <h4 style="width: 100%">Herramientas usadas en la disciplina:</h4>
                     <ul>
                         <li v-for="key in item.tools" class="ca">
-                            <a v-bind:href="getItemLink(tools[key].item_code, types.TOOL)" v-if="tools[key]">{{ tools[key].name }}</a>
+                            <a v-bind:href="getItemLink(tools[key].item_code, types.TOOL)" v-if="tools[key]">{{
+                                tools[key].name }}</a>
                         </li>
                     </ul>
 
@@ -316,7 +350,7 @@
             </div><!-- fin Disciplina -->
 
             <!-- Desarrollo -->
-            <div  v-if="item.type == types.DEVELOPMENT">
+            <div v-if="item.type == types.DEVELOPMENT">
                 <div class="tech-imgs" v-if="item.type == types.DEVELOPMENT">
                     <div v-for="key in item.devTechs" class="card">
                         <img v-bind:src="devTechs[key].image">
@@ -330,66 +364,71 @@
 
             <!-- Herramienta -->
             <div v-if="item.type == types.TOOL">
-                    <h2>Información de la herramienta</h2>
-                    <ul>
-                        <li><strong>Tecnologia: </strong>{{ technologies[item.technology] ?  technologies[item.technology].name : '' }}
-                        <li><strong>Tipo de Licencia: </strong>{{ item.licenseType }}
-                        </li>
-                        <li><strong>Restricciones de uso</strong>
-                            <p>{{ item.useRestrictions }}</p>
+                <h2>Información de la herramienta</h2>
+                <ul>
+                    <li><strong>Tecnologia: </strong>{{ technologies[item.technology] ?
+                        technologies[item.technology].name : '' }}
+                    <li><strong>Tipo de Licencia: </strong>{{ item.licenseType }}
+                    </li>
+                    <li><strong>Restricciones de uso</strong>
+                        <p>{{ item.useRestrictions }}</p>
 
-                        </li>
-                        <li> <a v-bind:href="item.toolUrl">Pagina Web</a>
-                        </li>
-                        <li>
-                            <a v-bind:href="item.toolDownloadUrl">URL de descarga</a>
-                        </li>
-                        <li><strong>Información técnica</strong>
-                            <ul>
-                                <li><i>Sistemas operativos:</i>
-                                    <span v-for="(id,index in item.operativeSystems"> {{ index > 0 ? ', ': ''  }} {{ operativeSystems[id].name }}</span>
-                                </li>
-                                <li><i>Integración con Sistema de Gestión de Aprendizaje (LMS): </i> {{ item.integration ? 'Si':'No' }}
-                                </li>
+                    </li>
+                    <li><a v-bind:href="item.toolUrl">Pagina Web</a>
+                    </li>
+                    <li>
+                        <a v-bind:href="item.toolDownloadUrl">URL de descarga</a>
+                    </li>
+                    <li><strong>Información técnica</strong>
+                        <ul>
+                            <li><i>Sistemas operativos:</i>
+                                <span v-for="(id,index in item.operativeSystems"> {{ index > 0 ? ', ': ''  }} {{ operativeSystems[id].name }}</span>
+                            </li>
+                            <li><i>Integración con Sistema de Gestión de Aprendizaje (LMS): </i> {{ item.integration ?
+                                'Si':'No' }}
+                            </li>
 
-                                <li><i>Descripción Funcional</i>
-                                    <p>{{ item.functionalDescription }}</p>
-                                </li>
-                            </ul>
-                        </li>
+                            <li><i>Descripción Funcional</i>
+                                <p>{{ item.functionalDescription }}</p>
+                            </li>
+                        </ul>
+                    </li>
 
-                    </ul>
+                </ul>
             </div><!-- Fin info herramienta -->
 
             <!-- Ejemplo -->
             <div v-if="item.type == types.EXAMPLE">
-                    <h2>Información del Ejemplo</h2>
-                    <ul>
-                        <li><strong>Estrategia Pedagógica: </strong>
-                            <a v-bind:href="getItemLink(strategies[item.strategy].item_code, types.STRATEGY)" v-if="strategies[item.strategy]">{{ strategies[item.strategy].name }}</a>
-                        </li>
-                        <li><strong>Herramienta: </strong>
-                            <a v-bind:href="getItemLink(tools[item.tool].item_code, types.TOOL)" v-if="tools[item.tool]">{{ tools[item.tool].name }}</a>
-                        </li>
-                        <li> <a v-bind:href="item.exampleUrl">Url del Ejemplo</a>
-                        </li>
-                    </ul>
+                <h2>Información del Ejemplo</h2>
+                <ul>
+                    <li><strong>Estrategia Pedagógica: </strong>
+                        <a v-bind:href="getItemLink(strategies[item.strategy].item_code, types.STRATEGY)"
+                           v-if="strategies[item.strategy]">{{ strategies[item.strategy].name }}</a>
+                    </li>
+                    <li><strong>Herramienta: </strong>
+                        <a v-bind:href="getItemLink(tools[item.tool].item_code, types.TOOL)" v-if="tools[item.tool]">{{
+                            tools[item.tool].name }}</a>
+                    </li>
+                    <li><a v-bind:href="item.exampleUrl">Url del Ejemplo</a>
+                    </li>
+                </ul>
             </div><!-- Fin ejemplo-->
 
             <!-- Tutorial -->
             <div v-if="item.type == types.TUTORIAL">
-                    <h2>Información del Tutorial</h2>
-                    <ul>
-                        <li><strong>Herramienta: </strong>
-                            <a v-bind:href="getItemLink(tools[item.tool].item_code, types.TOOL)" v-if="tools[item.tool]">{{ tools[item.tool].name }}</a>
-                        </li>
-                        <li> <a v-bind:href="item.tutorialUrl">Url del Tutorial</a>
-                        </li>
-                    </ul>
+                <h2>Información del Tutorial</h2>
+                <ul>
+                    <li><strong>Herramienta: </strong>
+                        <a v-bind:href="getItemLink(tools[item.tool].item_code, types.TOOL)" v-if="tools[item.tool]">{{
+                            tools[item.tool].name }}</a>
+                    </li>
+                    <li><a v-bind:href="item.tutorialUrl">Url del Tutorial</a>
+                    </li>
+                </ul>
             </div><!-- Fin Tutorial-->
 
 
-            <h2>Imagenes </h2>
+            <h2>Imagenes</h2>
 
             <div class="gallery">
 
@@ -398,7 +437,7 @@
                          v-on:click="openGalleryModal();moveCarousel(  index)">
                         <img src="../../static/images/zoom_in.png"
                              style="position:absolute;right:0.6em;bottom:0.6em;height: 2em;">
-                        <img v-bind:src="img.src"       >
+                        <img v-bind:src="img.src">
 
 
                     </div>
@@ -409,13 +448,15 @@
             </div>
 
             <div style="display: flex;flex-wrap: wrap" v-if="showApprovalButton">
-                <div v-if="disableApproval" style="width: 100%; text-align: center">Otro usuario debe aprobar sus cambios</div>
+                <div v-if="disableApproval" style="width: 100%; text-align: center">Otro usuario debe aprobar sus
+                    cambios
+                </div>
                 <button v-on:click="sendApproval(true)" class="btn btn-outline-secondary btn-lg btn-block main-button"
-                        v-bind:class="{ 'disabled-btn': disableApproval }"style="flex-grow: 1;" >
+                        v-bind:class="{ 'disabled-btn': disableApproval }" style="flex-grow: 1;">
                     Aprobar versión
                 </button>
                 <button v-on:click="sendApproval(false)" class="btn btn-outline-secondary btn-lg btn-block main-button"
-                        style="flex-grow: 1;" >
+                        style="flex-grow: 1;">
                     Rechazar
                 </button>
             </div>
@@ -467,7 +508,6 @@
 
         <div id="snackbar" v-bind:class="{show: loading}">Un momento por favor...</div>
         <div id="snackbar" v-bind:class="{show: initializing}">Cargando información...</div>
-
 
 
     </div><!-- end of vue -->

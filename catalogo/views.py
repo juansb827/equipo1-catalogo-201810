@@ -640,4 +640,4 @@ def taxonomiasMain(request):
     return render(request, 'taxonomiasmain.html')
 
 def crear_taxonomia_view(request):
-    return createItemView(request, models.TAXONOMY)
+    return render(request, 'addTaxonomia.html')

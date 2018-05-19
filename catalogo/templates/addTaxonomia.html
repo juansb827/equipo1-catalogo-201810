@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <script>
+        window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
+        window.itemInfo = {
+            id: {{  itemId }}+'',
+            type: {{ itemType }}+'',
+            version: {{ itemVer }}+''
+        }
+
+    </script>
+
+    {% verbatim  %}
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/estrategia.css">
+
+
+
+
+    <div class="container" style="padding: 100px;display:none" id="vue-app" v-bind:style="{ display: true }">
+        <div class="item-edit" v-if="editing">
+
+            <h1>Crear Taxonomias</h1>
+
+
+            <div class="estrategia item">
+
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="50"
+                           v-bind:class="getClass('name')"
+
+                           name="username" v-model.trim="item.name" @input="$v.item.name.$touch()">
+                    <div class="invalid-feedback">
+                        <p class="" v-if="!$v.item.name.required">El nombre es obligatorio.</p>
+                        <p class="" v-if="!$v.item.name.maxLength">El nombre no puede tener mas de {{
+                            $v.item.name.$params.maxLength.max }} caracteres.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" style="position: relative">
+                    <label for="description">Descripción:</label>
+                    <textarea class="form-control" rows="5" id="description"
+                              v-bind:class="getClass('description')"
+                              @input="$v.item.description.$touch()" v-model.trim="item.description"></textarea>
+                    <div style="text-align: right">{{ item.description.length }}/{{
+                        $v.item.description.$params.maxLength.max }}
+                    </div>
+                    <div class="invalid-feedback">
+                        <p class="" v-if="!$v.item.description.required">La descripción es obligatoria.</p>
+                        <p class="" v-if="!$v.item.description.maxLength">La descripción no puede tener mas de {{
+                            $v.item.description.$params.maxLength.max }} caracteres.</p>
+                    </div>
+                </div>
+                <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
+                    <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg  main-button "
+                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                        Crear
+                    </button>
+                    <button v-on:click="reset()" class="btn btn-outline-secondary btn-lg main-button  "
+                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                        Limpiar
+                    </button>
+
+                </div>
+            </div><!-- end of vue -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vuelidate@0.6.2/dist/vuelidate.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.6.2/dist/validators.min.js"></script>
+
+    <script type="text/javascript" src='../../static/js/utils.js'></script>
+    <script type="text/javascript" src='../../static/js/add.js'></script>
+
+    {% endverbatim %}
+{% endblock %}
