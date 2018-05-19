@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+        window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
+    </script>
+
+    <!-- header -->
+    <header class="header ">
+        <div class="overlayed">
+            <div class="container">
+                <div class="description ">
+                    <h1>
+                        <b>
+                            Bienvenido al catálogo de conocimiento
+
+                            <p>
+                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                                sunt in culpa qui officia deserunt
+                                mollit anim id est laborum.</p>
+                        </b>
+                        <button id="verCatalogo" class="btn btn-outline-secondary btn-lg" data-value="blog" href="#" style="width:10em">Ver
+                            catálogo
+                        </button>
+                        <a id="verEquipo" class="btn btn-outline-secondary btn-lg" href="{% url 'catalogo:getMembers' %}" style="width: 10em">Ver Equipo
+                        </a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+	{% verbatim  %}
+
+    <script type="text/javascript" src='../../static/js/utils.js'></script>
+    <script type="text/javascript" src='../../static/js/index.js'></script>
+
+
+
+{% endverbatim  %}
+{% endblock %}
