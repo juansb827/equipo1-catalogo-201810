@@ -318,6 +318,8 @@ var app = new Vue({
                     this.loading = false;
                 })
 
+            self.clearTaxonomyFields();
+
         },
         clearTaxonomyFields: function(){
             document.getElementById('name').value='';
