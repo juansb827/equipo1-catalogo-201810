@@ -45,13 +45,20 @@
             <ul class="navbar-nav mr-4">
                 {% if user.is_authenticated %}
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:index' %}">{{ user.username }}</a></li>
+                    <li class="dropdown-submenu">
+                        <a class="nav-link toggle-submenu" data-value="about" href="#" >Agregar a catalogo</a>
+                    <ul class="custom-dropdown">
+                        <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDisciplina' %}">Agregar Disciplina</a></li>
+                        <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearTutorial' %}">Agregar Tutorial</a></li>
+                        <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearEjemplo' %}">Agregar Ejemplo</a></li>
+                        <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearEstrategia' %}">Agregar Estrategia</a></li>
+                        <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearHerramienta' %}">Agregar Herramienta</a></li>
+                        <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDesarrollo' %}">Agregar Desarrollo</a></li>
+
+                    </ul>
+                    </li>
                     <li><a class="nav-link" data-value="about" href="{% url 'catalogo:logout' %}">Logout</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDisciplina' %}">Agregar Disciplina</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearTutorial' %}">Agregar Tutorial</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearEjemplo' %}">Agregar Ejemplo</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearEstrategia' %}">Agregar Estrategia</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearHerramienta' %}">Agregar Herramienta</a></li>
-                    <li class="nav-item"><a class="nav-link" data-value="about" href="{% url 'catalogo:crearDesarrollo' %}">Agregar Desarrollo</a></li>
+
 
                 {% else %}
                     <!-- <li><a class="nav-link" data-value="about" href="{% url 'catalogo:addUser' %}">Registro</a></li> -->
@@ -65,6 +72,22 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function(){
+
+         $('body').on("click",function () {
+             $('.custom-dropdown').hide();
+         });
+          $('.dropdown-submenu .toggle-submenu').on("click", function(e){
+              console.log("Click")
+            $('.custom-dropdown').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+          });
+        });
+    </script>
+
 	<!-- header -->
 	{% block content %}
     {% endblock %}

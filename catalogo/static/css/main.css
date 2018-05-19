@@ -33,6 +33,41 @@ html,h1,h2,h3,h4,h5,h6,a{
  color: #f4f4f4;
  cursor: pointer;
 }
+
+
+.custom-dropdown{
+    position: absolute;
+    top: 100%;
+    right: 0px;
+    width: 50%;
+    /* left: 0; */
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 10rem;
+    padding: .5rem 0;
+    margin: .125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #F97300;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem;
+}
+
+@media (max-width: 1024px) {
+    .custom-dropdown{
+        position: static;
+        border: 0px;
+        margin-left: 5%;
+
+        width: 100%;
+
+    }
+}
+
 .nav-link{
  margin-right: 1em !important;
 }
