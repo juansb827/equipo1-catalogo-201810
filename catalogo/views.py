@@ -666,3 +666,8 @@ def crear_taxonomia_view(request):
             return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         return render(request, 'addTaxonomia.html')
+
+def modificarTaxonomia(request):
+    return render(request, 'modificarTaxonomia.html')
+
+
