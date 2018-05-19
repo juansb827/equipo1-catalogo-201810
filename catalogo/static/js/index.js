@@ -10,7 +10,8 @@ var tipos = [ /* Se ponene en un array para que sean mostrados en el mismo orden
     { key: "4" , val :"Ejemplo"},
     { key: "5" , val :"Estrategia Pedagógica"},
     { key: "6" , val :"Desarrollo"},
-    { key: "7"  ,  val: "Disciplina"}
+    { key: "7"  ,  val: "Disciplina"},
+    { key: "8"  ,  val: "Taxonomia"}
 
 ]
 
