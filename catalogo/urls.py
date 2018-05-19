@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^crearEjemplo/$', views.crear_ejemplo_view, name='crearEjemplo'),
     url(r'^crearTutorial/$', views.crear_tutorial_view, name='crearTutorial'),
     url(r'^crearDisciplina/$', views.crear_disciplina_view, name='crearDisciplina'),
+    url(r'^crearTaxonomia/$', views.crear_taxonomia_view, name='crearTaxonomia'),
+
 
     url(r'^devTech/$', views.getDevTech, name='getDevTech'),
     url(r'^equipo/$', views.getMembers, name='getMembers'),

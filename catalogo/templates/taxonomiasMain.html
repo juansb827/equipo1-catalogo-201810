@@ -20,10 +20,10 @@
                             <p>
                                 Aqui podrá crear o modificar taxonomias existentes.</p>
                         </b>
-                        <button id="crearTaxonomia" class="btn btn-outline-secondary btn-lg" data-value="blog" href="#" style="width:10em">Crear Taxonomia
-                        </button>
-                        <a id="modificarTaxonomias" class="btn btn-outline-secondary btn-lg" href="{% url 'catalogo:getMembers' %}" style="width: 10em">Modificar Taxonomias
-                        </a>
+                            <a id="crearTaxonomia" class="btn btn-outline-secondary btn-lg" href="{% url 'catalogo:crearTaxonomia' %}" style="width: 10em">Crear Taxonomia
+                            </a>
+                            <a id="modificarTaxonomias" class="btn btn-outline-secondary btn-lg" href="{% url 'catalogo:getMembers' %}" style="width: 10em">Modificar Taxonomias
+                            </a>
                     </h1>
                 </div>
             </div>

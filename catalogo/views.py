@@ -580,6 +580,9 @@ def get_item(request):
     elif (type == models.DISCIPLINE):
         subItem = models.Discipline.objects.filter( pk = item[0].discipline.pk )
         res['subItem'] = serializers.serialize("json", subItem)
+    elif (type == models.TAXONOMY):
+        subItem = models.Taxonomia.objects.filter( pk = item[0].taxonomia.pk )
+        res['subItem'] = serializers.serialize("json", subItem)
 
     return HttpResponse(json.dumps(res))
 
@@ -635,3 +638,6 @@ def carac_herramienta_view(request):
 
 def taxonomiasMain(request):
     return render(request, 'taxonomiasmain.html')
+
+def crear_taxonomia_view(request):
+    return createItemView(request, models.TAXONOMY)

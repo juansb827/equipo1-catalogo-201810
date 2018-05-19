@@ -126,7 +126,8 @@ ITEM_TYPE_CHOICES = (
     ('4', 'EXAMPLE'),
     ('5', 'STRATEGY'),
     ('6', 'DEVELOPMENT'),
-    ('7', 'DISCIPLINE')
+    ('7', 'DISCIPLINE'),
+    ('8', 'TAXONOMY')
 )
 
 TECHNOLOGY = "1"
@@ -136,6 +137,7 @@ EXAMPLE = "4"
 STRATEGY = "5"
 DEVELOPMENT = "6"
 DISCIPLINE = "7"
+TAXONOMY = "8"
 
 ITEM_TYPE_STATUS = (
     ('1', 'IN REVIEW'),

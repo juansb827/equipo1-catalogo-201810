@@ -23,6 +23,7 @@
 
             <h1>{{ typeName[item.type] }}</h1>
 
+
             <div class="estrategia item">
 
                 <div class="form-group">
@@ -252,34 +253,38 @@
 
                 </div>
 
-
+                <!-- AGREGAR TAXONOMIA -->
+                <div v-if="item.type == types.TAXONOMY">
+                    <h2>types.TAXONOMY</h2>
+                </div>
 
             </div>
 
-            <h2>Imagenes</h2>
+            <div v-if="item.type!=types.TAXONOMY">
+                <h2>Imagenes</h2>
 
-            <temp class="" v-bind:images="item.images" ></temp>
+                <temp class="" v-bind:images="item.images" ></temp>
 
-            <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
-                <p class="" v-if="!$v.item.images.required">Debe seleccionar almenos una imagen.</p>
-                <p class="" v-if="$v.item.images.required && !$v.item.images.$each.errors">Debe esperar a que todas las imagenes sean subidas.</p>
+                <div class="invalid-feedback" style="display: block" v-if="$v.item.images.$error">
+                    <p class="" v-if="!$v.item.images.required">Debe seleccionar almenos una imagen.</p>
+                    <p class="" v-if="$v.item.images.required && !$v.item.images.$each.errors">Debe esperar a que todas las imagenes sean subidas.</p>
+                </div>
+
+
+
+                <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
+                    <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg  main-button " style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
+                        Vista previa
+                    </button>
+                    <button v-on:click="test()" class="btn btn-outline-secondary btn-lg main-button  "  style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
+                        Enviar a revisión
+                    </button>
+
+                    <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-basis: 100%;margin-bottom:1em" >
+                    Guardar Cambios
+                    </button>
+                </div>
             </div>
-
-
-
-            <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
-                <button v-on:click="showPreview()" class="btn btn-outline-secondary btn-lg  main-button " style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
-                    Vista previa
-                </button>
-                <button v-on:click="test()" class="btn btn-outline-secondary btn-lg main-button  "  style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%" >
-                    Enviar a revisión
-                </button>
-
-                <button v-on:click="submit()" class="btn btn-outline-secondary btn-lg btn-block main-button" style="flex-basis: 100%;margin-bottom:1em" >
-                Guardar Cambios
-                </button>
-            </div>
-
 
 
 

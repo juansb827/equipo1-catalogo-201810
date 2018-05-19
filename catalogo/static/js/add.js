@@ -10,6 +10,7 @@ EXAMPLE = "4";
 STRATEGY = "5";
 DEVELOPMENT = "6";
 DISCIPLINE = "7";
+TAXONOMY = "8";
 
 var typeName = {
     "-1": "Todas las categorias",
@@ -19,7 +20,8 @@ var typeName = {
     "4": "Ejemplo",
     "5": "Estrategia Pedagógica",
     "6": "Desarrollo",
-    "7": "Disciplina"
+    "7": "Disciplina",
+    "8": "Taxonomia"
 };
 
 
