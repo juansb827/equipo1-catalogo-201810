@@ -668,6 +668,30 @@ def crear_taxonomia_view(request):
         return render(request, 'addTaxonomia.html')
 
 def modificarTaxonomia(request):
-    return render(request, 'modificarTaxonomia.html')
+    print "request.method = ", request.method
+
+    if request.method == "POST":
+        print 'request.body = ', request.body
+
+        data = json.loads(request.body)
+        name = data['name']
+        response_data = {}
+
+        print 'data = ', data, '  -> name = ', name
+
+        lista_taxonomias = Taxonomia.objects.filter(name__contains=name)
+
+        if lista_taxonomias != None and lista_taxonomias.count() > 0:
+            message = ''
+            context = {'lista_taxonomias': lista_taxonomias, 'message' : message}
+            return render(request, 'modificarTaxonomia.html', context)
+        else:
+            message = 'No se encontraton taxonomias'
+            context = {'lista_taxonomias': lista_taxonomias, 'message': message}
+            return render(request, 'modificarTaxonomia.html', context)
+    else:
+        return render(request, 'modificarTaxonomia.html')
+
+
 
 

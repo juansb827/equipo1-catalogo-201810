@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <script>
+        window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
+        window.itemInfo = {
+            id: {{  itemId }}+'',
+            type: {{ itemType }}+'',
+            version: {{ itemVer }}+''
+        }
+
+    </script>
+
+    {% verbatim  %}
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/estrategia.css">
+
+
+
+
+    <div class="container" style="padding: 100px;display:none" id="vue-app" v-bind:style="{ display: true }">
+        <div class="item-edit" v-if="editing">
+
+            <h1>Modificar Taxonomias</h1>
+
+
+            <div class="estrategia item">
+
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" class="form-control form-control-lg " placeholder=""
+                           maxlength="50"
+                           v-bind:class="getClass('name')"
+
+                           name="username" v-model.trim="item.name" @input="$v.item.name.$touch()">
+                    <div class="invalid-feedback">
+                        <p class="" v-if="!$v.item.name.required">El nombre es obligatorio.</p>
+                        <p class="" v-if="!$v.item.name.maxLength">El nombre no puede tener mas de {{
+                            $v.item.name.$params.maxLength.max }} caracteres.</p>
+                    </div>
+                    <button v-on:click="searchTaxonomy()" class="btn btn-outline-secondary btn-lg  main-button "
+                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                        Buscar
+                    </button>
+                </div>
+
+                <!-- inicio tabla -->
+                {% for taxonomia in lista_taxonomias %}
+                <div class="col-md-4 col-sm-6 col-lg-3">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{taxonomia.name}}</h3>
+                        </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{taxonomia.description}}</h3>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- fin tabla -->
+
+            </div><!-- end of vue -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vuelidate@0.6.2/dist/vuelidate.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.6.2/dist/validators.min.js"></script>
+
+    <script type="text/javascript" src='../../static/js/utils.js'></script>
+    <script type="text/javascript" src='../../static/js/add.js'></script>
+
+    {% endverbatim %}
+{% endblock %}

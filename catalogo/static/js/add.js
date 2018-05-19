@@ -324,6 +324,32 @@ var app = new Vue({
         clearTaxonomyFields: function(){
             document.getElementById('name').value='';
             document.getElementById('description').value='';
+        },
+        searchTaxonomy: function(){
+            var self = this;
+
+            var name =  document.getElementById('name').value;
+            var data = {
+                'name': name
+            };
+            this.loading = true;
+
+            axios.defaults.xsrfCookieName = 'csrftoken';
+            axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+            axios.post(URL_BASE + "/catalogo/crearTaxonomia/", data)
+                .then(function (res) {
+                    resultado.innerHTML = res.data['message'];
+                })
+                .catch(function (err) {
+                    resultado.innerHTML = err.data['message'];
+                })
+                .finally(function () {
+                    this.loading = false;
+                })
+
+            self.clearTaxonomyFields();
+
         }
 
     },
