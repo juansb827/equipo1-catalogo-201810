@@ -293,9 +293,14 @@ var app = new Vue({
         addTaxonomy: function(){
 
             var self = this;
+
+            var name =  document.getElementById('name').value;
+            var description =  document.getElementById('description').value;
+            var resultado =  document.getElementById('resultado');
+
             var data = {
-                'name': self.name,
-                'description': self.description
+                'name': name,
+                'description': description
             };
             this.loading = true;
 
@@ -304,14 +309,19 @@ var app = new Vue({
 
             axios.post(URL_BASE + "/catalogo/crearTaxonomia/", data)
                 .then(function (res) {
-                    //window.location.href = URL_BASE + '/catalogo/?type=' + self.item.type + '&busqueda=' + self.item.name;
+                    resultado.innerHTML = res.data['message'];
                 })
                 .catch(function (err) {
+                    resultado.innerHTML = err.data['message'];
                 })
                 .finally(function () {
                     this.loading = false;
                 })
 
+        },
+        clearTaxonomyFields: function(){
+            document.getElementById('name').value='';
+            document.getElementById('description').value='';
         }
 
     },

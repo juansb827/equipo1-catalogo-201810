@@ -18,7 +18,7 @@ from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.views.decorators.csrf import csrf_exempt
 
-from models import UserForm, Item, Example, Tutorial, Tool
+from models import UserForm, Item, Example, Tutorial, Tool, Taxonomia
 import models as models
 
 CLOUDINARY_NAME = os.environ.get('CLOUDINARY_URL').split('@')[1]
@@ -643,10 +643,26 @@ def crear_taxonomia_view(request):
     print "request.method = ", request.method
 
     if request.method == "POST":
+        print 'request.body = ', request.body
+
         data = json.loads(request.body)
         name = data['name']
         description = data['description']
 
-        print data, '  ', name, ' ', description
+        response_data = {}
 
-    return render(request, 'addTaxonomia.html')
+        print 'data = ', data, '  -> name = ', name, ' -> description = ', description
+
+        encontrado = Taxonomia.objects.filter(name=name)
+        print 'encontrado = ', encontrado
+
+        if encontrado != None and encontrado.count() > 0:
+            response_data['message'] = 'La taxonomia ya existe'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            taxonomia = Taxonomia(name=name, description=description)
+            taxonomia.save()
+            response_data['message'] = 'Taxonomia guardada correctamente'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        return render(request, 'addTaxonomia.html')

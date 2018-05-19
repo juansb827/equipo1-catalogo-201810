@@ -28,7 +28,7 @@
 
                 <div class="form-group">
                     <label for="name">Nombre:</label>
-                    <input type="text" id="name" class="form-control form-control-lg " placeholder="" maxlength="50"
+                    <input type="text" id="name" name="name" class="form-control form-control-lg " placeholder="" maxlength="50"
                            v-bind:class="getClass('name')"
 
                            name="username" v-model.trim="item.name" @input="$v.item.name.$touch()">
@@ -41,7 +41,7 @@
 
                 <div class="form-group" style="position: relative">
                     <label for="description">Descripción:</label>
-                    <textarea class="form-control" rows="5" id="description"
+                    <textarea class="form-control" rows="5" id="description" name="description"
                               v-bind:class="getClass('description')"
                               @input="$v.item.description.$touch()" v-model.trim="item.description"></textarea>
                     <div style="text-align: right">{{ item.description.length }}/{{
@@ -53,6 +53,11 @@
                             $v.item.description.$params.maxLength.max }} caracteres.</p>
                     </div>
                 </div>
+
+                <div class="form-group" style="position: relative">
+                    <h2><p id="resultado"></p></h2>
+                </div>
+
                 <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
                     <button v-on:click="addTaxonomy()" class="btn btn-outline-secondary btn-lg  main-button "
                             style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
