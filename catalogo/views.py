@@ -21,6 +21,8 @@ from django.views.decorators.csrf import csrf_exempt
 from models import UserForm, Item, Example, Tutorial, Tool, Taxonomia
 import models as models
 
+from urlparse import urljoin
+
 CLOUDINARY_NAME = os.environ.get('CLOUDINARY_URL').split('@')[1]
 print("NAME", CLOUDINARY_NAME)
 
@@ -642,7 +644,7 @@ def taxonomiasMain(request):
 
 def buildATagModifyTaxonomy(taxonomy_id):
     return '"/catalogo/editarDescTaxonomias?id=' \
-           + str(taxonomy_id) + '"'
+           + str(taxonomy_id) + '"'.tr
 
 def crear_taxonomia_view(request):
     print "request.method = ", request.method
@@ -716,33 +718,34 @@ def modificarTaxonomia(request):
 
 def editarDescTaxonomias(request):
     id = request.GET['id']
+    url_origen = request.build_absolute_uri()
+    partes_url = url_origen.split('%22')
+    parte_inicial_url = partes_url[0]
+    parte_final_url = partes_url[1]
+    pos_ultimo_cero_url = parte_inicial_url.rfind('0')
+    new_url = parte_inicial_url[:pos_ultimo_cero_url+1] + parte_final_url
+    print partes_url , ' :: ' , pos_ultimo_cero_url, ' ***  ',parte_inicial_url[:pos_ultimo_cero_url+1], ' ++ ', new_url
+
+    request.path = parte_final_url
+
     print "editarDescTaxonomias"
     print "request.method = ", request.method
     print "id = ", id
+    print request.META['QUERY_STRING']
+    print request.build_absolute_uri()
+    print "request.path = ",request.path
 
-    return render(request, 'addTaxonomia.html')
+    return HttpResponseRedirect(parte_final_url)
 
-    # if request.method == "POST":
-    #     print 'request.body = ', request.body
-    #
-    #     data = json.loads(request.body)
-    #     name = data['name']
-    #     description = data['description']
-    #
-    #     response_data = {}
-    #
-    #     print 'data = ', data, '  -> name = ', name, ' -> description = ', description
-    #
-    #     encontrado = Taxonomia.objects.filter(name=name)
-    #     print 'encontrado = ', encontrado
-    #
-    #     if encontrado != None and encontrado.count() > 0:
-    #         response_data['message'] = 'La taxonomia ya existe'
-    #         return HttpResponse(json.dumps(response_data), content_type="application/json")
-    #     else:
-    #         taxonomia = Taxonomia(name=name, description=description)
-    #         taxonomia.save()
-    #         response_data['message'] = 'Taxonomia guardada correctamente'
-    #         return HttpResponse(json.dumps(response_data), content_type="application/json")
-    # else:
-    #     return render(request, 'addTaxonomia.html')
+def editarDescTaxonomias2(request):
+    id = request.GET['id']
+    taxonomia = Taxonomia.objects.filter(id=id).first()
+    print request.path
+    print request.META['QUERY_STRING']
+    print taxonomia
+    return render(request, 'editarDescTaxonomias.html', {'taxonomia':taxonomia})
+
+def saveTaxonomyDesc(request):
+    id = request.POST['id']
+    description = request.POST['description']
+    print id, ' -- ', description

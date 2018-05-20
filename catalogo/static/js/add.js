@@ -382,6 +382,48 @@ var app = new Vue({
 
             self.clearTaxonomyFields();
 
+        },
+        saveTaxonomyDesc: function(){
+            var self = this;
+
+            var description =  '';
+            if(document.getElementById('description')){
+                description =  document.getElementById('description').value;
+            }
+
+            var id =  '';
+            if(document.getElementById('id')){
+                id =  document.getElementById('id').value;
+            }
+
+            var data = {
+                'description': description,
+                'id': id
+            };
+
+            this.loading = true;
+
+            axios.defaults.xsrfCookieName = 'csrftoken';
+            axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+            axios.post(URL_BASE + "/catalogo/saveTaxonomyDesc/", data)
+                .then(function (res) {
+                    for(prop in res.data){
+                        console.log(prop + ' -- < ' + res.data[prop]);
+                    }
+
+                })
+                .catch(function (err) {
+                    for(prop in err){
+                        console.log('err[' + prop + '] = ' + err[prop]);
+                    }
+                })
+                .finally(function () {
+                    this.loading = false;
+                })
+
+            self.clearTaxonomyFields();
+
         }
 
     },

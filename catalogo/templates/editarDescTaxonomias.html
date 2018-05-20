@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <script>
+        window.CLOUDINARY_NAME = '{{ CLOUDINARY_NAME }}'
+        window.itemInfo = {
+            id: {{  itemId }}+'',
+            type: {{ itemType }}+'',
+            version: {{ itemVer }}+''
+        }
+
+    </script>
+
+
+    {% verbatim  %}
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/estrategia.css">
+
+
+
+
+    <div class="container" style="padding: 100px;display:none" id="vue-app" v-bind:style="{ display: true }">
+        <div class="item-edit" v-if="editing">
+
+            <h1>Editar Taxonomias</h1>
+
+
+            <div class="estrategia item">
+
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    {% endverbatim %}
+                    <input type="text" id="name" name="name" class="form-control form-control-lg " placeholder=""
+                           maxlength="50" name="username"  readonly value="{{ taxonomia.description }}"
+                        style="color: #000000 !important">
+                </div>
+
+                <div class="form-group" style="position: relative">
+                    <label for="description">Descripción:</label>
+                    <textarea class="form-control" rows="5" id="description" name="description">{{ taxonomia.description }}</textarea>
+
+                    <div class="invalid-feedback">
+                        <p class="" v-if="!$v.item.description.required">La descripción es obligatoria.</p>
+                        <p class="" v-if="!$v.item.description.maxLength">La descripción no puede tener mas de {{
+                            $v.item.description.$params.maxLength.max }} caracteres.</p>
+                    </div>
+
+                    <input type="hidden" name="id_hidden" value="{{ taxonomia.id }}">
+                </div>
+
+                {% verbatim  %}
+                <div class="form-group" style="position: relative">
+                    <h2><p id="resultado" class="main-button"></p></h2>
+                </div>
+
+                <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
+                    <button v-on:click="saveTaxonomyDesc()" class="btn btn-outline-secondary btn-lg  main-button "
+                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                        Modificar
+                    </button>
+                    <button v-on:click="clearTaxonomyFields()" class="btn btn-outline-secondary btn-lg main-button  "
+                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                        Limpiar
+                    </button>
+
+                </div>
+            </div><!-- end of vue -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vuelidate@0.6.2/dist/vuelidate.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.6.2/dist/validators.min.js"></script>
+
+    <script type="text/javascript" src='../../static/js/utils.js'></script>
+    <script type="text/javascript" src='../../static/js/add.js'></script>
+
+    {% endverbatim %}
+{% endblock %}
