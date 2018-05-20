@@ -11,7 +11,7 @@
 
     </script>
 
-    {% verbatim  %}
+
 
     <link rel="stylesheet" type="text/css" href="../../static/css/estrategia.css">
 
@@ -27,6 +27,7 @@
             <div class="estrategia item">
 
                 <div class="form-group">
+
                     <label for="name">Nombre:</label>
                     <input type="text" id="name" name="name" class="form-control form-control-lg " placeholder=""
                            maxlength="50"
@@ -36,30 +37,30 @@
                     <div class="invalid-feedback">
                         <p class="" v-if="!$v.item.name.required">El nombre es obligatorio.</p>
                         <p class="" v-if="!$v.item.name.maxLength">El nombre no puede tener mas de {{
-                            $v.item.name.$params.maxLength.max }} caracteres.</p>
+                                $v.item.name.$params.maxLength.max }} caracteres.</p>
                     </div>
-                    <button v-on:click="searchTaxonomy2()" class="btn btn-outline-secondary btn-lg  main-button "
+                    <button v-on:click="searchTaxonomy()" class="btn btn-outline-secondary btn-lg  main-button "
                             style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
                         Buscar
                     </button>
+                    <button class="btn btn-outline-secondary btn-lg  main-button "
+                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
+                        Buscar 2
+                    </button>
+
                 </div>
 
                 <!-- inicio tabla -->
-                {% for taxonomia in lista_taxonomias %}
-                <div class="col-md-4 col-sm-6 col-lg-3">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{taxonomia.name}}</h3>
-                        </div>
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{taxonomia.description}}</h3>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+                {% verbatim %}
+                <tr v-for="taxonomia in lista_taxonomias">
+                    <td>{{ taxonomia.name }}</td>
+                    <td>{{ taxonomia.description }}</td>
+                </tr>
+                {% endverbatim %}
                 <!-- fin tabla -->
 
             </div><!-- end of vue -->
+
         </div>
     </div>
 
@@ -69,5 +70,5 @@
     <script type="text/javascript" src='../../static/js/utils.js'></script>
     <script type="text/javascript" src='../../static/js/add.js'></script>
 
-    {% endverbatim %}
+
 {% endblock %}

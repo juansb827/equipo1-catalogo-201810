@@ -153,7 +153,8 @@ var app = new Vue({
         tools: {},
         technologies: {},  // tecnologias del catalogo eg. sicua o moodle
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
-        licenseTypes: {}
+        licenseTypes: {},
+        taxonomia: []
     },
     methods: {
         getClass: function (fieldName) {
@@ -294,9 +295,21 @@ var app = new Vue({
 
             var self = this;
 
-            var name =  document.getElementById('name').value;
-            var description =  document.getElementById('description').value;
-            var resultado =  document.getElementById('resultado');
+            var name =  '';
+            if(document.getElementById('name') != undefined){
+                name =  document.getElementById('name').value;
+            }
+
+            var description =  '';
+            if(document.getElementById('description') != undefined){
+                description =  document.getElementById('description').value;
+            }
+
+            var resultado =  '';
+            if(document.getElementById('resultado') != undefined){
+                resultado =  document.getElementById('resultado');
+            }
+
 
             var data = {
                 'name': name,
@@ -322,8 +335,50 @@ var app = new Vue({
 
         },
         clearTaxonomyFields: function(){
-            document.getElementById('name').value='';
-            document.getElementById('description').value='';
+
+            if(document.getElementById('name') != undefined){
+                document.getElementById('name').value='';
+            }
+
+            if(document.getElementById('description') != undefined){
+                document.getElementById('description').value='';
+            }
+
+        },
+        searchTaxonomy: function(){
+            var self = this;
+
+            var name =  '';
+            if(document.getElementById('name')){
+                name =  document.getElementById('name').value;
+            }
+
+            var data = {
+                'name': name
+            };
+
+            this.loading = true;
+
+            axios.defaults.xsrfCookieName = 'csrftoken';
+            axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+            axios.post(URL_BASE + "/catalogo/modificarTaxonomia/", data)
+                .then(function (res) {
+                    for(prop in res){
+                        console.log('res[' + prop + '] = ' + res[prop]);
+                    }
+
+                    self.lista_taxonomias = res.data;
+                })
+                .catch(function (err) {
+                    console.log('ERR res.data = ' + res.data);
+                })
+                .finally(function () {
+                    this.loading = false;
+                })
+
+            self.clearTaxonomyFields();
+
         }
 
     },
