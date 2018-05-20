@@ -681,22 +681,21 @@ def modificarTaxonomia(request):
         print 'data = ', data, '  -> name = ', name
 
         lista_taxonomias = Taxonomia.objects.filter(name__contains=name)
+        data = list(lista_taxonomias.values())
 
-        print 'lista_taxonomias = ', lista_taxonomias
+        print 'lista_taxonomias = ', data
+        response_data['lista_taxonomias'] = data
 
         if lista_taxonomias != None and lista_taxonomias.count() > 0:
             response_data['message'] = ''
-            response_data['lista_taxonomias'] = lista_taxonomias
+            print 'response_data > 0 = ', response_data
 
-            print 'context > 0 = ', response_data
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
             response_data['message'] = 'No se encontraton taxonomias'
-            response_data['lista_taxonomias'] = lista_taxonomias
+            print 'response_data else = ', response_data
 
+        return HttpResponse(json.dumps({"data": response_data}), content_type="application/json")
 
-            print 'context else = ', response_data
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         return render(request, 'modificarTaxonomia.html')
 

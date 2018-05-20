@@ -364,14 +364,16 @@ var app = new Vue({
 
             axios.post(URL_BASE + "/catalogo/modificarTaxonomia/", data)
                 .then(function (res) {
-                    for(prop in res){
-                        console.log('res[' + prop + '] = ' + res[prop]);
+                    for(prop in res.data){
+                        console.log('res.data[' + prop + '] = ' + res.data[prop]);
                     }
 
-                    self.lista_taxonomias = res.data;
+                    self.lista_taxonomias = res.data.lista_taxonomias;
                 })
                 .catch(function (err) {
-                    console.log('ERR res.data = ' + res.data);
+                    for(prop in err){
+                        console.log('err[' + prop + '] = ' + err[prop]);
+                    }
                 })
                 .finally(function () {
                     this.loading = false;
