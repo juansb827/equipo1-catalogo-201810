@@ -204,6 +204,7 @@ class Member(models.Model):
 class Taxonomia(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=500, default='')
+    modify_button = models.CharField(max_length=500, default='')
 
     def __unicode__(self):
         return self.name

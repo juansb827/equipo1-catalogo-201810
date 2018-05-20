@@ -639,6 +639,11 @@ def carac_herramienta_view(request):
 def taxonomiasMain(request):
     return render(request, 'taxonomiasmain.html')
 
+
+def buildATagModifyTaxonomy(taxonomy_id):
+    return '"/catalogo/editarDescTaxonomias?id=' \
+           + str(taxonomy_id) + '"'
+
 def crear_taxonomia_view(request):
     print "request.method = ", request.method
 
@@ -662,6 +667,14 @@ def crear_taxonomia_view(request):
         else:
             taxonomia = Taxonomia(name=name, description=description)
             taxonomia.save()
+
+            id_taxonomia = taxonomia.id
+            a_tag_modify_button = buildATagModifyTaxonomy(id_taxonomia)
+            print 'id_taxonomia = ', id_taxonomia
+            print 'a_tag_modify_button = ', a_tag_modify_button
+            Taxonomia.objects.filter(id=id_taxonomia).update(modify_button=a_tag_modify_button)
+
+
             response_data['message'] = 'Taxonomia guardada correctamente'
             return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
@@ -701,4 +714,35 @@ def modificarTaxonomia(request):
 
 
 
+def editarDescTaxonomias(request):
+    id = request.GET['id']
+    print "editarDescTaxonomias"
+    print "request.method = ", request.method
+    print "id = ", id
 
+    return render(request, 'addTaxonomia.html')
+
+    # if request.method == "POST":
+    #     print 'request.body = ', request.body
+    #
+    #     data = json.loads(request.body)
+    #     name = data['name']
+    #     description = data['description']
+    #
+    #     response_data = {}
+    #
+    #     print 'data = ', data, '  -> name = ', name, ' -> description = ', description
+    #
+    #     encontrado = Taxonomia.objects.filter(name=name)
+    #     print 'encontrado = ', encontrado
+    #
+    #     if encontrado != None and encontrado.count() > 0:
+    #         response_data['message'] = 'La taxonomia ya existe'
+    #         return HttpResponse(json.dumps(response_data), content_type="application/json")
+    #     else:
+    #         taxonomia = Taxonomia(name=name, description=description)
+    #         taxonomia.save()
+    #         response_data['message'] = 'Taxonomia guardada correctamente'
+    #         return HttpResponse(json.dumps(response_data), content_type="application/json")
+    # else:
+    #     return render(request, 'addTaxonomia.html')

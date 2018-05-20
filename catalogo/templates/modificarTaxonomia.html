@@ -12,10 +12,7 @@
     </script>
 
 
-
     <link rel="stylesheet" type="text/css" href="../../static/css/estrategia.css">
-
-
 
 
     <div class="container" style="padding: 100px;display:none" id="vue-app" v-bind:style="{ display: true }">
@@ -45,6 +42,7 @@
                     </button>
                 </div>
 
+
                 <!-- inicio tabla -->
                 {% verbatim %}
                 <table class="table table-striped table-hover">
@@ -56,19 +54,19 @@
                     </tr>
                     </thead>
                     <tbody>
+
                     <tr v-for="taxonomia in lista_taxonomias">
                         <td>{{ taxonomia.name }}</td>
                         <td>{{ taxonomia.description }}</td>
                         <td>
-                            <button v-on:click="alert('jojojo')" class="btn btn-outline-secondary btn-lg  main-button "
-                            style="flex-basis: 10%">
-                                Modificar
-                            </button>
+                            <a v-bind:href="taxonomia.modify_button" class="btn btn-outline-secondary btn-lg main-button"
+                               style="width: 10em;">Modificar</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 {% endverbatim %}
+
                 <!-- fin tabla -->
 
             </div><!-- end of vue -->

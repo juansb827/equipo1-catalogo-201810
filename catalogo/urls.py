@@ -40,8 +40,7 @@ urlpatterns = [
     url(r'^item/$', views.get_item, name='getItem'),
     url(r'^caracHerramienta/$', views.crear_herramienta_view, name='caracHerramienta'),
     url(r'^taxonomiasMain/$', views.taxonomiasMain, name='taxonomiasMain'),
-    url(r'^modificarTaxonomia/$', views.modificarTaxonomia, name='modificarTaxonomia')
-
-
+    url(r'^modificarTaxonomia/$', views.modificarTaxonomia, name='modificarTaxonomia'),
+    url(r'.editarDescTaxonomias/$', views.editarDescTaxonomias, name='editarDescTaxonomias')
 
 ]
