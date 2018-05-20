@@ -43,19 +43,24 @@
                             style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
                         Buscar
                     </button>
-                    <button class="btn btn-outline-secondary btn-lg  main-button "
-                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
-                        Buscar 2
-                    </button>
-
                 </div>
 
                 <!-- inicio tabla -->
                 {% verbatim %}
-                <tr v-for="taxonomia in lista_taxonomias">
-                    <td>{{ taxonomia.name }}</td>
-                    <td>{{ taxonomia.description }}</td>
-                </tr>
+                <table>
+                    <thead>
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Descripcion</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="taxonomia in lista_taxonomias">
+                        <td>{{ taxonomia.name }}</td>
+                        <td>{{ taxonomia.description }}</td>
+                    </tr>
+                    </tbody>
+                </table>
                 {% endverbatim %}
                 <!-- fin tabla -->
 

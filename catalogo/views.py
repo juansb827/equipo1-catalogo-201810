@@ -694,7 +694,7 @@ def modificarTaxonomia(request):
             response_data['message'] = 'No se encontraton taxonomias'
             print 'response_data else = ', response_data
 
-        return HttpResponse(json.dumps({"data": response_data}), content_type="application/json")
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
     else:
         return render(request, 'modificarTaxonomia.html')

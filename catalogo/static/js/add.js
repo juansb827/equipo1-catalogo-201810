@@ -154,7 +154,8 @@ var app = new Vue({
         technologies: {},  // tecnologias del catalogo eg. sicua o moodle
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
         licenseTypes: {},
-        taxonomia: []
+        taxonomia: {},
+        lista_taxonomias: []
     },
     methods: {
         getClass: function (fieldName) {
@@ -365,10 +366,10 @@ var app = new Vue({
             axios.post(URL_BASE + "/catalogo/modificarTaxonomia/", data)
                 .then(function (res) {
                     for(prop in res.data){
-                        console.log('res.data[' + prop + '] = ' + res.data[prop]);
+                        console.log(prop + ' -- < ' + res.data[prop]);
                     }
-
-                    self.lista_taxonomias = res.data.lista_taxonomias;
+                    self.lista_taxonomias = res.data['lista_taxonomias'];
+                    console.log('self.lista_taxonomias = ' + self.lista_taxonomias)
                 })
                 .catch(function (err) {
                     for(prop in err){
