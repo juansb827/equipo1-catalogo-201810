@@ -45,7 +45,7 @@
                             $v.item.description.$params.maxLength.max }} caracteres.</p>
                     </div>
 
-                    <input type="hidden" name="id_hidden" value="{{ taxonomia.id }}">
+                    <input type="hidden" id="id_hidden" value="{{ taxonomia.id }}">
                 </div>
 
                 {% verbatim  %}
@@ -58,11 +58,6 @@
                             style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
                         Modificar
                     </button>
-                    <button v-on:click="clearTaxonomyFields()" class="btn btn-outline-secondary btn-lg main-button  "
-                            style="margin-bottom: 1em;margin-top:1em;flex-basis: 48%">
-                        Limpiar
-                    </button>
-
                 </div>
             </div><!-- end of vue -->
         </div>

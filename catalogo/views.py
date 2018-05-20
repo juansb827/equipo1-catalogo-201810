@@ -644,7 +644,7 @@ def taxonomiasMain(request):
 
 def buildATagModifyTaxonomy(taxonomy_id):
     return '"/catalogo/editarDescTaxonomias?id=' \
-           + str(taxonomy_id) + '"'.tr
+           + str(taxonomy_id) + '"'
 
 def crear_taxonomia_view(request):
     print "request.method = ", request.method
@@ -724,28 +724,38 @@ def editarDescTaxonomias(request):
     parte_final_url = partes_url[1]
     pos_ultimo_cero_url = parte_inicial_url.rfind('0')
     new_url = parte_inicial_url[:pos_ultimo_cero_url+1] + parte_final_url
-    print partes_url , ' :: ' , pos_ultimo_cero_url, ' ***  ',parte_inicial_url[:pos_ultimo_cero_url+1], ' ++ ', new_url
+    # print partes_url , ' :: ' , pos_ultimo_cero_url, ' ***  ',parte_inicial_url[:pos_ultimo_cero_url+1], ' ++ ', new_url
 
     request.path = parte_final_url
 
-    print "editarDescTaxonomias"
-    print "request.method = ", request.method
-    print "id = ", id
-    print request.META['QUERY_STRING']
-    print request.build_absolute_uri()
-    print "request.path = ",request.path
+    # print "editarDescTaxonomias"
+    # print "request.method = ", request.method
+    # print "id = ", id
+    # print request.META['QUERY_STRING']
+    # print request.build_absolute_uri()
+    # print "request.path = ",request.path
 
     return HttpResponseRedirect(parte_final_url)
 
 def editarDescTaxonomias2(request):
     id = request.GET['id']
     taxonomia = Taxonomia.objects.filter(id=id).first()
-    print request.path
-    print request.META['QUERY_STRING']
-    print taxonomia
+    # print request.path
+    # print request.META['QUERY_STRING']
+    # print taxonomia
     return render(request, 'editarDescTaxonomias.html', {'taxonomia':taxonomia})
 
 def saveTaxonomyDesc(request):
-    id = request.POST['id']
-    description = request.POST['description']
+    response_data = {}
+
+    data = json.loads(request.body)
+    description = data['description']
+    id = data['id']
     print id, ' -- ', description
+
+    Taxonomia.objects.filter(id=id).update(description=description)
+
+    response_data = {}
+
+    response_data['message'] = 'Actualizacion exitosa'
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

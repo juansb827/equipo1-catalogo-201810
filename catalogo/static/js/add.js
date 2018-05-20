@@ -155,7 +155,8 @@ var app = new Vue({
         devTechs: {}, //Technologias que se usan para un desarrollo, e.g angular, node etc.. No tiene que ver con el CATALOGO
         licenseTypes: {},
         taxonomia: {},
-        lista_taxonomias: []
+        lista_taxonomias: [],
+        taxonomyid: ''
     },
     methods: {
         getClass: function (fieldName) {
@@ -392,9 +393,18 @@ var app = new Vue({
             }
 
             var id =  '';
-            if(document.getElementById('id')){
-                id =  document.getElementById('id').value;
+            console.log('document.getElementById(\'id_hidden\') ' + document.getElementById('id_hidden'))
+
+            if(document.getElementById('id_hidden')){
+                id =  document.getElementById('id_hidden').value;
             }
+
+            var resultado =  '';
+            if(document.getElementById('resultado') != undefined){
+                resultado =  document.getElementById('resultado');
+            }
+
+            console.log('id = ' + id);
 
             var data = {
                 'description': description,
@@ -408,9 +418,7 @@ var app = new Vue({
 
             axios.post(URL_BASE + "/catalogo/saveTaxonomyDesc/", data)
                 .then(function (res) {
-                    for(prop in res.data){
-                        console.log(prop + ' -- < ' + res.data[prop]);
-                    }
+                    resultado.innerHTML = res.data['message'];
 
                 })
                 .catch(function (err) {
@@ -421,8 +429,6 @@ var app = new Vue({
                 .finally(function () {
                     this.loading = false;
                 })
-
-            self.clearTaxonomyFields();
 
         }
 
