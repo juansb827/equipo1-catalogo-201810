@@ -47,17 +47,24 @@
 
                 <!-- inicio tabla -->
                 {% verbatim %}
-                <table>
-                    <thead>
-                    <tr>
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                    <tr class="table-warning">
                         <td>Nombre</td>
                         <td>Descripcion</td>
+                        <td>Modificar</td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="taxonomia in lista_taxonomias">
                         <td>{{ taxonomia.name }}</td>
                         <td>{{ taxonomia.description }}</td>
+                        <td>
+                            <button v-on:click="alert('jojojo')" class="btn btn-outline-secondary btn-lg  main-button "
+                            style="flex-basis: 10%">
+                                Modificar
+                            </button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
